@@ -1,0 +1,74 @@
+body {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 15px;
+}
+
+textarea {
+	width: 100%;
+	height: 400px;
+}
+
+/*
+form div.field, div.title{
+	display: inline-block;
+	padding: 3px 0px 3px 0px;
+}
+
+form div.title{
+	width: 20%;
+}
+
+form div.field{
+	width: 79%;
+}
+
+form input, select{
+	width: 100%;
+}
+
+.checkbox {
+	width: auto;
+}
+*/
+
+dl {
+/*	position: relative; */
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+}
+
+dl:first-child	{
+	padding-top: 0;
+}
+ 
+dt {
+	position: absolute;
+	float: left;
+	width: 200px;
+}
+
+dd {
+/*	position: relative; */
+	width: 100%;
+	margin: 3px -0px 3px 0px;
+	padding: 0px 0px 0px 210px;*/
+}
+
+dd:hover {
+	background-color: #fffacd;
+}
+
+input[type=text] {
+	width: 100%;
+}
+input[type=submit] {
+	width: auto;
+	margin: 3px 0px 3px 0px;
+}
+
+label {
+	display: block;
+	font-weight: bold;
+	margin: 8px 0px 4px 0px;
+}

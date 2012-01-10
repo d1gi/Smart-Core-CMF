@@ -1,0 +1,14 @@
+
+CREATE TABLE IF NOT EXISTS `{prefix}2gis_counter` (
+  `2gis_log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `city` varchar(30) DEFAULT NULL,
+  `ip` varchar(40) NOT NULL,
+  `browser` varchar(20) NOT NULL,
+  `browser_version` varchar(50) NOT NULL,
+  `platform` varchar(50) NOT NULL,
+  `user_agent` text NOT NULL,
+  PRIMARY KEY (`2gis_log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

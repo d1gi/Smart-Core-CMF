@@ -1,0 +1,7 @@
+
+CREATE TABLE IF NOT EXISTS {table} (
+  item_id bigint(20) unsigned NOT NULL,
+  value {value_type},
+  PRIMARY KEY (item_id),
+  KEY value (value{key})
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Тип: {type}' ;

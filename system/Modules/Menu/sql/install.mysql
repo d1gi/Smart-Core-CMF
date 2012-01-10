@@ -1,0 +1,40 @@
+
+CREATE TABLE IF NOT EXISTS `{prefix}menu_groups` (
+  `group_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `pos` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(50) NOT NULL,
+  `descr` varchar(255) NOT NULL,
+  PRIMARY KEY (`group_id`,`site_id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `pos` (`pos`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Группы меню' AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `{prefix}menu_items` (
+  `item_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `pid` mediumint(8) unsigned NOT NULL,
+  `pos` mediumint(8) unsigned NOT NULL,
+  `group_id` smallint(5) unsigned NOT NULL,
+  `folder_id` int(10) unsigned DEFAULT NULL,
+  `cached_uri` varchar(255) DEFAULT NULL,
+  `suffix` varchar(255) DEFAULT NULL COMMENT 'для меток типа #new',
+  `direct_link` varchar(255) DEFAULT NULL COMMENT 'может быть переименовать в direct_uri?',
+  `title` varchar(255) DEFAULT NULL,
+  `descr` varchar(255) DEFAULT NULL,
+  `options` text,
+  PRIMARY KEY (`item_id`,`site_id`),
+  KEY `pid` (`pid`),
+  KEY `pos` (`pos`),
+  KEY `is_active` (`is_active`),
+  KEY `group_id` (`group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `{prefix}menu_items_translation` (
+  `item_id` int(10) unsigned NOT NULL,
+  `site_id` mediumint(8) unsigned NOT NULL,
+  `language_id` varchar(8) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`item_id`,`site_id`,`language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,0 +1,2 @@
+
+<?php $this->container('content')?>

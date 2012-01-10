@@ -1,0 +1,54 @@
+@import "common.css";
+
+#filemanager_sidebar {
+	float: left;
+}
+
+#filemanager_container {
+	margin: 10px;
+/*	margin-left: 200px; */
+}
+
+#filemanager_container form {
+	float: left;
+}
+
+.filemanager_file_thumb {
+	width: 90px;
+	height: 90px;
+	overflow: hidden;
+}
+
+.filemanager_file_name {
+	font-size: 80%;
+	overflow: hidden;
+	text-align: center;
+}
+
+.filemanager_file_entry {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #e2e2e2;
+	margin: 5px;
+	padding: 5px;
+	float: left;
+	width: 90px;
+	height: 120px;
+	cursor: pointer;
+}
+
+.filemanager_file_entry:hover {
+	border-color: #74a1f1;
+	background-color: #eff6fc	
+}
+
+.filemanager_file_entry img {
+	vertical-align: baseline;
+}
+
+.filemanager_order_by {
+	margin: 10px 0px 10px 0px;
+	float: left;
+	width: 100%;
+}

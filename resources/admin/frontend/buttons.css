@@ -1,0 +1,23 @@
+.add {
+	background-image: url(images/add.gif) !important;
+	 background-repeat: no-repeat;
+}
+
+.edit {
+	background-image: url(images/edit.gif) !important;
+	 background-repeat: no-repeat;
+}
+
+.del {
+	background-image: url(images/delete.gif) !important;
+	 background-repeat: no-repeat;
+}
+
+.history {
+	background-image: url(images/album.gif) !important;
+	 background-repeat: no-repeat;
+}
+
+.btn-panel td {
+	padding-left:0px;
+}

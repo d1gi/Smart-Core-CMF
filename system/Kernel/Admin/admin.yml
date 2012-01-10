@@ -1,0 +1,86 @@
+structure:
+    title: Структура
+    #class: Admin_Structure
+    descr: Управление папками, контейнерами и подключение модулей.
+    _items_:
+        folder_create:
+            path: folder/create
+            title: Добавить папку
+            descr: Создать новую папку.
+            class: Admin_Folders
+        node_create:
+            path: node/create
+            title: Подключить модуль
+            descr: Создать ноду в выбранном разделе и папке.
+        folder:
+            title: Папки
+            descr: Управление древовидной структурой разделов.
+            class: Admin_Folder
+            params: list
+        containers:
+            title: Контейнеры
+            descr: Управление блоками для объединения нод.
+            class: Admin_Container
+        node:
+            title: Ноды
+            class: Admin_Node
+            descr: Список всех подключенных модулей.
+module:
+    title: Модули
+    class: Admin_Module
+    descr: Управление модулями доступными для сайта.
+    #options:
+component:
+    title: Компоненты
+    class: Admin_Component
+    descr: Управление компонентами доступными на платформе.
+config:
+    title: Настройка
+    descr: Управление конфигурацией сайта.
+    _items_:
+        site:
+            title: Сайт
+            descr: Основные настройки сайта.
+            class: Admin_Site
+        develop:
+            title: Разработка
+            descr: Стредства для разработчиков.
+            _items_:
+                sysinfo:
+                    title: Системная информация
+                    descr: Конфигурация платформы окружения PHP и т.д.
+                    class: Admin_Sysinfo
+                performance:
+                    title: Производительность
+                    descr: * Кэширование для анонимных пользователей, а также включение/выключение препроцессора CSS и JavaScript.
+                maintenance:
+                    title: Обслуживание
+                    descr: * Перевод сайта в офлайн для его обслуживания, настройка сообщения при обслуживании сайта и возврат в режим онлайн.
+        global:
+            title: Глобальная конфигурация
+            descr: Таблица всех конфигурационных параметров.
+            class: Admin_Settings
+        databases:
+            title: Подключения к БД
+            descr: * Настройка возможных подключений к БД, которые могут использовать модули.
+users:
+    title: Пользователи
+    class: Admin_Users
+    descr: Управление аккаунтами, ролями и правами пользователей.
+    # В случае, если есть это поле, происходит редирект на указанный в to_item подпункт.
+    redirect: list 
+    _items_:
+        list:
+            title: Список
+            class: Admin_Users
+        create:
+            title: Зарегистрировать нового пользователя 
+            class: Admin_Users
+            short_title: Новый
+        groups:
+            title: Группы
+            class: Admin_Users
+        ip_blocking:
+            title: Блокировка по IP-адресам 
+            class: Admin_Users
+            short_title: IP-Баны

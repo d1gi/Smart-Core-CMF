@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `{prefix}comments` (
+  `comment_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL,
+  `node_id` int(10) unsigned NOT NULL,
+  `pid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Ответ на каментарий',
+  `post_id` bigint(20) unsigned NOT NULL COMMENT 'ИД комментируемой записи',
+  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `status` varchar(20) DEFAULT NULL COMMENT 'premoderate, postmoderate, spam, spam_suspicion',
+  `user_id` int(10) unsigned NOT NULL,
+  `user_nickname` varchar(50) NOT NULL COMMENT 'Псевдоним пользователя',
+  `user_email` varchar(100) NOT NULL COMMENT 'e-mail пользователя',
+  `user_homepage` varchar(255) DEFAULT NULL COMMENT 'Домашняя страница пользователя',
+  `user_ip` varchar(40) NOT NULL,
+  `user_agent` varchar(255) NOT NULL COMMENT 'Браузер пользователя',
+  `create_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания',
+  `update_datetime` datetime DEFAULT NULL COMMENT 'Дата изменения',
+  `subject` varchar(100) DEFAULT NULL COMMENT 'Тема комментария',
+  `content` text NOT NULL COMMENT 'Текст комментария',
+  PRIMARY KEY (`comment_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

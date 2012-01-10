@@ -1,0 +1,26 @@
+
+CREATE TABLE IF NOT EXISTS `{prefix}text_items` (
+  `item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `language_id` varchar(8) NOT NULL,
+  `text` longtext NOT NULL,
+  `meta` text COMMENT 'Мета-данные',
+  `create_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания',
+  `owner_id` int(10) unsigned NOT NULL COMMENT 'id создателя',
+  PRIMARY KEY (`item_id`,`site_id`,`language_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `{prefix}text_items_history` (
+  `history_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `language_id` varchar(8) NOT NULL,
+  `item_id` int(10) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `update_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `text_archive` longblob NOT NULL,
+  `unpack_length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Длина распакованной строки в байтах.',
+  PRIMARY KEY (`history_id`,`site_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='История изменения текстов' AUTO_INCREMENT=1 ;

@@ -1,0 +1,5 @@
+#tool_bar {
+	height: 50px;
+	background-color: green;
+	z-index: 100;
+}

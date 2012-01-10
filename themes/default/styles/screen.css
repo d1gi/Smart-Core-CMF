@@ -1,0 +1,223 @@
+@import "default-form.css";
+
+html {
+	height: 100%;
+}
+
+body {
+/*	background: url(../images/bg.jpg) repeat; */
+/*	background-color: #f8f8f8;*/
+/*	margin-top: 50px; */
+	background: url(../images/grad1.png) repeat-x;
+	height: 100%;
+	position: relative; /* Opera 9.5 */
+	min-width: 1000px;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	margin: 0px;
+	padding: 0px;
+}
+
+dd {
+	margin: 0px 0px 6px 0px;
+}
+
+pre {
+	font-family: Consolas;
+	font-weight: normal;
+	font-size: 16px;;
+}
+
+td {
+	vertical-align: top;
+}
+
+#nofooter {
+	min-height: 100%;
+	margin-bottom: -100px;
+}
+
+img {
+	border: 0;
+}
+
+/*
+ul{
+	margin: 0px 0px 0px 40px;
+	padding: 0px;
+}
+li {
+	margin: 4px 8px 4px -22px;
+	padding: 0px;
+}
+*/
+* html #nofooter { /* MSIE 6 */
+	height: 100%;
+}
+
+.pusher, .clear {
+	clear: both;
+}
+
+#footer-pusher {
+	height: 100px;
+	clear: both;
+}
+
+#footer {
+	margin: 0px auto 0px auto;
+	max-width: 1100px;
+	min-width: 800px;
+	height: 100px;
+}
+
+.vhcenter1 {
+	display: table;
+	position: relative;
+	width: 100%;	
+}
+
+.vhcenter2 {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	padding: 35px 70px 35px 70px;
+}
+
+#content {
+	margin: 10px 0px 10px 220px;
+/*	background-color: #f2f2f2; */
+	word-spacing: 0.1em;
+	line-height: 1.4em;
+}
+
+#content h1 {
+	margin: 4px 0px 16px 0px;
+	font-size: 26px;
+}
+
+.main-frame {
+	width: 100% !important; /* код для всех браузерах */
+	width: 800px; /* код для IE версии 6 и ниже */
+	max-width: 1100px;
+	min-width: 800px;
+	padding: 0px;
+	margin: 0px auto 0px auto;
+	text-align: left;	
+}
+
+#logo h1 {
+	font-size: 30px;
+	font-family: "Trebuchet MS";
+	margin: 0px;
+	padding: 0px;
+}
+
+#logo {
+	font-size: 13px;
+	margin: 0px 0px 10px 0px;
+}
+
+#v-menu {
+	float: left;
+	height: 1px; /* Хак :( */
+}
+
+#v-menu ul{
+/*	display: inline-block; */
+	margin: 0px 0px 0px 40px;
+	padding: 0px;
+}
+#v-menu ul li {
+	margin: 4px 8px 4px -22px;
+	padding: 0px;
+/*	list-style: disc;*/
+}
+#v-menu ul li a.selected, .selected {
+	color: #ffc055;
+}
+
+#auth-light {
+	float: right;
+}
+
+.required em {
+	color: red;
+}
+
+.success_message {
+	margin: 10px;
+	padding: 10px 10px 10px 30px;
+	background-color: #d7ffd9;
+	border: 1px solid green;
+	color: black;
+}
+
+.notice_message {
+	margin: 10px;
+	padding: 10px 10px 10px 30px;
+	background-color: #ffffd7;
+	border: 1px solid yellow;
+	color: black;
+}
+
+#error-messages {
+	margin: 10px;
+	padding: 10px 10px 10px 30px;
+	background-color: #ffc6ce;
+	border: 1px solid Red;
+	color: black;
+}
+
+#error-messages li {
+	list-style: disc;
+}
+
+#success-messages {
+	margin: 10px;
+	padding: 10px 10px 10px 30px;
+	background-color: #fff8dc;
+	border: 1px solid #efe58c;
+	color: black;
+}
+
+#breadcrumbs {
+	font-size: 70%;
+	display: block;
+	margin: 14px 0px 14px 220px;	
+}
+
+.contact-form input[type=text],
+.contact-form select,
+.contact-form textarea {
+	width: 70%;
+}
+
+.paginator>span { float: left; margin-right: 4px; }
+.paginator ul { margin: 0px;}
+.paginator ul li { display: inline; margin-bottom: 9px; }
+.paginator ul li a, .paginator ul li span { padding: 2px 6px 2px 6px; border: 1px solid; }
+.paginator ul li a { border-color: transparent;	text-decoration: none; }
+.paginator ul li a:hover { border-color: yellow; }
+
+/* Тёмная тема =============== */
+
+body {
+/*	background-color: #555555; */
+	color: white;
+	background-color: #4c4c4c;
+	background-image: none;
+	}
+a {
+	color: yellow;
+	text-decoration: none;
+	}
+a:hover {
+	text-decoration: underline;
+	}
+#content {
+	background-color: #525252;		
+	}
+#footer {
+	background-color: #595959;	
+	}

@@ -1,0 +1,31 @@
+textarea {
+	overflow: auto;
+	width: auto;
+}
+
+label {
+	cursor: pointer;	
+}
+/*
+input[type=text], select {
+	width: 100%;
+}
+*/
+.default-form .row {
+	padding: 4px 0px 4px 0px;
+	margin: 4px 0px 4px 0px;
+	clear: both;
+}
+
+.default-form .row>label {
+	float: left;
+	padding-right: 4px;
+}
+
+.default-form .row>span {
+	float: left;
+}
+
+.default-form .field {
+	margin-left: 180px;
+}

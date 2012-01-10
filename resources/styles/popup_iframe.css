@@ -1,0 +1,176 @@
+body {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 15px;
+}
+
+h1 {
+	font-size: 22px;
+}
+
+h2 {
+	font-size: 20px;
+}
+
+h3 {
+	font-size: 18px;
+}
+
+tr {
+	background-color: white;
+}
+
+td {
+	vertical-align: top;
+}
+
+th {
+	font-size: 80%;
+	background-color: #f4faff;
+}
+
+
+textarea {
+	overflow: auto;
+	width: auto;
+	height: 400px;
+}
+
+/*
+form div.field, div.title{
+	display: inline-block;
+	padding: 3px 0px 3px 0px;
+}
+
+form div.title{
+	width: 20%;
+}
+
+form div.field{
+	width: 79%;
+}
+
+form input, select{
+	width: 100%;
+}
+
+form input.submit{
+	width: auto;
+}
+
+.checkbox {
+	width: auto;
+}
+
+dl {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+}
+
+dl:first-child	{
+	padding-top: 0;
+}
+ 
+dd {
+	margin: 3px 0px 3px 0px;
+}
+
+div.news-form div:hover{
+	color: black;
+	background-color: #ffffe0;
+}
+*/
+
+input[type=text], input[type=file], select {
+	padding: 2px;
+	border: 1px solid #bcbcbc;
+	width: 100%;
+	margin: 2px 0px 2px 0px;
+}
+
+input[type=text]:focus, select:focus {
+	background-color: #fffff0;
+}
+
+input[type=submit] {
+	margin: 8px 8px 8px 0px;
+}
+
+label {
+/* 	display: block; */
+	cursor: pointer;
+}
+
+option[selected=selected] {
+	font-weight: bold;
+	color: blue;
+}
+
+.default-form .row {
+	padding: 4px 0px 4px 0px;
+	margin: 4px 0px 4px 0px;
+	clear: both;
+}
+
+.default-form div.row:hover {
+	background-color: #fafafa;
+/*	background-color: #fbfbfb; */
+}
+
+.default-form .row>label {
+	float: left;
+	padding-right: 4px;
+}
+
+.default-form .row>span {
+	float: left;
+}
+
+.default-form .field {
+	margin-left: 200px;
+	margin-right: 4px;
+}
+
+fieldset legend {
+	font-weight: bold;
+}
+
+fieldset {	
+	margin-bottom: 4px;
+	background-color: #fbfbfb;
+	border: 1px solid #dadada;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+fieldset:hover {
+	border-color: #a7a7a7;
+}
+
+.texter-edit textarea {
+	width: 100%;
+}
+
+.admin-table {
+	margin: 0px;
+	padding: 0px;
+	border-spacing: 0px;
+	empty-cells: show;
+	border-collapse: collapse;
+	border: 1px solid #c5c5c5;
+}
+
+.admin-table td, .admin-table th {
+	border: 1px solid #c5c5c5;
+	padding: 6px;
+}
+
+.admin-table tr:hover {
+	background-color: #fffff0;
+}
+.paginator>span {	float: left; margin-right: 4px; }
+.paginator ul li { display: inline; }
+.paginator ul li a, .paginator ul li span { padding: 2px 6px 2px 6px; border: 1px solid; }
+.paginator ul li a {	border-color: transparent;	text-decoration: none; }
+.paginator ul li a:hover {	border-color: yellow; }

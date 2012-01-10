@@ -1,0 +1,112 @@
+
+/* Базовые настрокйки
+-----------------------------------------------------------------------------*/
+
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+html {
+/*	height: 100%;*/
+	font-size: 100.01%; /* Opera, Safari */	
+}
+
+body {
+	font-family: Arial, Verdana, Gevena, sans-serif;
+	font-style: normal;
+	font-size: 0.755em;
+	position: relative; /* Opera 9.5 */
+/*	height: 100%; */
+	background-color: white;
+	color: black;
+}
+
+a {
+	color: blue;
+	cursor: pointer !important; /* Safari */
+	outline: none;
+	text-decoration: underline;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img {
+	border: none;
+}
+
+ul, ol {
+	margin: 0px 0px 0px 24px;
+	vertical-align: top;
+}
+
+li {
+	margin: 6px 0px 6px 0px;
+}
+
+p {
+	margin: 0px 0px 12px 0px;
+/*	text-indent: 1em; */
+}
+
+input {
+	vertical-align: middle;
+}
+
+td {
+	font-size: 0.755em;
+	vertical-align: top;
+/*	padding: 0px;*/
+	padding: 4px;
+}
+
+table.design {
+	margin: 0px;
+	padding: 0px;
+	border-spacing: 0px;
+	empty-cells: show;
+	border-collapse: collapse;
+/*	table-layout: fixed;*/
+}
+
+table.design td {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* Вспомогательные
+-----------------------------------------------------------------------------*/
+
+.dbg {
+/*	display: block;*/
+	border: 1px dashed red;
+}
+
+.invis {
+	display: none;
+}
+
+.clear {
+	clear: both;
+}
+
+/* Типография
+-----------------------------------------------------------------------------*/
+
+
+/* Раскладка
+-----------------------------------------------------------------------------*/
+
+.vhcenter1 {
+	display: table;
+	position: relative;
+}
+
+.vhcenter2 {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+

@@ -1,0 +1,8 @@
+# permalinks
+if (!-e $request_filename ) {
+    rewrite  ^/.*   /index.php  break;
+}
+
+location ~ ^.*\.(inc|tpl|ini)$ {
+	deny  all;
+}

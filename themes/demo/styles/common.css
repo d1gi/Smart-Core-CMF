@@ -1,0 +1,99 @@
+/*-----------------------------------------------------------------------------
+Типичная таблица стилей для основных браузеров (не ИЕ)
+
+Версия:			0.1
+Автор:			Артем Рыжков
+Электропочта:	digital_boy@mail.ru
+Сайт автора:	http://digi.org.ru
+
+-----------------------------------------------------------------------------*/
+
+* {
+	font-family: Arial, Verdana, Gevena, sans-serif
+}
+
+html {
+	height: 100%;
+	font-size: 100.01%; /* Opera, Safari */
+}
+
+body {
+	position: relative; /* Opera 9.5 */
+	height: 100%;
+	margin: 0;
+	background-color: white;
+	font: normal 0.755em;
+	padding: 0; /* Opera 8- */
+}
+
+a {
+	color: inherit;
+	cursor: pointer !important; /* Safari */
+}
+
+div, img, form, ul, li, ol {
+	padding: 0;
+	margin: 0;
+}
+
+img {
+	border: 0;
+}
+
+td {
+	vertical-align: top;
+	padding: 4px;
+}
+
+ul {
+	vertical-align: top;
+	list-style-position: inside;
+}
+
+table.design {
+	padding: 0; 
+	margin: 0; 
+	border-spacing: 0; 
+	empty-cells: show;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+/* Пользовательские
+-----------------------------------------------------------------------------*/
+
+/* Типография
+-----------------------------------------------------------------------------*/
+
+
+/* Раскладка
+-----------------------------------------------------------------------------*/
+
+
+/* Вспомогательные
+-----------------------------------------------------------------------------*/
+
+.dbg {
+	display: block;
+	border: 1px dotted red;
+}
+
+.invis {
+	display: none;
+}
+
+.pusher {
+	clear: both;
+}
+
+.vhcenter1 {
+	display: table;
+	position: relative;
+}
+
+.vhcenter2 {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+

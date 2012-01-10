@@ -1,0 +1,86 @@
+-- Базовые таблицы для работы юниката.
+--
+-- 2011-11-22.0
+
+-- 1.
+
+CREATE TABLE IF NOT EXISTS `{prefix}webforms` (
+  `form_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `use_captcha` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Использовать ли каптчу, указывается ИД ноды карптчи',
+  `params` text,
+  `create_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания',
+  `owner_id` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'id создателя',
+  PRIMARY KEY (`form_id`,`site_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Cписок форм в системе' AUTO_INCREMENT=1 ;
+
+-- 2.
+
+CREATE TABLE IF NOT EXISTS `{prefix}webforms_fields` (
+  `field_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL,
+  `form_id` int(10) unsigned NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '0',
+  `pos` int(10) unsigned NOT NULL DEFAULT '0',
+  `type` varchar(20) NOT NULL DEFAULT 'string',
+  `default_value` text COMMENT 'Значение по умолчанию',
+  `attrs` text COMMENT 'Атрибуты',
+  `params` text COMMENT 'Параметры',
+  `validators` text COMMENT 'Валидаторы',
+  `name` varchar(50) NOT NULL COMMENT 'Служебное имя',
+  `title` varchar(255) NOT NULL,
+  `descr` varchar(255) DEFAULT NULL,
+  `is_required` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Обязателен для заполнения?',
+  `service_comment` varchar(255) DEFAULT NULL COMMENT 'Служебный комментарий',
+  `create_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания',
+  `owner_id` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'id создателя',
+  PRIMARY KEY (`field_id`,`site_id`,`form_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Поля форм' AUTO_INCREMENT=1 ;
+
+-- 3.
+
+CREATE TABLE IF NOT EXISTS `{prefix}webforms_fields_translation` (
+  `field_id` int(10) unsigned NOT NULL,
+  `site_id` smallint(5) unsigned NOT NULL,
+  `language_id` varchar(8) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `descr` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`field_id`,`language_id`,`site_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Переводы названий полей форм';
+
+-- 4.
+
+CREATE TABLE IF NOT EXISTS `{prefix}webforms_results` (
+  `result_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` mediumint(8) unsigned NOT NULL,
+  `form_id` int(10) unsigned NOT NULL,
+  `is_readed` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Статус прочтения',
+  `language_id` varchar(2) NOT NULL,
+  `reader_user_id` int(10) unsigned DEFAULT NULL COMMENT 'ID юзера прочитавшего результат',
+  `readed_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата прочтения',
+  `datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата отправления',
+  `sender_user_id` int(10) unsigned NOT NULL COMMENT 'Ид юзера отправителя',
+  `result_data` mediumtext NOT NULL COMMENT 'Сериализованное сообщение со всеми полями.',
+  `ip` varchar(40) NOT NULL,
+  `browser` varchar(50) NOT NULL,
+  `browser_version` varchar(50) NOT NULL,
+  `platform` varchar(50) NOT NULL,
+  `user_agent` text NOT NULL,
+  PRIMARY KEY (`result_id`,`site_id`),
+  KEY `form_id-site_id` (`form_id`,`site_id`),
+  KEY `language_id` (`language_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Результаты отправленных вебформ.' AUTO_INCREMENT=1 ;
+
+-- 5.
+
+CREATE TABLE IF NOT EXISTS `{prefix}webforms_translation` (
+  `form_id` int(10) unsigned NOT NULL,
+  `site_id` mediumint(8) unsigned NOT NULL,
+  `language_id` varchar(8) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `submit_title` varchar(50) NOT NULL DEFAULT 'Send' COMMENT 'Надпись на кнопке сохраняющей результаты формы.',
+  `descr` text COMMENT 'Описание для пользователей',
+  `success_message` text COMMENT 'Текст после успешно отправленной формы.',
+  PRIMARY KEY (`form_id`,`site_id`,`language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='переводы названий форм';
