@@ -4,7 +4,7 @@
 /**
  * Класс с административными методами.
  * 
- * @version 2012-01-10.0
+ * @version 2012-01-11.0
  */
 class Module_Subscribe_Admin extends Module_Subscribe
 {
@@ -50,19 +50,7 @@ class Module_Subscribe_Admin extends Module_Subscribe
 								),
 							'default'	=> 'draft',
 							'disabled'	=> false,
-							),
-						'is_required'	=> 1,
-						'show_in_admin'	=> 1,
-						'show_in_list'	=> 1,
-						'show_in_view'	=> 1,
-						'empty_as_null'	=> 0,
-						),
-					'modify_datetime' => array(
-						'title'			=> 'Дата последнего изменения',
-						'pos'			=> 2,
-						'type'			=> 'datetime',
-						'params'		=> array(
-							'disabled'	=> true,
+							'readonly'	=> true,
 							),
 						'is_required'	=> 1,
 						'show_in_admin'	=> 1,

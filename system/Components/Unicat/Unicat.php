@@ -12,7 +12,7 @@
  * @uses Node
  * @uses User
  * 
- * @version 2011-12-30.0
+ * @version 2012-01-11.0
  */
 class Component_Unicat extends Base
 {
@@ -528,7 +528,7 @@ class Component_Unicat extends Base
 	 * 
 	 * @todo multilang
 	 */
-	public function getUriByCategoryId($structure_id, $category_id)
+	public function getUriByCategoryId($structure_id, $category_id = 0)
 	{
 		$uri_parts = array();
 		$uri = '';
@@ -551,7 +551,7 @@ class Component_Unicat extends Base
 			$uri .= $value . '/';
 		}
 	
-		return Folder::getUri($this->Node->folder_id) . $uri;
+		return Folder::getUri($this->Node->folder_id) . $this->path_prefix . $uri;
 	}
 	
 	/**
@@ -1549,15 +1549,17 @@ class Component_Unicat extends Base
 		
 		// Обработка мета-тэгов.
 		$meta = array();
-		if (!empty($data['meta']['keywords'])) {
+		if (isset($data['meta']['keywords']) and !empty($data['meta']['keywords'])) {
 			$meta['keywords'] = $data['meta']['keywords'];
 		}
-		if (!empty($data['meta']['description'])) {
+		if (isset($data['meta']['description']) and !empty($data['meta']['description'])) {
 			$meta['description'] = $data['meta']['description'];
 		}
 		$meta = empty($meta) ? 'NULL' : $this->DB->quote(serialize($meta));
 
 		$Date = new Helper_Date();
+		
+// @todo проверка на доступность $data['uri_part']
 		
 		// Сначала создаётся запись с техническим uri_part.
 		$uri_part = md5(microtime() . $this->Env->user_id . $data['uri_part']);
@@ -1636,13 +1638,23 @@ class Component_Unicat extends Base
 		}
 		
 		// После вставки всех свойств записи, надо пройтись по прототипу новой записи и добавить пустые свойства.
+		// @todo сделать без запросов select.
 		$prototype = $this->getItemPrototype(null, false, false);
 		foreach ($prototype as $property_id => $value) {
-			if ($value['empty_as_null'] == 1) {
-				$sql = "SELECT count(item_id) AS cnt FROM {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$value['name']} WHERE item_id = '$item_id' ";
-				if ($this->DB->getRowObject($sql)->cnt == 0) {
+			$sql = "SELECT count(item_id) AS cnt FROM {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$value['name']} WHERE item_id = '$item_id' ";
+			if ($this->DB->getRowObject($sql)->cnt == 0) {
+				if ($value['empty_as_null'] == 1) {
 					$sql = "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$value['name']} (item_id, value) VALUES ('$item_id', NULL) ";
 					$this->DB->exec($sql);
+					continue;
+				}
+				
+				$params = unserialize($value['params']);
+				
+				if (isset($params['default']) and !empty($params['default'])) {
+					$sql = "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$value['name']} (item_id, value) VALUES ('$item_id', {$this->DB->quote($params['default'])}) ";
+					$this->DB->exec($sql);
+					continue;
 				}
 			}
 		}
@@ -1830,6 +1842,9 @@ class Component_Unicat extends Base
 	public function postProcessor($pd, $submit)
 	{
 		switch ($submit) {
+			case 'cancel':
+				cf_redirect($this->path_prefix);
+				break;
 			case 'create_structure':
 				$this->createStructure($pd);
 				cf_redirect('?structures');
@@ -1892,7 +1907,7 @@ class Component_Unicat extends Base
 				if (is_numeric($pd['item_id'])) {
 					$this->deleteItem($pd['item_id']);
 				}
-				cf_redirect($this->getUriByCategoryId($pd['category_id']));
+				cf_redirect($this->getUriByCategoryId(@$pd['category_id'])); // @todo не всегда есть $pd['category_id']
 				break;
 			case 'delete_property':
 				if (is_numeric($pd['property_id'])) {

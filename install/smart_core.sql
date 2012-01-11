@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost:3309
--- Время создания: Янв 10 2012 г., 11:09
+-- Время создания: Янв 11 2012 г., 04:08
 -- Версия сервера: 5.1.45
 -- Версия PHP: 5.2.10
 
@@ -1750,36 +1750,13 @@ CREATE TABLE IF NOT EXISTS `subscribers` (
   `email` varchar(100) NOT NULL,
   `params` text COMMENT 'Параметры, например имя пользователя и как в нему обращаться.',
   `create_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания подписчика',
-  `activate_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата активации',
+  `activate_datetime` datetime DEFAULT NULL COMMENT 'Дата активации',
   PRIMARY KEY (`subscriber_id`,`site_id`),
   KEY `is_active` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Подписчики' AUTO_INCREMENT=1 ;
 
 --
 -- Дамп данных таблицы `subscribers`
---
-
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `subscribers_activation`
---
-
-DROP TABLE IF EXISTS `subscribers_activation`;
-CREATE TABLE IF NOT EXISTS `subscribers_activation` (
-  `subscriber_id` int(10) unsigned NOT NULL,
-  `site_id` mediumint(8) unsigned NOT NULL,
-  `datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания запроса на активацию',
-  `action` enum('subscribe','delete','update') NOT NULL DEFAULT 'subscribe',
-  `code` varchar(128) NOT NULL,
-  `rubrics_list` text NOT NULL COMMENT 'Сериализованный список рубрик',
-  PRIMARY KEY (`subscriber_id`,`site_id`,`action`),
-  UNIQUE KEY `site_id` (`code`,`site_id`,`action`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Подтверждение подсписчиков. ';
-
---
--- Дамп данных таблицы `subscribers_activation`
 --
 
 
@@ -1799,6 +1776,28 @@ CREATE TABLE IF NOT EXISTS `subscribers_rubrics_relation` (
 
 --
 -- Дамп данных таблицы `subscribers_rubrics_relation`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `subscribers_submit`
+--
+
+DROP TABLE IF EXISTS `subscribers_submit`;
+CREATE TABLE IF NOT EXISTS `subscribers_submit` (
+  `subscriber_id` int(10) unsigned NOT NULL,
+  `site_id` mediumint(8) unsigned NOT NULL,
+  `datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата создания запроса на активацию',
+  `action` enum('subscribe','delete','update') NOT NULL DEFAULT 'subscribe',
+  `code` varchar(128) NOT NULL,
+  `rubrics_list` text NOT NULL COMMENT 'Сериализованный список рубрик',
+  PRIMARY KEY (`subscriber_id`,`site_id`,`action`,`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Подтверждения подсписчиков. ';
+
+--
+-- Дамп данных таблицы `subscribers_submit`
 --
 
 

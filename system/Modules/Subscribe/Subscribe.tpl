@@ -1,7 +1,7 @@
 <?php
 
 if (isset($data['manage_link'])) {
-	echo "<a href=\"" . $data['manage_link'] . "\">Управление</a><br /><br />";
+	echo "<a href=\"" . $data['manage_link'] . "\">Выпуски рассылок</a> &nbsp;&nbsp; <br /><br />";
 }
 
 if (isset($data['error_messages']) and is_array($data['error_messages'])) {
@@ -10,6 +10,10 @@ if (isset($data['error_messages']) and is_array($data['error_messages'])) {
 	   echo "<li>$value</li>\n";
 	}
 	echo '</ul>';
+}
+
+if (isset($data['error_message'])) {
+	echo "<div class=\"error_message\">" . $data['error_message'] . "</div>";
 }
 
 if (isset($data['success_message'])) {

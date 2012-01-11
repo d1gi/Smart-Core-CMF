@@ -526,7 +526,7 @@ class Component_Unicat_Admin extends Component_Unicat
 							'label' => $value['title'],
 							'type' => 'select',
 							'options' => $options,
-							);
+							);						
 						break;
 					default;
 				} // __end switch ($value['type'])
@@ -547,7 +547,7 @@ class Component_Unicat_Admin extends Component_Unicat
 					
 					$form_data['elements']['pd[content][' . $key . ']']['value'] = $default;
 				}
-				
+
 				// Установка фрага disabled.
 				if (isset($params['disabled'])) {
 					$form_data['elements']['pd[content][' . $key . ']']['disabled'] = $params['disabled'];
@@ -1064,7 +1064,7 @@ class Component_Unicat_Admin extends Component_Unicat
 					}
 
 					if (!$this->Media->isActive()) {
-						$form_data['elements'][$key]['disabled']  = true;
+						$form_data['elements'][$key]['disabled'] = true;
 					}
 
 					array_pop($form_fields_list);
@@ -1088,6 +1088,11 @@ class Component_Unicat_Admin extends Component_Unicat
 						'value' => $value['original_value'],
 						'options' => $options,
 						);
+					if (isset($params['readonly']) and $params['readonly'] != 0) {
+						$form_data['elements']['pd[content][' . $value['property_id'] . ']']['type'] = 'html';
+						$form_data['elements']['pd[content][' . $value['property_id'] . ']']['value'] = $options[$value['original_value']];
+						unset($form_data['elements']['pd[content][' . $value['property_id'] . ']']['options']);
+					}
 					break;
 				case 'string':
 					$form_data['elements']['pd[content][' . $value['property_id'] . ']'] = array (
@@ -1125,10 +1130,14 @@ class Component_Unicat_Admin extends Component_Unicat
 						'onclick' => $DatePicker->onfocus(),
 						'value' => $value['value'],
 						);
+					if (isset($params['readonly']) and $params['readonly'] != 0) {
+						$form_data['elements']['pd[content][' . $value['property_id'] . ']']['type'] = 'html';
+						unset($form_data['elements']['pd[content][' . $value['property_id'] . ']']['onclick']);
+					}
 					break;
 				default;
 			}
-			
+				
 			// Установка фрага disabled.
 			if (isset($params['disabled'])) {
 				$form_data['elements']['pd[content][' . $value['property_id'] . ']']['disabled'] = $params['disabled'];

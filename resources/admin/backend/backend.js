@@ -14,6 +14,6 @@ function fieldsetsToTabs($) {
 	$('fieldset:first').addClass('visible');
 	
 	$('ul.tabs').delegate('li:not(.current)', 'click', function() {
-		$(this).addClass('current').siblings().removeClass('current').parents('div.section').find('fieldset.box').hide().eq($(this).index()).fadeIn(100);
+		$(this).addClass('current').siblings().removeClass('current').parents('div.section').find('fieldset.box').hide().eq($(this).index()).fadeIn(0);
 	})
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost:3309
--- Время создания: Янв 10 2012 г., 06:39
+-- Время создания: Янв 11 2012 г., 04:06
 -- Версия сервера: 5.1.45
 -- Версия PHP: 5.2.10
 
@@ -176,28 +176,33 @@ CREATE TABLE IF NOT EXISTS `unicat_items` (
   `uri_part` varchar(100) NOT NULL,
   `owner_id` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'ID пользователя владельца записи',
   `create_datetime` datetime DEFAULT NULL COMMENT 'Время создания записи',
+  `modify_datetime` datetime DEFAULT NULL COMMENT 'Дата последнего изменения',
   `meta` text COMMENT 'Мета-данные',
   PRIMARY KEY (`item_id`,`entity_id`,`site_id`),
   UNIQUE KEY `uri_part` (`uri_part`,`entity_id`,`site_id`),
   KEY `is_active` (`is_active`,`entity_id`,`site_id`),
   KEY `is_deleted` (`is_deleted`,`entity_id`,`site_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Записи элементов каталога' AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Записи элементов каталога' AUTO_INCREMENT=15 ;
 
 --
 -- Дамп данных таблицы `unicat_items`
 --
 
-INSERT INTO `unicat_items` (`item_id`, `entity_id`, `site_id`, `is_active`, `is_deleted`, `uri_part`, `owner_id`, `create_datetime`, `meta`) VALUES
-(1, 1, 1, 1, 0, 'russia', 1, '2011-10-19 04:31:40', NULL),
-(2, 1, 1, 1, 0, 'ukr', 1, '2011-10-19 04:41:37', NULL),
-(3, 1, 1, 1, 0, 'test', 1, '2011-10-20 04:50:48', NULL),
-(4, 1, 1, 1, 0, 'yut', 1, '2011-10-20 06:58:11', NULL),
-(5, 1, 1, 1, 0, 'avto2', 1, '2011-10-20 07:28:08', NULL),
-(6, 2, 1, 1, 0, 'first', 1, '2011-12-03 22:35:56', NULL),
-(7, 2, 1, 1, 0, '7', 1, '2011-12-03 22:39:11', NULL),
-(8, 2, 1, 1, 0, '8', 1, '2011-12-04 23:36:06', NULL),
-(9, 2, 1, 1, 0, '9', 1, '2011-12-05 02:48:07', NULL),
-(10, 2, 1, 1, 0, '10', 1, '2011-12-05 03:23:46', NULL);
+INSERT INTO `unicat_items` (`item_id`, `entity_id`, `site_id`, `is_active`, `is_deleted`, `uri_part`, `owner_id`, `create_datetime`, `modify_datetime`, `meta`) VALUES
+(1, 1, 1, 1, 0, 'russia', 1, '2011-10-19 04:31:40', NULL, NULL),
+(2, 1, 1, 1, 0, 'ukr', 1, '2011-10-19 04:41:37', NULL, NULL),
+(3, 1, 1, 1, 0, 'test', 1, '2011-10-20 04:50:48', NULL, NULL),
+(4, 1, 1, 1, 0, 'yut', 1, '2011-10-20 06:58:11', NULL, NULL),
+(5, 1, 1, 1, 0, 'avto2', 1, '2011-10-20 07:28:08', NULL, NULL),
+(6, 2, 1, 1, 0, 'first', 1, '2011-12-03 22:35:56', NULL, NULL),
+(7, 2, 1, 1, 0, '7', 1, '2011-12-03 22:39:11', NULL, NULL),
+(8, 2, 1, 1, 0, '8', 1, '2011-12-04 23:36:06', NULL, NULL),
+(9, 2, 1, 1, 0, '9', 1, '2011-12-05 02:48:07', NULL, NULL),
+(10, 2, 1, 1, 0, '10', 1, '2011-12-05 03:23:46', NULL, NULL),
+(11, 5, 1, 1, 0, '11', 1, '2012-01-10 10:16:45', NULL, NULL),
+(12, 5, 1, 1, 0, '12', 1, '2012-01-10 10:57:41', NULL, NULL),
+(13, 5, 1, 1, 1, '13', 1, '2012-01-10 11:00:14', NULL, NULL),
+(14, 5, 1, 1, 0, '14', 1, '2012-01-11 04:03:52', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -469,25 +474,9 @@ CREATE TABLE IF NOT EXISTS `unicat_items_s1_e5_auto_start_datetime` (
 -- Дамп данных таблицы `unicat_items_s1_e5_auto_start_datetime`
 --
 
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `unicat_items_s1_e5_modify_datetime`
---
-
-DROP TABLE IF EXISTS `unicat_items_s1_e5_modify_datetime`;
-CREATE TABLE IF NOT EXISTS `unicat_items_s1_e5_modify_datetime` (
-  `item_id` bigint(20) unsigned NOT NULL,
-  `value` datetime DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`item_id`),
-  KEY `value` (`value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Тип: datetime';
-
---
--- Дамп данных таблицы `unicat_items_s1_e5_modify_datetime`
---
-
+INSERT INTO `unicat_items_s1_e5_auto_start_datetime` (`item_id`, `value`) VALUES
+(11, '2012-01-19 00:00:00'),
+(12, '2012-01-21 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -507,6 +496,11 @@ CREATE TABLE IF NOT EXISTS `unicat_items_s1_e5_status` (
 -- Дамп данных таблицы `unicat_items_s1_e5_status`
 --
 
+INSERT INTO `unicat_items_s1_e5_status` (`item_id`, `value`) VALUES
+(11, 'draft'),
+(12, 'draft'),
+(13, 'draft'),
+(14, 'draft');
 
 -- --------------------------------------------------------
 
@@ -526,6 +520,11 @@ CREATE TABLE IF NOT EXISTS `unicat_items_s1_e5_subject` (
 -- Дамп данных таблицы `unicat_items_s1_e5_subject`
 --
 
+INSERT INTO `unicat_items_s1_e5_subject` (`item_id`, `value`) VALUES
+(11, 'Рассылка 1'),
+(12, 'Последние новости 2'),
+(13, '78786897689689'),
+(14, '3333333 2');
 
 -- --------------------------------------------------------
 
@@ -545,6 +544,10 @@ CREATE TABLE IF NOT EXISTS `unicat_items_s1_e5_text` (
 -- Дамп данных таблицы `unicat_items_s1_e5_text`
 --
 
+INSERT INTO `unicat_items_s1_e5_text` (`item_id`, `value`) VALUES
+(11, '<p>Тема: &laquo;Сублимированный рейтинг в XXI веке&raquo;</p>\r\n<p>Взаимодействие корпорации и клиента амбивалентно. Агентская комиссия специфицирует мониторинг активности, используя опыт предыдущих кампаний. Ассортиментная политика предприятия развивает стратегический маркетинг, используя опыт предыдущих кампаний. Более того, взаимодействие корпорации и клиента искажает бренд, расширяя долю рынка.<br /><br /><br /></p>'),
+(12, 'Опросная анкета упорядочивает из ряда вон выходящий портрет потребителя, учитывая результат предыдущих медиа-кампаний. Спонсорство, в рамках сегодняшних воззрений, однородно стабилизирует принцип восприятия, используя опыт предыдущих кампаний. Узнавание бренда осмысленно переворачивает повторный контакт, признавая определенные рыночные тенденции. Стимулирование сбыта амбивалентно.<br /><br />'),
+(13, '56897689');
 
 -- --------------------------------------------------------
 
@@ -685,7 +688,11 @@ INSERT INTO `unicat_items_structures_relation` (`item_id`, `entity_id`, `structu
 (7, 2, 0, 0),
 (8, 2, 0, 0),
 (9, 2, 0, 0),
-(10, 2, 0, 0);
+(10, 2, 0, 0),
+(11, 5, 0, 0),
+(12, 5, 0, 0),
+(13, 5, 0, 0),
+(14, 5, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -774,8 +781,7 @@ INSERT INTO `unicat_properties` (`property_id`, `entity_id`, `site_id`, `is_acti
 (17, 3, 2, 1, 3, 4, 1, 1, 1, 1, 0, 'auto_start_datetime', 'Дата начала рассылки', 'datetime', 'a:0:{}', '', '2011-12-07 14:39:19', 1),
 (18, 3, 2, 1, 4, 4, 0, 0, 0, 1, 0, 'text', 'Полный текст', 'text', 'a:0:{}', '', '2011-12-07 14:39:19', 1),
 (24, 5, 1, 1, 0, 10, 1, 1, 1, 1, 0, 'subject', 'Тема выпуска', 'string', 'a:0:{}', '', '2012-01-10 07:37:38', 1),
-(25, 5, 1, 1, 1, 10, 1, 1, 1, 1, 0, 'status', 'Статус', 'select', 'a:3:{s:7:"options";a:4:{s:5:"draft";s:16:"Черновик";s:10:"in_process";s:36:"В процессе рассылки";s:7:"stopped";s:20:"Остановлен";s:8:"finished";s:16:"Завершен";}s:7:"default";s:5:"draft";s:8:"disabled";b:1;}', 'options:\n  draft: Черновик\n  in_process: В процессе рассылки\n  stopped: Остановлен\n  finished: Завершен\ndefault: draft\ndisabled: true\n', '2012-01-10 07:37:39', 1),
-(26, 5, 1, 1, 2, 10, 1, 1, 1, 1, 0, 'modify_datetime', 'Дата последнего изменения', 'datetime', 'a:1:{s:8:"disabled";b:1;}', 'disabled: true\n', '2012-01-10 07:37:39', 1),
+(25, 5, 1, 1, 1, 10, 1, 1, 1, 1, 0, 'status', 'Статус', 'select', 'a:4:{s:7:"options";a:4:{s:5:"draft";s:16:"Черновик";s:10:"in_process";s:36:"В процессе рассылки";s:7:"stopped";s:20:"Остановлен";s:8:"finished";s:16:"Завершен";}s:7:"default";s:5:"draft";s:8:"disabled";s:1:"1";s:8:"readonly";s:1:"0";}', 'options:\r\n  draft: Черновик\r\n  in_process: В процессе рассылки\r\n  stopped: Остановлен\r\n  finished: Завершен\r\ndefault: draft\r\ndisabled: 1\r\nreadonly: 0', '2012-01-10 07:37:39', 1),
 (27, 5, 1, 1, 3, 10, 1, 1, 1, 1, 0, 'auto_start_datetime', 'Дата начала рассылки', 'datetime', 'a:0:{}', '', '2012-01-10 07:37:39', 1),
 (28, 5, 1, 1, 4, 10, 0, 0, 0, 1, 0, 'text', 'Полный текст', 'text', 'a:0:{}', '', '2012-01-10 07:37:39', 1);
 

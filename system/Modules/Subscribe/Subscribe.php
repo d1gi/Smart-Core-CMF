@@ -131,8 +131,16 @@ class Module_Subscribe extends Module
 		}
 		
 		switch ($parser_data['action']) {
+			case 'activate':
+				if ($this->activate($parser_data['code'])) {
+					$this->output_data['notice_message'] = 'Активация на подписку прошла успешно.';
+				} else {
+					$this->output_data['error_message'] = $this->getErrorMessage();
+				}
+				return;
+				break;
 			case 'email':
-				if ($this->isEmailExist($parser_data['email'])) {
+				if ($this->getSubscriberId($parser_data['email'])) {
 					$this->output_data['notice_message'] = 'Указанный email уже существует в базе рассылок. Вы можете ввести другой email и продолжить процедуру подписки либо отписаться от рассылки.';
 					$this->output_data['subscribe_form'] = $this->getUnSubscribeFormData($parser_data['email']);
 				} else {
@@ -142,10 +150,16 @@ class Module_Subscribe extends Module
 				return;
 				break;
 			case 'delete':
-				if ($this->isEmailExist($parser_data['code'])) {
+				if ($this->getSubscriberId($parser_data['code'])) {
 					$this->createDeleteActivation($parser_data['code']);
 					$this->output_data['success_message'] = 'На указанный email: ' . $parser_data['code'] . ' отправлено письмо с кодом подтверждения операции.';
-				}
+				} else {
+					if ($this->delete($parser_data['code'])) {
+						$this->output_data['notice_message'] = 'Удаление подписки прошло успешно.';
+					} else {
+						$this->output_data['error_message'] = $this->getErrorMessage();
+					}
+				} 
 				return;
 				break;
 			case 'releases':
@@ -167,6 +181,88 @@ class Module_Subscribe extends Module
 	}	
 	
 	/**
+	 * NewFunction
+	 *
+	 * @param
+	 * @return
+	 */
+	public function delete($code)
+	{
+		$sql = "SELECT subscriber_id
+			FROM {$this->DB->prefix()}subscribers_submit
+			WHERE site_id = '{$this->Env->site_id}'
+			AND action = 'delete'
+			AND code = {$this->DB->quote($code)} ";
+		$row = $this->DB->getRow($sql);
+		if (empty($row)) {
+			$this->setErrorCode(1);
+			$this->setErrorMessge('Код не действителен.');
+			return false;
+		} else {
+			$sql = "DELETE FROM {$this->DB->prefix()}subscribers_submit
+				WHERE site_id = '{$this->Env->site_id}'
+				AND subscriber_id  = '{$row['subscriber_id']}' 
+				AND action = 'delete' ";
+			$this->DB->exec($sql);
+			
+			$sql = "DELETE FROM {$this->DB->prefix()}subscribers
+				WHERE site_id = '{$this->Env->site_id}'
+				AND subscriber_id  = '{$row['subscriber_id']}' ";
+			$this->DB->exec($sql);
+
+			$sql = "DELETE FROM {$this->DB->prefix()}subscribers_rubrics_relation
+				WHERE site_id = '{$this->Env->site_id}'
+				AND subscriber_id  = '{$row['subscriber_id']}' ";
+			$this->DB->exec($sql);
+			return true;
+		}
+	}
+	
+	/**
+	 * Активация подписки
+	 *
+	 * @param string $code
+	 * @return bool
+	 */
+	public function activate($code)
+	{
+		// @todo , rubrics_list
+		$sql = "SELECT subscriber_id
+			FROM {$this->DB->prefix()}subscribers_submit
+			WHERE site_id = '{$this->Env->site_id}'
+			AND action = 'subscribe'
+			AND code = {$this->DB->quote($code)} ";
+		$row = $this->DB->getRow($sql);
+		if (empty($row)) {
+			$this->setErrorCode(1);
+			$this->setErrorMessge('Код активации не действителен.');
+			return false;
+		} else {
+			$sql = "
+				UPDATE {$this->DB->prefix()}subscribers SET
+					is_active = '1',
+					activate_datetime = NOW()
+				WHERE site_id = '{$this->Env->site_id}'
+				AND subscriber_id  = '{$row['subscriber_id']}' ";
+			$this->DB->query($sql);
+			
+			$sql = "DELETE FROM {$this->DB->prefix()}subscribers_submit
+				WHERE site_id = '{$this->Env->site_id}'
+				AND subscriber_id  = '{$row['subscriber_id']}' 
+				AND action = 'subscribe' ";
+			$this->DB->exec($sql);
+			
+			$sql = "
+				INSERT INTO {$this->DB->prefix()}subscribers_rubrics_relation
+					(subscriber_id, site_id, rubric_id)
+				VALUES
+					('{$row['subscriber_id']}', '{$this->Env->site_id}', '0') ";
+			$this->DB->query($sql);
+			return true;
+		}
+	}
+	
+	/**
 	 * Подтвердить отписку от подписки :)
 	 *
 	 * @param string $email
@@ -179,14 +275,14 @@ class Module_Subscribe extends Module
 		$rubrics_list = serialize(array());
 		
 		$sql = "SELECT count(subscriber_id) AS cnt
-			FROM {$this->DB->prefix()}subscribers_activation
+			FROM {$this->DB->prefix()}subscribers_submit
 			WHERE site_id = '{$this->Env->site_id}'
 			AND subscriber_id = '$subscriber_id' 
-			AND code = {$this->DB->quote($code)} ";
+			AND action = 'delete' ";
 		$row = $this->DB->getRow($sql);
-		if ($row['cnt']) {
+		if ($row['cnt'] == 0) {
 			$sql = "
-				INSERT INTO {$this->DB->prefix()}subscribers_activation
+				INSERT INTO {$this->DB->prefix()}subscribers_submit
 					(site_id, subscriber_id, datetime, action, rubrics_list, code )
 				VALUES
 					('{$this->Env->site_id}', '$subscriber_id', NOW(), 'delete', {$this->DB->quote($rubrics_list)}, {$this->DB->quote($code)} ) ";
@@ -230,7 +326,7 @@ class Module_Subscribe extends Module
 		$code = md5($rubrics_list . microtime() . $email . $subscriber_id );
 		
 		$sql = "
-			INSERT INTO {$this->DB->prefix()}subscribers_activation
+			INSERT INTO {$this->DB->prefix()}subscribers_submit
 				(site_id, subscriber_id, datetime, action, rubrics_list, code )
 			VALUES
 				('{$this->Env->site_id}', '$subscriber_id', NOW(), 'subscribe', $rubrics_list, {$this->DB->quote($code)} ) ";
@@ -256,19 +352,6 @@ class Module_Subscribe extends Module
 			$content,
 			array($email)
 			);
-	}
-	
-	/**
-	 * Проверка, сществует ли емаил в базе подписчиков.
-	 *
-	 * @param string $email
-	 * @return bool
-	 */
-	public function isEmailExist($email)
-	{
-		$sql = "SELECT subscriber_id FROM {$this->DB->prefix()}subscribers WHERE site_id = '{$this->Env->site_id}' AND email = {$this->DB->quote(trim($email))} ";
-		$row = $this->DB->getRow($sql);
-		return empty($row) ? false : true;
 	}
 	
 	/**
@@ -298,8 +381,12 @@ class Module_Subscribe extends Module
 		// @todo проверку на наличие хешей в запросе.
 		switch ($uri_parts[0]['name']) {
 			case 'activate':
-				$data['data']['action'] = 'activate';
-				$data['data']['code'] = $uri_parts[1]['name'];
+				if (isset($uri_parts[1]['name'])) {
+					$data['data']['action'] = 'activate';
+					$data['data']['code'] = $uri_parts[1]['name'];
+				} else {
+					return null;
+				}
 				break;
 			case 'delete':
 				if (isset($uri_parts[1]['name'])) {

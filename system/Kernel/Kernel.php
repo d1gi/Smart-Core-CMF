@@ -1001,7 +1001,7 @@ class Kernel extends SingletonBase
 //		cf_debug($this->profiler['kernel']['parser']);
 
 //		cf_debug($this->EE);
-							
+
 //		cf_debug($this->EE->template, 'Массив template');
 //		cf_debug($this->EE->data, 'Массив data');
 //		cf_debug($this->EE->data['content'], 'Контейнер "content"');
