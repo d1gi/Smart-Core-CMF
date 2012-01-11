@@ -98,17 +98,18 @@ class Module_Catalog extends Module
 	{
 		// Если таблиц не существует, предлагается создать.
 		// или если экземпляр не установлен, пледлагается создать новый.
-		if ($this->Unicat->isTablesExist() == false) {
-			if ($this->Permissions->isRoot()) {
-				if ($this->unicat_params['entity_id'] == 0) {
-					$this->output_data['create_entity_form_data'] = $this->Unicat->getCreateEntityFormData();
-					$this->setTpl($this->Unicat->getCreateEntityFormTemplate());
-cf_debug("123");
-				} else {
-					$this->output_data['create_tables_form_data'] = $this->Unicat->getCreateTablesFormData();
-					$this->setTpl($this->Unicat->getCreateTablesFormTemplate());
-				}
+		if ($this->Permissions->isRoot()) {
+			if ($this->unicat_params['entity_id'] == 0) {
+				$this->output_data['create_entity_form_data'] = $this->Unicat->getCreateEntityFormData();
+				$this->setTpl($this->Unicat->getCreateEntityFormTemplate());
+//cf_debug("123");
+			} else if ($this->Unicat->isTablesExist() == false) {
+				$this->output_data['create_tables_form_data'] = $this->Unicat->getCreateTablesFormData();
+				$this->setTpl($this->Unicat->getCreateTablesFormTemplate());
 			}
+		}
+		
+		if ($this->Unicat->isTablesExist() == false or $this->unicat_params['entity_id'] == 0) {
 			return;
 		}
 		

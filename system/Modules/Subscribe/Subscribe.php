@@ -556,7 +556,7 @@ class Module_Subscribe extends Module
 		// Валидация емаила
 		$Validator = new Helper_Validator();
 		
-		$email = trim($pd['email']);
+		$email = trim(@$pd['email']);
 		
 		switch ($submit) {
 			case 'quick_subscribe':
