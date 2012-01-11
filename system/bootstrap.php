@@ -13,7 +13,7 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2012-01-09.0
+ * @version 	2012-01-12.0
  */
 // Проверка на версию index.php
 if (!defined('INDEX_PHP_VERSION') or INDEX_PHP_VERSION !== 3) {
@@ -62,10 +62,7 @@ $config = array(
 	);
 
 // Наложение конфига платформы на системный конфиг.
-foreach ($cfg_ini as $key => $value) {
-	$config[$key] = $value;
-}
-
+$config = array_merge($config, $cfg_ini); 
 unset($cfg_ini);
 
 // Определение констант.
