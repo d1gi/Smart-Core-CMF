@@ -4,12 +4,16 @@
 /**
  * Класс Session_Handler.
  *  
- * @copyright	Copyright &copy; 2010-2011 Smart Core CMF
+ * @package		Kernel
+ * @author		Artem Ryzhkov
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF
  * @link		http://smart-core.org/
  * @license		http://www.opensource.org/licenses/gpl-2.0
  * 
- * @uses DB
+ * @uses		DB
  * 
+ * @version		2012-01-11.0
+ *  
  * @todo ОЧЕНЬ важно оптимизировать, чтобы медоты getUserData/setUserData и getToken/setToken 
  *		 выполнялись без запросов! т.е. надо эти данные считывать при первом запуске метода read().
  */
@@ -104,7 +108,7 @@ class Session_Handler extends Base
 	 */
 	public function getUserGroups()
 	{
-		return $this->user_data['groups'];
+		return isset($this->user_data['groups']) ? $this->user_data['groups'] : 0;
 	}
 	
 	/**

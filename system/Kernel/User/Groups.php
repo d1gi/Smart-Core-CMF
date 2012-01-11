@@ -51,7 +51,7 @@ class User_Groups extends SingletonBase
 	* 
 	* @return array
 	*/
-	public function getGrouppedArray($user_id)
+	public function getGroupedArray($user_id)
 	{
 		$this->_tmp_group_inherit = array();
 		$this->_tmp_group_level = 0;
@@ -90,8 +90,7 @@ class User_Groups extends SingletonBase
 		}
 		
 		$list = array();
-		
-		$tmp = $this->getGrouppedArray($user_id);
+		$tmp = $this->getGroupedArray($user_id);
 		foreach ($tmp as $key => $value) {
 			foreach ($tmp[$key] as $key2 => $value2) {
 				$list[$key2] = $value2;

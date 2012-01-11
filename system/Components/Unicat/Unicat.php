@@ -657,11 +657,7 @@ class Component_Unicat extends Base
 			if ($comparisons_count > 1) {
 				$sql_comparisons .= " AND (";
 				foreach ($comparisons as $comparison) {
-					if (strlen($comparison['value']) > 0) {
-						$value = $this->DB->quote($comparison['value']);
-					} else {
-						$value = '';
-					}
+					$value = strlen($comparison['value']) > 0 ? $this->DB->quote($comparison['value']) : '';
 					$sql_comparisons .= " ip$property_name.value {$comparison['comparison']} $value \n\t";
 					if ($comparisons_count-- > 1) {
 						$sql_comparisons .= " OR ";
@@ -671,11 +667,7 @@ class Component_Unicat extends Base
 			}
 			// Одно условие на свойство.
 			elseif ($comparisons_count == 1) {
-				if (strlen($comparisons[0]['value']) > 0) {
-					$value = $this->DB->quote($comparisons[0]['value']);
-				} else {
-					$value = '';
-				}
+				$value = strlen($comparisons[0]['value']) > 0 ? $this->DB->quote($comparisons[0]['value']) : '';
 				$sql_comparisons .= " AND ip$property_name.value {$comparisons[0]['comparison']} $value \n";
 			}
 		}
@@ -825,7 +817,7 @@ class Component_Unicat extends Base
 			return false;
 		}
 		
-		$sql = "SELECT item_id, uri_part, is_active, owner_id, meta, create_datetime
+		$sql = "SELECT item_id, uri_part, is_active, owner_id, meta, create_datetime, modify_datetime
 			FROM {$this->prefix}items
 			WHERE item_id = '$item_id'
 			AND entity_id = '{$this->entity_id}'
@@ -866,7 +858,7 @@ class Component_Unicat extends Base
 			ORDER BY pos ASC ";
 		$result = $this->DB->query($sql);
 		while ($row = $result->fetchObject()) {
-			// Получение значений записи.
+			// Получение значений свойств записи.
 			$sql2 = "SELECT value
 				FROM {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$row->name}
 				WHERE item_id = '$item_id' ";
@@ -881,11 +873,7 @@ class Component_Unicat extends Base
 					$value = $this->Media->getFileUri($row2->value, $params);
 					$original_value = $row2->value;
 				} elseif ($row->type == 'select') {
-					if (isset($params['options'][$row2->value])) {
-						$value = $params['options'][$row2->value];
-					} else {
-						$value = $row2->value;
-					}
+					$value = isset($params['options'][$row2->value]) ? $params['options'][$row2->value] : $row2->value;
 					$original_value = $row2->value;
 				} else {
 					$value = $row2->value;
@@ -1289,7 +1277,8 @@ class Component_Unicat extends Base
 			UPDATE {$this->prefix}items SET
 				is_active = '$data[is_active]',
 				uri_part = {$this->DB->quote($uri_part)},
-				meta = $meta
+				meta = $meta,
+				modify_datetime = NOW()
 			WHERE item_id = '$data[item_id]'
 			AND entity_id = '{$this->entity_id}'
 			AND site_id = '{$this->Env->site_id}' ";
@@ -1336,15 +1325,10 @@ class Component_Unicat extends Base
 				}
 			// Свойства записи нет, добавляем его.
 			} else {
-				if (strlen(trim($value)) == 0 and $empty_as_null == 1) {
-					$sql = "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$property_name}
-							(item_id, value) VALUES ('$data[item_id]', NULL)";
-					$this->DB->query($sql);
-				} else {
-					$sql = "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$property_name}
-							(item_id, value) VALUES ('$data[item_id]', " . $this->DB->quote(trim($value)) . " ) ";
-					$this->DB->query($sql);
-				}
+				$sql = (strlen(trim($value)) == 0 and $empty_as_null == 1)
+					? "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$property_name} (item_id, value) VALUES ('$data[item_id]', NULL)"
+					: "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$property_name} (item_id, value) VALUES ('$data[item_id]', " . $this->DB->quote(trim($value)) . " ) ";
+				$this->DB->query($sql);
 			}
 		}
 		return true;

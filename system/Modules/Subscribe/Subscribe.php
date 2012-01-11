@@ -10,7 +10,7 @@
  * @uses DB
  * @uses Permissions
  * 
- * @version 2012-01-10.0
+ * @version 2012-01-11.0
  */
 class Module_Subscribe extends Module
 {

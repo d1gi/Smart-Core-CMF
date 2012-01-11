@@ -11,7 +11,7 @@
  * @uses Helper_Paginator
  * @uses spyc-0.5
  * 
- * @version 2012-01-10.0
+ * @version 2012-01-11.0
  */
 class Component_Unicat_Admin extends Component_Unicat
 {
@@ -884,6 +884,7 @@ class Component_Unicat_Admin extends Component_Unicat
 		
 		// @todo ПЕРЕДЕЛАТЬ! :)
 		$item = $this->getItem($item_id, array('categories' => 1));
+		
 		$current_category_id = 1;
 		if (isset($item['categories'])) {
 			foreach ($item['categories'] as $key => $value) {
@@ -906,11 +907,15 @@ class Component_Unicat_Admin extends Component_Unicat
 					'type' => 'checkbox',
 					'value' => $item['is_active'],
 					),
-				'pd[create_datetime]' => array(
-					'label' => 'Запись создана:',
-					'type' => 'string',
+				'pd[_create_datetime]' => array(
+					'label' => 'Запись создана',
+					'type' => 'html',
 					'value' => $item['create_datetime'],
-					'disabled' => true,
+					),
+				'pd[_modify_datetime]' => array(
+					'label' => 'Запись изменена',
+					'type' => 'html',
+					'value' => $item['modify_datetime'],
 					),
 				'pd[uri_part]' => array(
 					'label' => 'Часть адреса',
@@ -945,6 +950,10 @@ class Component_Unicat_Admin extends Component_Unicat
 				),
 			);
 
+		if (empty($item['modify_datetime'])) {
+			unset($form_data['elements']['pd[_modify_datetime]']);
+		}
+			
 		//$images = array();	
 		$prototype	= $this->getItemPrototype($structures);
 		// @todo Продумать подключение визивига!!!!
@@ -1156,7 +1165,8 @@ class Component_Unicat_Admin extends Component_Unicat
 				'title' => 'Системные параметры',
 				'elements' => array(
 					'pd[is_active]',
-					'pd[create_datetime]',
+					'pd[_create_datetime]',
+					'pd[_modify_datetime]',
 					'pd[uri_part]',
 					'pd[meta][keywords]',
 					'pd[meta][description]',
