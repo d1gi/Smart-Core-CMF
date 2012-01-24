@@ -1,18 +1,19 @@
 <?php
 // Шаблон отображения записей каталога.
+//cmf_dump($this->);
 
-if (isset($data['category_properties']) and !empty($data['category_properties'])) {
+if (!empty($this->category_properties)) {
 	echo "\n<div class=\"unicat_properties\">\n";
-	foreach ($data['category_properties'] as $property_name => $property_value) {
+	foreach ($this->category_properties as $property_name => $property_value) {
 		echo "\t<div class=\"unicat_property_$property_name\">$property_value</div>\n";
 	}
 	echo "</div>\n";
 }
 
-if (isset($data['items'])) {
-	echo "\n<div class=\"$data[class_prefix]list\">\n";
-	foreach ($data['items'] as $key => $value) {
-		echo "<div class=\"$data[class_prefix]item\" id=\"$data[class_prefix]item_id_$key\">\n";
+if (isset($this->items)) {
+	echo "\n<div class=\"{$this->class_prefix}list\">\n";
+	foreach ($this->items as $key => $value) {
+		echo "<div class=\"{$this->class_prefix}item\" id=\"{$this->class_prefix}item_id_$key\">\n";
 		foreach ($value['properties']['content'] as $prop_name => $val) {
 			echo "\t<div class=\"prop_$prop_name\">";
 			if ($val['type'] === 'img') {
@@ -43,5 +44,5 @@ if (isset($data['items'])) {
 ?>
 
 <div class="paginator">
-<?php echo @$data['pages'];?>
+<?php echo $this->Pages?>
 </div>

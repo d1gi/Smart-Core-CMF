@@ -4,16 +4,16 @@
  */
 
 // Вывод сообщений.
-if (isset($data['messages']) and is_array($data['messages'])) {
+if (is_array($this->messages)) {
 	echo 'При заполнении формы допущены следующие ошибки:<br /><ul id="error-messages">';
-	foreach ($data['messages'] as $key => $value) {
+	foreach ($this->messages as $key => $value) {
 	   echo "<li>$value</li>\n";
 	}
 	echo '</ul>';
 }
 
 // Сама форма.
-if (isset($data['webform'])) {
-	$Form = new Helper_Form($data['webform']);
+if ($this->webform) {
+	$Form = new Helper_Form($this->webform);
 	echo $Form;
 }

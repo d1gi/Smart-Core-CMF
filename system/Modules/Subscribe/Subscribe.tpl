@@ -1,30 +1,30 @@
 <?php
 
-if (isset($data['manage_link'])) {
-	echo "<a href=\"" . $data['manage_link'] . "\">Выпуски рассылок</a> &nbsp;&nbsp; <br /><br />";
+if ($this->manage_link) {
+	echo "<a href=\"" . $this->manage_link . "\">Выпуски рассылок</a> &nbsp;&nbsp; <br /><br />";
 }
 
-if (isset($data['error_messages']) and is_array($data['error_messages'])) {
+if ($this->error_messages and is_array($this->error_messages)) {
 	echo 'При вводе данных допущены следующие ошибки:<br /><ul id="error-messages">';
-	foreach ($data['error_messages'] as $key => $value) {
+	foreach ($this->error_messages as $key => $value) {
 	   echo "<li>$value</li>\n";
 	}
 	echo '</ul>';
 }
 
-if (isset($data['error_message'])) {
-	echo "<div class=\"error_message\">" . $data['error_message'] . "</div>";
+if ($this->error_message) {
+	echo "<div class=\"error_message\">" . $this->error_message . "</div>";
 }
 
-if (isset($data['success_message'])) {
-	echo "<div class=\"success_message\">" . $data['success_message'] . "</div>";
+if ($this->success_message) {
+	echo "<div class=\"success_message\">" . $this->success_message . "</div>";
 }
 
-if (isset($data['notice_message'])) {
-	echo "<div class=\"notice_message\">" . $data['notice_message'] . "</div>";
+if ($this->notice_message) {
+	echo "<div class=\"notice_message\">" . $this->notice_message . "</div>";
 }
 
-if (isset($data['items'])) {
+if (isset($this->items)) {
 	echo "\n<div class=\"$data[css_prefix]list\">\n";
 	
 	?>
@@ -36,7 +36,7 @@ if (isset($data['items'])) {
 		</tr>
 	<?php
 	
-	foreach ($data['items'] as $key => $value) {
+	foreach ($this->items as $key => $value) {
 		echo "<tr>\n";
 		echo "\t<td><div class=\"$data[css_prefix]item\" id=\"$data[css_prefix]item_id_$key\">{$value['properties']['content']['subject']['value']}</div></td>\n";
 		echo "\t<td>" . @$value['properties']['content']['auto_start_datetime']['value'] . "</td>\n";
@@ -51,7 +51,7 @@ if (isset($data['items'])) {
 	echo "</div>\n";
 } 
 
-if (isset($data['subscribe_form'])) {
-	$Form = new Helper_Form($data['subscribe_form']);
+if (!empty($this->subscribe_form)) {
+	$Form = new Helper_Form($this->subscribe_form);
 	echo $Form;
 }

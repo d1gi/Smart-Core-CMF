@@ -1,9 +1,7 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
- * Компонент: Универсальный каталог, предоставляющий модулям интерфейс работы с
- * каталогизированными данными.
+ * Компонент: Универсальный каталог, предоставляющий модулям интерфейс работы
+ * с каталогизированными данными.
  * 
  * @uses Component_Media
  * @uses DB
@@ -12,9 +10,9 @@
  * @uses Node
  * @uses User
  * 
- * @version 2012-01-11.0
+ * @version 2012-01-25.0
  */
-class Component_Unicat extends Base
+class Component_Unicat extends Controller
 {
 	/**
 	 * Префикс таблиц.
@@ -122,7 +120,7 @@ class Component_Unicat extends Base
 		$this->entity_id			= $params['entity_id'];
 		$this->current_page			= 1;
 		$this->items_per_page		= 10;
-		$this->setTpl(false);
+//		$this->setTpl(false);
 		
 		// Проверка на наличие таблиц (пока смотрим только entities).
 		$result = $this->DB->query("SHOW TABLES LIKE '{$this->prefix}entities'");
@@ -273,14 +271,14 @@ class Component_Unicat extends Base
 			$selected = strpos($current_path, $uri) === 0 ? 1 : 0;
 			
 			$items[$row->category_id] = array(
-				'selected' => $selected,
-				'uri' => $uri,
-				'title' => $row->title,
-				'uri_part' => $row->uri_part,
-				'is_active' => $row->is_active,
-				'pid' => $row->pid,
-				'pos' => $row->pos,
-				'items' => $this->getCategoriesTree($structure_id, $row->category_id, $max_depth, $is_active),
+				'selected'	=> $selected,
+				'uri'		=> $uri,
+				'title'		=> $row->title,
+				'uri_part'	=> $row->uri_part,
+				'is_active'	=> $row->is_active,
+				'pid'		=> $row->pid,
+				'pos'		=> $row->pos,
+				'items'		=> $this->getCategoriesTree($structure_id, $row->category_id, $max_depth, $is_active),
 				);
 		} // end while $row
 		
@@ -323,7 +321,6 @@ class Component_Unicat extends Base
 	 * Вспомогательный метод рекурсивного формирования списка наследованных категорий.
 	 *
 	 * @param int $category_id
-	 * @return void
 	 */
 	protected function _buildCategoryInheritanceList($structure_id, $category_id)
 	{
@@ -1065,7 +1062,7 @@ class Component_Unicat extends Base
 	 * 
 	 * @todo мультиязычность.
 	 */
-	public function parser($path)
+	public function router($path)
 	{
 		$path_parts = explode('/', $path);
 
@@ -1094,19 +1091,18 @@ class Component_Unicat extends Base
 				// Существует ли запись.
 				if ($item_id = $this->isItemExist(basename($value, '.html'), $category_pid)) {
 					$breadcrumbs[] = array(
-						'uri'	=> $this->Env->current_folder_path . Site::getHttpLangPrefix() . $uri . $value,
+						'uri'	=> $value,
 						'title' => $this->getItemValue($item_id, 'title'),
 						'descr' => '', // @todo сделать :) хотя непонятно пока из чего они могут браться...
 						);
 					
 					$data = array(
-						'data' => array(
-							'path'		 => $path,
+						'action' => 'showItem',
+						'params' => array(
 							'structures' => $category_pid == 0 ? null : array($this->structures[0]['id'] => $category_pid),
 							'item_id'	 => $item_id,
 							),
 						'breadcrumbs'	 => $breadcrumbs,
-						'title'			 => '' // @todo возможно не нужно т.к. вся инфа теперь в $breadcrumbs.
 						);
 					return $data;
 				} else {
@@ -1121,7 +1117,7 @@ class Component_Unicat extends Base
 				$is_success = true;
 				if ($page > 1) {
 					$breadcrumbs[] = array (
-						'uri'	=> $this->Env->current_folder_path . Site::getHttpLangPrefix() . $uri,
+						'uri'	=> $uri,
 						'title' => 'Страница № ' . $page,
 						'descr' => '', // @todo сделать :) хотя непонятно пока из чего оно может браться...
 						);
@@ -1142,7 +1138,7 @@ class Component_Unicat extends Base
 						$row = $result->fetchObject();
 						$uri .= $value . '/';
 						$breadcrumbs[] = array (
-							'uri'	=> $this->Env->current_folder_path . Site::getHttpLangPrefix() . $uri,
+							'uri'	=> $value . '/',
 							'title' => $row->title,
 							'descr' => '', // @todo сделать :) хотя непонятно пока из чего может браться...
 							);
@@ -1162,15 +1158,15 @@ class Component_Unicat extends Base
 		// @todo сделать мультиструктурность! пока юзается первая (rubrics)
 		if ($is_success) {
 			$data = array(
-				'data' => array(
-					'path'			=> $path,
+				'action' => 'run',
+				'params' => array(
 					'structures'	=> $category_pid == 0 ? null : array($this->structures[0]['id'] => $category_pid),
 					//'category_id'	=> $category_pid,
 					'page' 			=> $page, // @todo проверка существует ли запрошенная страница.
 					'item_id'		=> $item_id,
 					'meta'			=> $meta,
 					),
-				'breadcrumbs' 		=> $breadcrumbs,
+				'breadcrumbs'	=> $breadcrumbs,
 				);
 		}
 		
@@ -1228,7 +1224,7 @@ class Component_Unicat extends Base
 			$uri_part = trim($data['item_id']);
 		} else {
 			$Helper_Uri = new Helper_Uri();
-			$uri_part = $Helper_Uri->preparePart($data['uri_part']);
+			$uri_part = $Helper_Uri->preparePart($data['uri_part']); 
 			$sql = "SELECT count(item_id) AS cnt
 				FROM {$this->prefix}items
 				WHERE site_id = '{$this->Env->site_id}'
@@ -1325,9 +1321,8 @@ class Component_Unicat extends Base
 				}
 			// Свойства записи нет, добавляем его.
 			} else {
-				$sql = (strlen(trim($value)) == 0 and $empty_as_null == 1)
-					? "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$property_name} (item_id, value) VALUES ('$data[item_id]', NULL)"
-					: "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$property_name} (item_id, value) VALUES ('$data[item_id]', " . $this->DB->quote(trim($value)) . " ) ";
+				$value = (strlen(trim($value)) == 0 and $empty_as_null == 1) ? 'NULL' : $this->DB->quote(trim($value));
+				$sql = "INSERT INTO {$this->prefix}items_s{$this->Env->site_id}_e{$this->entity_id}_{$property_name} (item_id, value) VALUES ('$data[item_id]', $value)";
 				$this->DB->query($sql);
 			}
 		}
@@ -1658,7 +1653,7 @@ class Component_Unicat extends Base
 	{
 		$sql = "SELECT property_id FROM {$this->prefix}properties WHERE name = '$name' AND entity_id = '{$this->entity_id}' AND site_id = '{$this->Env->site_id}' ";
 		if ($row = $this->DB->getRow($sql)) {
-			return $row['property_id '];
+			return $row['property_id'];
 		} else {
 			return false;
 		}
@@ -1827,27 +1822,27 @@ class Component_Unicat extends Base
 	{
 		switch ($submit) {
 			case 'cancel':
-				cf_redirect($this->path_prefix);
+				cmf_redirect($this->path_prefix);
 				break;
 			case 'create_structure':
 				$this->createStructure($pd);
-				cf_redirect('?structures');
+				cmf_redirect('?structures');
 				break;
 			case 'update_structures':
 				$this->updateStructure($pd);
-				cf_redirect('?structures');
+				cmf_redirect('?structures');
 				break;
 			case 'create_category':
 				$this->createCategory($pd);
-				cf_redirect('?structure=' . $pd['structure_id']);
+				cmf_redirect('?structure=' . $pd['structure_id']);
 				break;
 			case 'delete_category':
 				$this->deleteCategory($pd['category_id']);
-				cf_redirect('?structure=' . $pd['structure_id']);
+				cmf_redirect('?structure=' . $pd['structure_id']);
 				break;
 			case 'upadate_category':
 				$this->updateCategory($pd);
-				cf_redirect('?structure=' . $pd['structure_id']);
+				cmf_redirect('?structure=' . $pd['structure_id']);
 				break;
 			case 'create_entity':
 				$this->createEntity($pd['name'], $pd['title']);
@@ -1857,47 +1852,47 @@ class Component_Unicat extends Base
 				break;
 			case 'create_property':
 				$this->createProperty($pd);
-				cf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
+				cmf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
 				break;
 			case 'update_property':
 				$this->updateProperty($pd);
-				cf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
+				cmf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
 				break;
 			case 'create_properties_group':
 				$this->createPropertiesGroup($pd);
-				cf_redirect('?properties');
+				cmf_redirect('?properties');
 				break;
 			case 'update_properties_group':
 				$this->updatePropertiesGroup($pd);
-				cf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
+				cmf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
 				break;
 			case 'create_item':
 				$item_id = $this->createItem($pd);
 				// @todo надо редиректить на свежесозданную запись т.е. через метод getUriByItemId($item_id)
 				// а еще лучше getCategoryUriByItemId($item_id) - получить ссылку на категорию в которую включена запись.
-				//cf_redirect($this->getUriByCategoryId($pd['category_id'])); 
-				cf_redirect($this->path_prefix);
+				//cmf_redirect($this->getUriByCategoryId($pd['category_id'])); 
+				cmf_redirect($this->path_prefix);
 				break;
 			case 'update_item':
 				$this->updateItem($pd);
 				if (isset($_POST['return_to'])) {
-					cf_redirect($_POST['return_to']);
+					cmf_redirect($_POST['return_to']);
 				} else {
-					//cf_redirect($this->getUriByCategoryId($pd['category_id']));
-					cf_redirect($this->path_prefix);
+					//cmf_redirect($this->getUriByCategoryId($pd['category_id']));
+					cmf_redirect($this->path_prefix);
 				}
 				break;
 			case 'delete_item':
 				if (is_numeric($pd['item_id'])) {
 					$this->deleteItem($pd['item_id']);
 				}
-				cf_redirect($this->getUriByCategoryId(@$pd['category_id'])); // @todo не всегда есть $pd['category_id']
+				cmf_redirect($this->getUriByCategoryId(@$pd['category_id'])); // @todo не всегда есть $pd['category_id']
 				break;
 			case 'delete_property':
 				if (is_numeric($pd['property_id'])) {
 					$this->deleteProperty($pd['property_id']);
 				}
-				cf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
+				cmf_redirect('?edit_properties_group=' . $pd['properties_group_id']);
 				break;
 			default;
 		}

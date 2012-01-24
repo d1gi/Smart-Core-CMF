@@ -1,4 +1,3 @@
 <?php 
-$Form = new Helper_Form(@$data['edit_collection_form_data']);
+$Form = new Helper_Form($this->edit_collection_form_data);
 echo $Form;
-?>

@@ -11,7 +11,7 @@
 		<th>Params</th>
 	</tr>
 	<?php
-	foreach ($data['collections'] as $key => $value) {
+	foreach ($this->collections as $key => $value) {
 		echo "<tr>\n";
 		echo "\t<td>$key</td>\n";
 		echo "\t<td><b><a href=\"" . HTTP_ROOT . ADMIN . "/component/Media/collection/$key/\">$value[name]</a></b></td>\n";
@@ -33,7 +33,7 @@
 
 <h3>Создать новую коллекцию</h3>
 <?php 
-$Form = new Helper_Form(@$data['create_collection_form_data']);
+$Form = new Helper_Form($this->create_collection_form_data);
 echo $Form;
 ?>
 </fieldset>
@@ -50,7 +50,7 @@ echo $Form;
 	</tr>
 	<?php
 
-	foreach ($data['storages'] as $key => $value) {
+	foreach ($this->storages as $key => $value) {
 		echo "<tr>\n";
 		echo "\t<td>$key</td>\n";
 		echo "\t<td><b><a href=\"storage/$key/\">$value[name]</a></b></td>\n";
@@ -70,7 +70,7 @@ echo $Form;
 
 <h3>Создать новое хранилище</h3>
 <?php 
-$Form = new Helper_Form(@$data['create_storage_form_data']);
+$Form = new Helper_Form($this->create_storage_form_data);
 echo $Form;
 ?>
 

@@ -77,9 +77,9 @@ class Module_WebForm extends Module
 		}
 		
 		// Сообщение об успешной отправке формы.
-		$this->output_data['send_success'] = $this->Session_Force->send_success;
-		if (!empty($this->output_data['send_success'])) {
-			$this->setTpl('Success');
+		$this->View->send_success = $this->Session_Force->send_success;
+		if (!empty($this->View->send_success)) {
+			$this->View->setTpl('Success');
 			return true;
 		}
 		
@@ -179,8 +179,8 @@ class Module_WebForm extends Module
 				);
 		}
 		
-		$this->output_data['messages'] = $this->Session_Force->messages;
-		$this->output_data['webform'] = $form_data;
+		$this->View->messages = $this->Session_Force->messages;
+		$this->View->webform = $form_data;
 	}	
 	
 	/**

@@ -146,7 +146,7 @@ class Module_Taxonomy extends Module
 	 * @param string $path - часть URI запроса
 	 * @return array|false
 	 */
-	public function parser($path)
+	public function parse($path)
 	{
 		$tag = explode('/', $path);
 		$tag = $tag[0];
@@ -168,5 +168,4 @@ class Module_Taxonomy extends Module
 		
 		return $data;
 	}
-	
 }

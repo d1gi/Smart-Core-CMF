@@ -10,7 +10,7 @@
 		<th>Action</th>
 	</tr>        
 <?php
-	foreach ($data['groups_list'] as $group_id => $value) {
+	foreach ($this->groups_list as $group_id => $value) {
 		echo "<tr>\n";
 		echo "<td>$group_id</td>";
 		echo "<td>$value[name]</td>";
@@ -32,7 +32,7 @@
 
 <fieldset><legend>Создать новую группу</legend>
 <?php
-$Form = new Helper_Form($data['create_group_form_data']);
+$Form = new Helper_Form($this->create_group_form_data);
 echo $Form;
 ?>
 </fieldset>

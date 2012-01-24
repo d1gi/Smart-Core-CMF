@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Модуль Menu.
  * 
@@ -9,7 +7,7 @@
  * @uses Kernel
  * @uses Permissions
  * 
- * @version 2011-11-01.0
+ * @version 2012-01-24.0
  */
 class Module_Menu extends Module
 {
@@ -39,12 +37,6 @@ class Module_Menu extends Module
 			'selected_inheritance' => 0,
 			'tpl' 			=> '',
 			));
-
-		$this->menu_group_id 			= $this->Node->getParam('menu_group_id');
-		$this->selected_inheritance		= $this->Node->getParam('selected_inheritance');
-		$this->css_class				= $this->Node->getParam('css_class');
-		$this->max_depth				= $this->Node->getParam('max_depth');
-		$this->tpl						= $this->Node->getParam('tpl');
 	}
 
 	/**
@@ -55,13 +47,12 @@ class Module_Menu extends Module
 	public function run($parser_data)
 	{
 		if (!empty($this->tpl)) {
-			$this->setTpl($this->tpl);
+			$this->View->setTpl($this->tpl);
 		}
 		
 		$this->_getTreeList($this->getTree(0, $this->max_depth));
-		$this->output_data['css_class'] = $this->css_class;
-		$this->output_data['items'] = $this->_folder_tree_list_arr;
-//		$this->output_data['items'] = $this->getItems();
+		$this->View->css_class = $this->css_class;
+		$this->View->items = $this->_folder_tree_list_arr;
 	}	
 
 	/**
@@ -97,7 +88,7 @@ class Module_Menu extends Module
 	 * @uses Permissions
 	 * 
 	 * @todo Сделать поддержку древовидности (вложенных пунктов меню)
-	 */
+	 *
 	protected function getItems_old($pid = false, $max_depth = false)
 	{
 		$items = array();
@@ -141,7 +132,7 @@ class Module_Menu extends Module
 //			$items[$row->item_id]['pid'] = $row->pid;
 		}
 		return $items;
-	}
+	}*/
 	
 	/**
 	 *  
@@ -154,16 +145,10 @@ class Module_Menu extends Module
 		while($row = $result->fetchObject()) {
 			$data[$row->group_id]['title'] = "$row->descr ($row->name)";
 			$data[$row->group_id]['level'] = 0;
-			if ($row->group_id == $selected) {
-				$tmp = 1;
-			} else {
-				$tmp = 0;
-			}
-			$data[$row->group_id]['selected'] = $tmp;
+			$data[$row->group_id]['selected'] = $row->group_id == $selected ? 1 : 0;
 		}
 		return $data;
 	}
-	
 	
 	/**
 	 * Обработчик POST данных
@@ -234,11 +219,7 @@ class Module_Menu extends Module
 		$this->_tree_level++;
 		$items = array();
 
-		if ($this->only_is_active) {
-			$is_active = 'AND i.is_active = 1';
-		} else {
-			$is_active = '';
-		}
+		$is_active = $this->only_is_active ? 'AND i.is_active = 1' : '';
 		
 		// @todo сделать через класс Folder
 //		$Folder = new Folder();
@@ -270,45 +251,36 @@ class Module_Menu extends Module
 			if ($max_depth != false and $max_depth < $this->_tree_level) {
 				continue;
 			}
-
-			if (empty($row->direct_link)) {
-				$uri = Folder::getUri($row->folder_id);
-			} else {
-				$uri = $row->direct_link;
-			}
 			
-			if (empty($row->title)) {
-				$title = $row->folder_title;
-			} else {
-				$title = $row->title;
-			}
+			$uri = empty($row->direct_link) ? Folder::getUri($row->folder_id) : $row->direct_link;
+			$title = empty($row->title) ? $row->folder_title : $row->title;
 			
 			$selected = 0;
 			if ($this->selected_inheritance) {
-				foreach ($this->EE->breadcrumbs as $breadcrumb) {
-					if ($breadcrumb['uri'] === $uri and ($uri != HTTP_ROOT or Kernel::getEnv()->current_folder_id == 1)) {
+				foreach ($this->Breadcrumbs->get() as $breadcrumb) {
+					if ($breadcrumb['uri'] === $uri and ($uri != HTTP_ROOT or $this->Env->current_folder_id == 1)) {
 						$selected = 1;
 						break;
 					}
 				}
 			} else {
-				if (Kernel::getEnv()->current_folder_id == $row->folder_id) {
+				if ($this->Env->current_folder_id == $row->folder_id) {
 					$selected = 1;
 				}
 			}
 			
 			$items[$row->item_id] = array(
-				'selected' => $selected,
-				'uri' => $uri,
-				'title' => $title,
-				'descr' => $row->folder_descr,
-				'folder_id' => $row->folder_id,
-				'options' => unserialize($row->options),
+				'selected'	=> $selected,
+				'uri'		=> $uri,
+				'title'		=> $title,
+				'descr'		=> $row->folder_descr,
+				'folder_id'	=> $row->folder_id,
+				'options'	=> unserialize($row->options),
 				// '_temp_group_id' => $group_id,
-				'pid' => $row->pid,
-				'pos' => $row->pos,
-				'is_active' => $row->is_active,
-				'items' => $this->getTree($row->item_id, $max_depth),
+				'pid'		=> $row->pid,
+				'pos'		=> $row->pos,
+				'is_active'	=> $row->is_active,
+				'items'		=> $this->getTree($row->item_id, $max_depth),
 				);
 			
 		} // end while $row

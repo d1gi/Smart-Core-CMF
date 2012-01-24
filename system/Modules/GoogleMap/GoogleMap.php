@@ -93,6 +93,6 @@ class Module_GoogleMap extends Module
 				);
 		}
 		
-		$this->output_data['map_block'] = $this->map_block_id_name;
+		$this->View->map_block = $this->map_block_id_name;
 	}
 }

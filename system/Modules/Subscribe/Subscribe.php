@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Модуль: подписка на рассылку.
  * 
@@ -90,7 +88,8 @@ class Module_Subscribe extends Module
 		// При database_id = 0 модуль будет использовать тоже подключение, что и ядро, иначе создаётся новое подключение.
 		if ($this->unicat_database_id != 0) {
 			// @todo для совместимости с эмуляцией функции get_called_class для РНР 5.2, дальше для PHP 5.3 only можно будет записывать в одну строку, без $con_data.
-			$con_data = DB_Resources::getInstance()->getConnectionData($this->unicat_database_id);
+//			$con_data = DB_Resources::getInstance()->getConnectionData($this->unicat_database_id);
+			$con_data = $this->DB_Resources->getConnectionData($this->unicat_database_id);
 			$UnicatDB = DB::connect($con_data);
 			unset($con_data);
 		} else {
@@ -120,64 +119,64 @@ class Module_Subscribe extends Module
 	{
 		if ($this->unicat_params['entity_id'] == 0) {
 			if ($this->Permissions->isRoot()) {
-				$this->output_data['create_entity_form_data'] = $this->Unicat->getCreateEntityFormData();
-				$this->setTpl($this->Unicat->getCreateEntityFormTemplate());
+				$this->View->create_entity_form_data = $this->Unicat->getCreateEntityFormData();
+				$this->View->setTpl($this->Unicat->getCreateEntityFormTemplate());
 			}
 			return;
 		}
 		
 		if (($this->Permissions->isRoot() or $this->Permissions->isAdmin()) and @$parser_data['action'] !== 'releases') {
-			$this->output_data['manage_link'] = $this->Node->getUri() . 'releases/';
+			$this->View->manage_link = $this->Node->getUri() . 'releases/';
 		}
 		
 		switch ($parser_data['action']) {
 			case 'activate':
 				if ($this->activate($parser_data['code'])) {
-					$this->output_data['notice_message'] = 'Активация на подписку прошла успешно.';
+					$this->View->notice_message = 'Активация на подписку прошла успешно.';
 				} else {
-					$this->output_data['error_message'] = $this->getErrorMessage();
+					$this->View->error_message = $this->getErrorMessage();
 				}
 				return;
 				break;
 			case 'email':
 				if ($this->getSubscriberId($parser_data['email'])) {
-					$this->output_data['notice_message'] = 'Указанный email уже существует в базе рассылок. Вы можете ввести другой email и продолжить процедуру подписки либо отписаться от рассылки.';
-					$this->output_data['subscribe_form'] = $this->getUnSubscribeFormData($parser_data['email']);
+					$this->View->notice_message = 'Указанный email уже существует в базе рассылок. Вы можете ввести другой email и продолжить процедуру подписки либо отписаться от рассылки.';
+					$this->View->subscribe_form = $this->getUnSubscribeFormData($parser_data['email']);
 				} else {
 					$this->createActivation($parser_data['email']);
-					$this->output_data['success_message'] = 'На указанный email: ' . $parser_data['email'] . ' отправлено письмо с кодом активации подписки на рассылку.';
+					$this->View->success_message = 'На указанный email: ' . $parser_data['email'] . ' отправлено письмо с кодом активации подписки на рассылку.';
 				}
 				return;
 				break;
 			case 'delete':
 				if ($this->getSubscriberId($parser_data['code'])) {
 					$this->createDeleteActivation($parser_data['code']);
-					$this->output_data['success_message'] = 'На указанный email: ' . $parser_data['code'] . ' отправлено письмо с кодом подтверждения операции.';
+					$this->View->success_message = 'На указанный email: ' . $parser_data['code'] . ' отправлено письмо с кодом подтверждения операции.';
 				} else {
 					if ($this->delete($parser_data['code'])) {
-						$this->output_data['notice_message'] = 'Удаление подписки прошло успешно.';
+						$this->View->notice_message = 'Удаление подписки прошло успешно.';
 					} else {
-						$this->output_data['error_message'] = $this->getErrorMessage();
+						$this->View->error_message = $this->getErrorMessage();
 					}
 				} 
 				return;
 				break;
 			case 'releases':
-				$this->EE->addBreadCrumb('releases/', 'Управление');
-				$this->output_data['css_prefix'] = $this->css_prefix;
+				$this->Breadcrumbs->add('releases/', 'Управление');
+				$this->View->css_prefix = $this->css_prefix;
 				$options = array(
 					'order' => array(
 						'i.item_id' => 'DESC',
 						),
 					);
-				$this->output_data['items'] = $this->Unicat->getItems($options);
+				$this->View->items = $this->Unicat->getItems($options);
 				return;
 				break;
 			default;
 		}
 		
-		$this->output_data['error_messages'] = $this->Session_Force->error_messages;
-		$this->output_data['subscribe_form'] = $this->getSubscribeFormData($this->Session_Force->email);
+		$this->View->error_messages = $this->Session_Force->error_messages;
+		$this->View->subscribe_form = $this->getSubscribeFormData($this->Session_Force->email);
 	}	
 	
 	/**
@@ -196,7 +195,7 @@ class Module_Subscribe extends Module
 		$row = $this->DB->getRow($sql);
 		if (empty($row)) {
 			$this->setErrorCode(1);
-			$this->setErrorMessge('Код не действителен.');
+			$this->setErrorMessage('Код не действителен.');
 			return false;
 		} else {
 			$sql = "DELETE FROM {$this->DB->prefix()}subscribers_submit
@@ -235,7 +234,7 @@ class Module_Subscribe extends Module
 		$row = $this->DB->getRow($sql);
 		if (empty($row)) {
 			$this->setErrorCode(1);
-			$this->setErrorMessge('Код активации не действителен.');
+			$this->setErrorMessage('Код активации не действителен.');
 			return false;
 		} else {
 			$sql = "
@@ -373,10 +372,10 @@ class Module_Subscribe extends Module
 	 * @param string $path - часть URI запроса
 	 * @return array|false
 	 */
-	public function parser($path)
+	public function router($path)
 	{
 		$data = array();
-		$uri_parts = Uri::parser($path);
+		$uri_parts = Uri::parse($path);
 		
 		// @todo проверку на наличие хешей в запросе.
 		switch ($uri_parts[0]['name']) {
@@ -551,6 +550,7 @@ class Module_Subscribe extends Module
 	 */
 	public function postProcessor($pd, $submit)
 	{
+		//cmf_dump($this->Session); cmf_dump($_POST); exit;		
 		$this->Unicat->postProcessor($pd, $submit);
 		
 		// Валидация емаила
@@ -561,39 +561,38 @@ class Module_Subscribe extends Module
 		switch ($submit) {
 			case 'quick_subscribe':
 				if ($Validator->email($email)) {
-					cf_redirect($this->Node->getUri() . $email);
+					cmf_redirect($this->Node->getUri() . $email);
 				} else {
 					if (!empty($email)) {
 						$this->Session_Force->error_messages = $Validator->getMessages();
 						$this->Session_Force->email = $email;
 					}
-					cf_redirect($this->Node->getUri());
+					cmf_redirect($this->Node->getUri());
 				}
 				break;
 			case 'subscribe': // @todo 
 				if ($Validator->email($email)) {
-					cf_redirect($this->Node->getUri() . $email);
+					cmf_redirect($this->Node->getUri() . $email);
 				} else {
 					if (!empty($email)) {
 						$this->Session_Force->error_messages = $Validator->getMessages();
 						$this->Session_Force->email = $email;
 					}
-					cf_redirect($this->Node->getUri());
+					cmf_redirect($this->Node->getUri());
 				}
 				break;
 			case 'unsubscribe':
 				if ($Validator->email($email)) {
-					cf_redirect($this->Node->getUri() . 'delete/' . $email);
+					cmf_redirect($this->Node->getUri() . 'delete/' . $email);
 				} else {
 					if (!empty($email)) {
 						$this->Session_Force->error_messages = $Validator->getMessages();
 						$this->Session_Force->email = $email;
 					}
-					cf_redirect($this->Node->getUri());
+					cmf_redirect($this->Node->getUri());
 				}
 				break;
 			default:
 		}
-	} 
-
+	}
 }

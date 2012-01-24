@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
@@ -15,7 +13,7 @@ class Module_GoogleMap_Admin extends Module_GoogleMap implements Admin_ModuleInt
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			/*  'google_key' => array(
 				'label' => 'Ключ: (http://code.google.com/intl/ru/apis/maps/signup.html)',
 				'type' => 'text',
@@ -42,8 +40,6 @@ class Module_GoogleMap_Admin extends Module_GoogleMap implements Admin_ModuleInt
 				'value' => $this->latitude
 				),
 		);
-		
-		return $node_params;
 	}
 
 	/**
@@ -62,24 +58,4 @@ class Module_GoogleMap_Admin extends Module_GoogleMap implements Admin_ModuleInt
 			);
 		return $params;
 	}
-
-	/**
-	 * Получить элементы управления нодой.
-	 * 
-	 * @return array
-	 */
-/*	public function getFrontControls()
-	{
-		$this->default_action = 'edit';
-
-		$items['edit'] = array(
-			'popup_window_title' => 'Редактирование',
-			'title' => 'Редактировать',
-			'link' => $this->Env->current_folder_path . ACTION . '/' . $this->Node->id . '/edit/',
-			'ico' => 'edit',
-			);
-		return $items;
-		
-	}
-*/
 }

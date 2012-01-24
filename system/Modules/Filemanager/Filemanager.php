@@ -71,7 +71,7 @@ class Module_Filemanager extends Module
 			'help' => 'Cправка по загрузке файла',
 			);
 		
-		$this->output_data['collections_list'] = $this->Media->getCollectionsList(true);
+		$this->View->collections_list = $this->Media->getCollectionsList(true);
 		
 		$params = array(
 			'order' => array(
@@ -132,8 +132,8 @@ class Module_Filemanager extends Module
 				);
 		}
 		
-		$this->output_data['file_list'] = $this->Media->getFilesList($params);
-		$this->output_data['upload_form'] = $form_data;
+		$this->View->file_list = $this->Media->getFilesList($params);
+		$this->View->upload_form = $form_data;
 	}	
 
 	/**
@@ -144,7 +144,7 @@ class Module_Filemanager extends Module
 	 * 
 	 * @todo мультиязычность.
 	 */
-	public function parser($path)
+	public function router($path)
 	{
 		$path_parts = explode('/', $path);
 

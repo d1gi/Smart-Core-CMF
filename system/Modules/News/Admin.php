@@ -1,10 +1,8 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
- * @version 2011-12-05.0
+ * @version 2011-12-25.0
  */
 class Module_News_Admin extends Module_News
 {
@@ -106,34 +104,18 @@ class Module_News_Admin extends Module_News
 	 * Функция обработки действий над нодой.
 	 * 
 	 * @param string $params - часть адреса идущая после ключевого слова "action" в строке запроса.
-	 * @return void
+	 * @return bool
 	 */
 	public function nodeAction($params)
 	{
-		$this->output_data = $this->Unicat->action($params);
+		$this->Unicat->action($params);
+		$this->View = $this->Unicat->View;
 		
 		// Если не используется период публикации, то и не отображаются свойства дат начала и конца отображения.
 		if ($this->use_publication_period == 0) {
-			unset($this->output_data['form_data']['elements']['pd[content][8]']);
-			unset($this->output_data['form_data']['elements']['pd[content][9]']);
+			unset($this->View->form_data['elements']['pd[content][8]']);
+			unset($this->View->form_data['elements']['pd[content][9]']);
 		}
-		
-		$this->setTpl($this->Unicat->getTpl());
-		$this->setTplPath($this->Unicat->getTplPath());
 		return true;
 	}
-
-	/**
-	 * Вызывается при создании ноды.
-	 * 
-	 * @return array $params
-	 *
-	public function createNode()
-	{
-		$params = parent::createNode();
-		//$params['use_publication_period'] = 0;
-		return $params;
-	}
-	*/
-
 }

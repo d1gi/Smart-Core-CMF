@@ -7,7 +7,7 @@
 	$first_child = true;
 
 	echo "\n<ul>\n";
-	foreach ($data['categories_list'] as $key => $value) {
+	foreach ($this->categories_list as $key => $value) {
 		
 		$tab = '';
 		for ($i = 0; $i <= $value['level'] - 1; $i++) {
@@ -63,7 +63,7 @@
 	</fieldset>
 
 	<fieldset><legend>Добавить новую категорию</legend>
-	<?php $Form = new Helper_Form($data['new_category_form_data']); echo $Form;?>
+	<?php $Form = new Helper_Form($this->new_category_form_data); echo $Form;?>
 	</fieldset>
 
 <a href="?">&laquo; Назад</a>

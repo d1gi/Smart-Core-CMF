@@ -57,7 +57,7 @@ class Module_???_Admin extends Module_??? implements Admin_ModuleInterface
 					),
 				),
 			);
-		$this->output_data['edit_form_data'] = $form_data;
+		$this->View->edit_form_data = $form_data;
 	}
 */
 	/**

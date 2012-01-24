@@ -6,7 +6,7 @@
  * 
  * @uses EE
  */
-class Component_Popup extends Base 
+class Component_Popup extends Controller
 {
 	private $type;
 	private $title;
@@ -28,7 +28,6 @@ class Component_Popup extends Base
 	 * Установить тип библиотери по работе с лайтбоксом.
 	 * 
 	 * @param string $type
-	 * @return void
 	 */
 	public function setType($type)
 	{

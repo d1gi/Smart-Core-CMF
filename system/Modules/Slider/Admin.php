@@ -36,7 +36,7 @@ class Module_Slider_Admin extends Module_Slider implements Admin_ModuleInterface
 				AND slider_id = '$_GET[delete_img]'
 				";
 			$this->DB->exec($sql);
-			cf_redirect($_SERVER['HTTP_REFERER']);
+			cmf_redirect($_SERVER['HTTP_REFERER']);
 		}
 		
 		$form_data = array(

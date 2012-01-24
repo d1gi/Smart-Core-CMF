@@ -29,15 +29,15 @@ jQuery(function(){
 
 echo "<table width=\"100%\">
 	<tr>
-		<td><h2>" . $data['album']['title'] . "</h2></td>
+		<td><h2>" . $this->album['title'] . "</h2></td>
 		<td align=\"right\">&nbsp;<a href=\"?\">все альбомы</a></td>
 	</tr>
 </table>
 ";
 
-echo "<p>"  . $data['album']['images_count'] . " фотографий</p>";
+echo "<p>"  . $this->album['images_count'] . " фотографий</p>";
 
-foreach ($data['images'] as $key => $value) {
+foreach ($this->images as $key => $value) {
 	echo "
 	<a class=\"lightview\" rel=\"gallery[mygallery]\" href=\"$value[original_link]\" name=\"image_$key\" title=\"$value[descr]\">
 		<div class=\"gallery_image\" id=\"news_item_id_$key\">

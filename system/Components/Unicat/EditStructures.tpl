@@ -6,9 +6,9 @@
 
 <?php
 
-if (!empty($data['structures_list'])) { ?>
+if (!empty($this->structures_list)) { ?>
 	<form action="" method="post" class="default-form">
-	<input type="hidden" name="node_id" value="<?php echo $data['node_id']?>"/>
+	<input type="hidden" name="node_id" value="<?php echo $this->node_id?>"/>
 	<table class="admin-table" width="100%">
 	<tr>
 		<th>id</th>
@@ -23,7 +23,7 @@ if (!empty($data['structures_list'])) { ?>
 	</tr>
 
 	<?php
-	foreach ($data['structures_list'] as $key => $value) {
+	foreach ($this->structures_list as $key => $value) {
 		
 		if ($value['reqired'] == 1) {
 			$required = ' checked="checked"';
@@ -58,7 +58,7 @@ if (!empty($data['structures_list'])) { ?>
 }
 
 
-//	foreach ($data['properties_groups_list'] as $key => $value) {
+//	foreach ($this->properties_groups_list as $key => $value) {
 //		echo "\t<li><a href=\"?edit_properties_group=$key\">$value[title]</a></li>\n";				
 //	}
 ?>
@@ -66,7 +66,7 @@ if (!empty($data['structures_list'])) { ?>
 <!--</ul> </fieldset>-->
 
 <fieldset><legend>Добавить структуру категорий</legend>
-<?php $Form = new Helper_Form($data['new_structure_form_data']); echo $Form;?>
+<?php $Form = new Helper_Form($this->new_structure_form_data); echo $Form;?>
 </fieldset>
 
 </div>

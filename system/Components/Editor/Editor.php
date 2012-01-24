@@ -6,7 +6,7 @@
  * 
  * @uses EE
  */
-class Component_Editor extends Base
+class Component_Editor extends Controller
 {
 	private $type;
 	private $width;

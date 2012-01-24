@@ -1,19 +1,18 @@
 
 <div class="default-form">
 <?php
-if (isset($data['edit_item_form_data'])) {
-	$Form = new Helper_Form($data['edit_item_form_data']);
-	echo $Form;
-}
+$Form = new Helper_Form($this->edit_item_form_data);
+echo $Form;
 
-if (isset($data['list'])) {
+
+if ($this->list) {
 	echo "<fieldset><legend>Пункты меню</legend>\n<ul>\n";
 	
 	$level = 0;
 	$first_child = true;
 	
-	foreach ($data['list'] as $key => $value) {
-		$anchor = "<a href=\"" . $data['link'] . $key . "/\" title=\"" . $value['uri'] . "\">" . $value['title'] . " (id: $key, pos: " . $value['pos'] . ")</a>";
+	foreach ($this->list as $key => $value) {
+		$anchor = "<a href=\"" . $this->link . $key . "/\" title=\"" . $value['uri'] . "\">" . $value['title'] . " (id: $key, pos: " . $value['pos'] . ")</a>";
 
 		if ($value['is_active'] == 0) {
 			$anchor = "<span style=\"text-decoration: line-through;\">$anchor</span>";
@@ -53,7 +52,7 @@ if (isset($data['list'])) {
 	</fieldset>
 	
 	<fieldset><legend>Добавить новый пункт меню</legend>
-	<?php $Form = new Helper_Form($data['new_item_form_data']); echo $Form;?>
+	<?php $Form = new Helper_Form($this->new_item_form_data); echo $Form;?>
 	</fieldset>
 	
 	<?php

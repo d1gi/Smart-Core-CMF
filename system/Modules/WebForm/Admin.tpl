@@ -1,22 +1,10 @@
 <?php
 /**
- * @version 2011-07-19.0
+ * @version 2012-01-24.0
  */
 
-// Отображение меню.
-if (isset($data['menu'])) {
-	foreach ($data['menu'] as $key => $value) {
-		if (isset($value['selected']) and $value['selected'] == true) {
-			echo "<b><a href=\"$value[link]\">$value[title]</a></b> | ";
-		} else {
-			echo "<a href=\"$value[link]\">$value[title]</a> | ";
-		}
-	}
-	echo "<br /><br />\n\n";
-}
- 
 // Список всех Веб-форм.
-if (isset($data['webforms_list']) and count($data['webforms_list'] > 0)) {
+if (is_array($this->webforms_list) and count($this->webforms_list > 0)) {
 	?>
 	<fieldset><legend>Список всех веб-форм</legend>
 	<table class="admin-table" width="100%">
@@ -29,7 +17,7 @@ if (isset($data['webforms_list']) and count($data['webforms_list'] > 0)) {
 			<th>Action</th>
 		</tr>        
 		<?php
-		foreach ($data['webforms_list'] as $form_id => $value) {
+		foreach ($this->webforms_list as $form_id => $value) {
 			echo "<tr>\n";
 			echo "<td>$form_id</td>";
 			echo "<td><a href=\"$form_id/\">$value[name]</a></td>";
@@ -52,7 +40,7 @@ if (isset($data['webforms_list']) and count($data['webforms_list'] > 0)) {
 }
 
 // Список полей формы.
-if (isset($data['webform_fields']) and count($data['webform_fields']) > 0) {
+if (is_array($this->webform_fields) and count($this->webform_fields) > 0) {
 	?>
 	<fieldset><legend>Поля веб-формы</legend>
 	<table class="admin-table" width="100%">
@@ -68,7 +56,7 @@ if (isset($data['webform_fields']) and count($data['webform_fields']) > 0) {
 <!--			<th>Action</th>-->
 		</tr>        
 		<?php
-		foreach ($data['webform_fields'] as $field_id => $value) {
+		foreach ($this->webform_fields as $field_id => $value) {
 			echo "<tr>\n";
 			echo "<td>$field_id</td>";
 			echo "<td>$value[pos]</td>";
@@ -88,38 +76,38 @@ if (isset($data['webform_fields']) and count($data['webform_fields']) > 0) {
 }
 
 // Просмотр результата.
-if (isset($data['result']) and count($data['result']) > 0) {
+if (is_array($this->result) and count($this->result) > 0) {
 	?>
 	<fieldset><legend>Просмотр результата веб-формы</legend>
 	<table class="admin-table" width="100%">
 		<?php
 		echo "<tr>\n";
 		echo "<td>Результат</td><td>";
-			foreach ($data['result']['result_data'] as $key => $value) {
+			foreach ($this->result['result_data'] as $key => $value) {
 				echo "<b>$value[title]</b>: $value[content] <br /><br />";
 			}
 		echo "</td>";
-//		echo "<td>{$data['result']['result_data']}</td>";
+//		echo "<td>{$this->result['result_data']}</td>";
 		echo "</tr>\n";
 
 		echo "<tr>\n";
 		echo "<td>Отправлено</td>";
-		echo "<td>{$data['result']['datetime']} (by user_id: {$data['result']['sender_user_id']})</td>";
+		echo "<td>{$this->result['datetime']} (by user_id: {$this->result['sender_user_id']})</td>";
 		echo "</tr>\n";
 		
 		echo "<tr>\n";
 		echo "<td>IP адрес</td>";
-		echo "<td>{$data['result']['ip']}</td>";
+		echo "<td>{$this->result['ip']}</td>";
 		echo "</tr>\n";
 		
 		echo "<tr>\n";
 		echo "<td>Браузер</td>";
-		echo "<td>{$data['result']['browser']} v{$data['result']['browser_version']} ({$data['result']['platform']})</td>";
+		echo "<td>{$this->result['browser']} v{$this->result['browser_version']} ({$this->result['platform']})</td>";
 		echo "</tr>\n";
 		
 		echo "<tr>\n";
 		echo "<td>User Agent</td>";
-		echo "<td>{$data['result']['user_agent']}</td>";
+		echo "<td>{$this->result['user_agent']}</td>";
 		echo "</tr>\n";
 		
 		?>
@@ -129,7 +117,7 @@ if (isset($data['result']) and count($data['result']) > 0) {
 }
 
 // Список результатов отправки формы.
-if (isset($data['results']) and count($data['results']) > 0) {
+if (isset($this->results) and count($this->results) > 0) {
 	?>
 	<fieldset><legend>Результаты отправки веб-формы</legend>
 	<table class="admin-table" width="100%">
@@ -141,7 +129,7 @@ if (isset($data['results']) and count($data['results']) > 0) {
 			<!--<th>Action</th>-->
 		</tr>        
 		<?php
-		foreach ($data['results'] as $field_id => $value) {
+		foreach ($this->results as $field_id => $value) {
 			echo "<tr>\n";
 			echo "<td>$field_id</td>";
 			echo "<td><a href=\"$field_id/\">$value[datetime]</a></td>";
@@ -157,32 +145,30 @@ if (isset($data['results']) and count($data['results']) > 0) {
 }
  
 // Форма создания новой Веб-формы.
-if (isset($data['create_webform_form_data'])) {
+if ($this->create_webform_form_data) {
 	echo "<fieldset><legend>Создать новую веб-форму</legend>";
-	$Form = new Helper_Form($data['create_webform_form_data']);
+	$Form = new Helper_Form($this->create_webform_form_data);
 	echo $Form;
 	echo "</fieldset>";
 }
 
 // Форма создания поля.
-if (isset($data['create_webform_field_form_data'])) {
+if ($this->create_webform_field_form_data) {
 	echo "<fieldset><legend>Создать поле</legend>";
-	$Form = new Helper_Form($data['create_webform_field_form_data']);
+	$Form = new Helper_Form($this->create_webform_field_form_data);
 	echo $Form;
 	echo "</fieldset>";
 }
 
 // Форма редактирования поля.
-if (isset($data['edit_webform_field_form_data'])) {
-	$Form = new Helper_Form($data['edit_webform_field_form_data']);
-	echo $Form;
-}
+$Form = new Helper_Form($this->edit_webform_field_form_data);
+echo $Form;
 
 // Форма редактирования Веб-формы.
-if (isset($data['edit_webform_form_data'])) {
+//if ($this->edit_webform_form_data) {
 //	echo "<fieldset><legend>Создать новую Веб-форму</legend>";
-	$Form = new Helper_Form($data['edit_webform_form_data']);
+	$Form = new Helper_Form($this->edit_webform_form_data);
 	echo $Form;
 //	echo "</fieldset>";
-}
+//}
 

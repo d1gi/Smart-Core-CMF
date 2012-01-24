@@ -7,7 +7,7 @@
  * @uses Node
  * 
  * @package Module
- * @version 2011-07-09.0
+ * @version 2012-01-14.0
  */
 class Module_Comments extends Module
 {
@@ -30,8 +30,10 @@ class Module_Comments extends Module
 	 */
 	protected function init()
 	{
-		$this->source_node_id		= $this->Node->params['source_node_id'];
-		$this->is_only_authorized	= $this->Node->params['is_only_authorized'];
+		$this->Node->setDefaultParams(array(
+			'source_node_id'	 => 0,
+			'is_only_authorized' => 1,
+			));
 	}
 	
 	/**
@@ -45,7 +47,7 @@ class Module_Comments extends Module
 			$Node = new Node($this->source_node_id);
 			$post_id = $Node->hook('getUniqueId');
 			if (!empty($post_id)) {
-				$form_data = array(
+				$this->View->add_comment_form_data = array(
 					'hiddens' => array(
 						'node_id' => $this->Node->id,
 						'pd[post_id]' => $post_id,
@@ -69,15 +71,13 @@ class Module_Comments extends Module
 							),
 						),
 					);
-				$this->output_data['add_comment_form_data'] = $form_data;
-				$this->output_data['comments'] = $this->getList($post_id);
-			}
-			
+				$this->View->comments = $this->getList($post_id);
+			}			
 		}
 	}
 	
 	/**
-	 * Получить список всего комментариев к указанной записи.
+	 * Получить список всех комментариев к указанной записи.
 	 *
 	 * @param int $item_id
 	 * @return array
@@ -105,7 +105,7 @@ class Module_Comments extends Module
 	}
 
 	/**
-	 * Создание комментария
+	 * Создание комментария.
 	 *
 	 * @param
 	 * @return
@@ -143,6 +143,5 @@ class Module_Comments extends Module
 				break;
 			default:
 		}
-	} 
-	
+	}
 }

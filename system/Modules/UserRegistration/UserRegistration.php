@@ -10,15 +10,20 @@
  * @uses Session
  * @uses Settings
  * 
- * @version 2011-12-23.0
+ * @version 2012-01-14.0
  */
 class Module_UserRegistration extends Module
 {
 	/**
 	 * Нода с основной нодой аккаунта юзера.
+	 * @var int
 	 */
 	protected $account_node_id;
 
+	/**
+	 * Нода CAPTCHA
+	 * @var int
+	 */
 	protected $captcha_node_id;
 	
 	/**
@@ -50,7 +55,7 @@ class Module_UserRegistration extends Module
 				
 //				if ($this->Session->isKeyExist('openid_identity') == false) {
 				if ($this->Session_Force->openid_identity == null) {
-					cf_redirect('?');
+					cmf_redirect('?');
 				}
 				
 				$login		= $this->Session_Force->openid_identity;
@@ -195,11 +200,11 @@ class Module_UserRegistration extends Module
 					);
 			}
 			
-			$this->output_data['registration_form_data'] = $form_data;
-			$this->output_data['messages'] = $this->Session_Force->messages;
-		} else { // Авторизнутые юзеры редиректятся на главную страничку авторизации.
+			$this->View->registration_form_data = $form_data;
+			$this->View->messages = $this->Session_Force->messages;
+		} else { // Аутентифицированные юзеры редиректятся на главную страничку учетной записи.
 			$Node = new Node();
-			cf_redirect($this->Node->getUri($this->account_node_id));
+			cmf_redirect($this->Node->getUri($this->account_node_id));
 		}
 	}	
 	
@@ -228,14 +233,14 @@ class Module_UserRegistration extends Module
 			case 'reg':
 				if ($capcha_passed and $this->User->createAccount($pd)) {
 					$this->User->login(trim($pd['login']), $pd['pass1']);
-					cf_redirect($this->Node->getUri($this->account_node_id));
+					cmf_redirect($this->Node->getUri($this->account_node_id));
 				} else {
 					$this->Session_Force->form_data = array(
 						'email' => trim($pd['email']),
 						'login' => trim($pd['login']),
 						'nickname' => trim($pd['nickname']),
 						);
-					cf_redirect();
+					cmf_redirect();
 				}
 				break;
 			case 'openid_reg':
@@ -255,9 +260,9 @@ class Module_UserRegistration extends Module
 				
 				if ($capcha_passed and $this->User->createAccount($pd, true)) {
 					$this->User->login(trim($pd['login']));
-					cf_redirect($this->Node->getUri($this->account_node_id));
+					cmf_redirect($this->Node->getUri($this->account_node_id));
 				} else {
-					cf_redirect();
+					cmf_redirect();
 				}
 				break;
 			default;

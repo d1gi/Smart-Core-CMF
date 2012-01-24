@@ -1,2 +1,2 @@
 <?php
-echo $data['edit_form'];
+echo $this->edit_form;

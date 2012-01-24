@@ -20,7 +20,7 @@
 		<th width="1%">Пустое значение как NULL</th>
 	</tr>
 	<?php
-	foreach ($data['properties_list'] as $key => $value) {
+	foreach ($this->properties_list as $key => $value) {
 		echo "<tr>\n";
 		echo "\t<td><a href=\"?edit_property=$key\">$key</a></td>\n";
 		echo "\t<td>$value[pos]</td>\n";
@@ -52,11 +52,11 @@
 </fieldset>
 
 <fieldset><legend>Создать свойство</legend>
-	<?php $Form = new Helper_Form($data['create_property_form_data']); echo $Form;?>
+	<?php $Form = new Helper_Form($this->create_property_form_data); echo $Form;?>
 </fieldset>
 
 <fieldset><legend>Группа свойств</legend>
-	<?php $Form = new Helper_Form($data['edit_properties_group_form_data']); echo $Form;?>
+	<?php $Form = new Helper_Form($this->edit_properties_group_form_data); echo $Form;?>
 </fieldset>
 
 

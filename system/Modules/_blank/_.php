@@ -38,19 +38,6 @@ class Module_??? extends Module
 	}	
 
 	/**
-	 * Парсер части УРИ.
-	 * 
-	 * @param string $path - часть URI запроса
-	 * @return array|false
-	 */
-/*
-	public function parser($path)
-	{
-		$data = array();
-		return $data;
-	}
-*/
-	/**
 	 * Обработчик POST данных
 	 * 
 	 * @param int $pd
@@ -59,7 +46,7 @@ class Module_??? extends Module
 	 */
 /*	public function postProcessor($pd, $submit)
 	{
-		//cf_debug($submit);cf_debug($pd);exit;	
+		//cmf_dump($submit);cmf_dump($pd);exit;	
 		switch ($submit) {
 			case 'save':
 				// 

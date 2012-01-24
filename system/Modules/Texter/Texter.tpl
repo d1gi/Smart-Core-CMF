@@ -1,2 +1,1 @@
-<?php
-echo $data['text'] . "\n";
+<?php echo $this->text?>

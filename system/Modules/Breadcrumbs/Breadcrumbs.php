@@ -12,13 +12,13 @@ class Module_Breadcrumbs extends Module
 	 * Разделитель.
 	 * @var string
 	 */
-	protected $delimiter = '&raquo;';
+	protected $delimiter;
 	
 	/**
 	 * Скрыть "хлебные крошки", если выбрана корневая папка.
 	 * @var bool
 	 */
-	protected $hide_if_only_home = 1;
+	protected $hide_if_only_home;
 	
 	/**
 	 * Конструктор.
@@ -27,8 +27,12 @@ class Module_Breadcrumbs extends Module
 	 */
 	protected function init()
 	{
-		$this->delimiter		 = $this->Node->params['delimiter'];
-		$this->hide_if_only_home = $this->Node->params['hide_if_only_home'];
+		$this->Node->setDefaultParams(array(
+			'delimiter'			=> '&raquo;',
+			'hide_if_only_home'	=> false,
+			));
+		$this->delimiter		 = $this->Node->getParam('delimiter');
+		$this->hide_if_only_home = $this->Node->getParam('hide_if_only_home');
 	}
 	
 	/**
@@ -38,11 +42,11 @@ class Module_Breadcrumbs extends Module
 	 */
 	public function run($parser_data)
 	{
-		$this->output_data['delimiter'] = $this->delimiter;
-		if ($this->hide_if_only_home == 1 and count(&$this->EE->breadcrumbs) == 1) {
-			$this->output_data['items'] = array();
-		} else {
-			$this->output_data['items'] = &$this->EE->breadcrumbs;
-		}
+		$this->View->delimiter = $this->delimiter;
+		$this->View->items = array();
+		
+		if ($this->hide_if_only_home == false or count($this->Breadcrumbs->get()) > 1) {
+			$this->View->items = $this->Breadcrumbs->get();
+		}		
 	}	
 }

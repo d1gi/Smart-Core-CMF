@@ -47,6 +47,6 @@ class Module_2GisCounter extends Module
 			VALUES
 				('$user_id', '{$this->Env->site_id}', '$datetime', $city, $ip, $user_agent, $browser, $browser_version, $platform) ";
 		$this->DB->query($sql);
-		cf_redirect(HTTP_ROOT);
+		cmf_redirect(HTTP_ROOT);
 	}	
 }

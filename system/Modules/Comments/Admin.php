@@ -15,7 +15,7 @@ class Module_Comments_Admin extends Module_Comments implements Admin_ModuleInter
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'source_node_id' => array(
 				'label' => 'Источник Node ID:',
 				'type' => 'text',
@@ -27,21 +27,5 @@ class Module_Comments_Admin extends Module_Comments implements Admin_ModuleInter
 				'value' => $this->is_only_authorized,
 				),
 			);
-		return $node_params;
 	}
-
-	/**
-	 * Вызывается при создании ноды.
-	 * 
-	 * @return array $params
-	 */
-	public function createNode()
-	{
-		$params = array(
-			'source_node_id' => 0,
-			'is_only_authorized' => 1,
-			);
-		return $params;
-	}
-
 }

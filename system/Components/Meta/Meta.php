@@ -6,7 +6,7 @@
  * 
  * @version 2011-07-18.0
  */
-class Component_Meta
+class Component_Meta // extends View
 {
 	/**
 	 * Массив мета данных.
@@ -32,7 +32,7 @@ class Component_Meta
 	 */
 	public function getControls(array $hiddens = null)
 	{
-		$controls = array(
+		return array(
 			'meta_list' => $this->meta,
 			'meta_create_form' => array(
 				'hiddens' => $hiddens,
@@ -57,14 +57,12 @@ class Component_Meta
 				'help' => 'Cправка по добавлению мета тэга.',
 				),
 			);
-		return $controls;
 	}
 	
 	/**
 	 * Отображение интерфейса управления мета тэгами.
 	 *
 	 * @param array $data
-	 * @return void
 	 */
 	public function renderControls($data)
 	{

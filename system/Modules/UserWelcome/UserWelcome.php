@@ -7,7 +7,7 @@
  * @uses User
  * 
  * @package Module
- * @version 2011-09-22.0
+ * @version 2012-01-14.0
  */
 class Module_UserWelcome extends Module
 {
@@ -46,30 +46,28 @@ class Module_UserWelcome extends Module
 		
 		// Гость
 		if ($this->Env->user_id === 0) {
-			$this->setTpl('Light');
+			$this->View->setTpl('Light');
 			
 			if ($this->register_node_id == 0) {
-				$this->output_data['register_link'] = false;
+				$this->View->register_link = false;
 			} else {
-				$this->output_data['register_link'] = $this->Node->getUri($this->register_node_id);
+				$this->View->register_link = $this->Node->getUri($this->register_node_id);
 			}
 			
 			if ($this->account_node_id == 0) {
-				$this->output_data['login_link'] = false;
+				$this->View->login_link = false;
 			} else {
-				$this->output_data['login_link'] = $this->Node->getUri($this->account_node_id);
+				$this->View->login_link = $this->Node->getUri($this->account_node_id);
 			}
 		}
 		// Авторизованный юзер.
 		else {
-			$this->setTpl('LightWelcome');
+			$this->View->setTpl('LightWelcome');
 			
-			$this->output_data['welcome_text'] = 'Добро пожаловать';
-			$this->output_data['name'] = $this->User->getName();
-			$this->output_data['welcome_link'] = $this->Node->getUri($this->account_node_id);
-			
-			$this->output_data['logout_link'] = $this->Node->getUri($this->account_node_id) . '?logout';
+			$this->View->welcome_text	= 'Добро пожаловать';
+			$this->View->name			= $this->User->getName();
+			$this->View->welcome_link	= $this->Node->getUri($this->account_node_id);
+			$this->View->logout_link	= $this->Node->getUri($this->account_node_id) . '?logout';
 		}
-	}	
-
+	}
 }

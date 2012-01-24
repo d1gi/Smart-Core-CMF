@@ -1,10 +1,8 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
- * @version 2012-01-09.0
+ * @version 2012-01-25.0
  */
 class Module_WebForm_Admin extends Module_WebForm implements Admin_ModuleInterface
 {
@@ -14,15 +12,14 @@ class Module_WebForm_Admin extends Module_WebForm implements Admin_ModuleInterfa
 	public function getFrontControls() 
 	{
 		$this->default_action = 'manage';
-		$items = array(
+		return array(
 			'manage' => array(
 				'popup_window_title' => 'Управление веб-формами',
 				'title' => 'Управление',
-				'link' => ADMIN . '/module/WebForm/',
+				'link' => HTTP_ROOT . ADMIN . '/module/WebForm/',
 				'ico' => 'edit',
 				),
 			);
-		return $items;
 	}
 	
 	/**
@@ -40,83 +37,82 @@ class Module_WebForm_Admin extends Module_WebForm implements Admin_ModuleInterfa
 		// Удаление формы.
 		if (isset($_GET['del_form']) and is_numeric($_GET['del_form'])) {
 			$this->deleteWebform($_GET['del_form']);
-			cf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/');
+			cmf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/');
 		}
 		
-		$this->setTpl('Admin');
-		$data = array();
+		$this->View->setTpl('Admin');
+		$this->View->setTplPath('Modules/WebForm');
 		
 		$result = $this->DB->query("SHOW TABLES LIKE '{$this->DB->prefix()}webforms' ");
 		if ($result->rowCount() == 0) {
-			return $data;
+			return false;
 		}
 		
 		$uri_path_parts = explode('/', $uri_path);
 		
 		// Выбрано редактирование формы
 		if (is_numeric($uri_path_parts[0])) {
-			$data['webform_data'] = $this->getWebformData($uri_path_parts[0]);
-			$this->EE->addBreadCrumb($uri_path_parts[0] . '/', $data['webform_data']['title']);
-			$data['menu'] = array(
+			$this->View->webform_data = $this->getWebformData($uri_path_parts[0]);
+			$this->Breadcrumbs->add($uri_path_parts[0] . '/', $this->View->webform_data['title']);
+			$this->View->menu = array(
 				'common' => array(
 					'title' => 'Основные настройки веб-формы',
-					'link' => $this->EE->breadcrumbs[count($this->EE->breadcrumbs) - 1]['uri'],
+					'uri' => 'WebForm/' . $uri_path_parts[0] . '/',
+					'descr' => '',
 					),
 				'results' => array(
 					'title' => 'Результаты',
-					'link' => $this->EE->breadcrumbs[count($this->EE->breadcrumbs) - 1]['uri'] . 'results/',
+					'uri' => 'WebForm/' . $uri_path_parts[0] . '/results/',
+					'descr' => '',
 					),
 				'fields' => array(
 					'title' => 'Поля формы',
-					'link' => $this->EE->breadcrumbs[count($this->EE->breadcrumbs) - 1]['uri'] . 'fields/',
+					'uri' => 'WebForm/' . $uri_path_parts[0] . '/fields/',
+					'descr' => '',
 					),
 				);
 			switch ($uri_path_parts[1]) {
 				case 'results':
-					$data['menu']['results']['selected'] = true;
-					$this->EE->addBreadCrumb($uri_path_parts[0] . '/', 'Результаты');
+					$this->View->menu['results']['selected'] = true;
 					// Просмотр результата.
 					if (isset($uri_path_parts[2]) and is_numeric($uri_path_parts[2])) {
 						$tmp = $this->getResults(array(
 							'form_id' => $uri_path_parts[0],
 							'result_id' => $uri_path_parts[2],
 							));
-						$data['result'] = $tmp[$uri_path_parts[2]];
+						$this->View->result = $tmp[$uri_path_parts[2]];
 					}
 					// Просмотр всех результатов.
 					else {
-						$data['results'] = $this->getResults(array(
+						$this->View->results = $this->getResults(array(
 							'form_id' => $uri_path_parts[0],
 							));
 					}
 					break;
 				case 'fields':
-					$this->EE->addBreadCrumb($uri_path_parts[1] . '/', 'Поля формы');
-					$data['menu']['fields']['selected'] = true;
+					$this->View->menu['fields']['selected'] = true;
 					// Редактирование поля.
 					if (isset($uri_path_parts[2]) and is_numeric($uri_path_parts[2])) {
-						$this->EE->addBreadCrumb($uri_path_parts[0] . '/', 'Редактирование поля: ' . $uri_path_parts[2]);
-						$data['edit_webform_field_form_data'] = $this->getEditFieldFormData($uri_path_parts[0], $uri_path_parts[2]);
+						$this->View->edit_webform_field_form_data = $this->getEditFieldFormData($uri_path_parts[0], $uri_path_parts[2]);
 					}
 					// Список полей.
 					else {
-						$data['webform_fields'] = $this->getWebformFields($uri_path_parts[0], true);
-						$data['create_webform_field_form_data'] = $this->getCreateFieldFormData($uri_path_parts[0]);
+						$this->View->webform_fields = $this->getWebformFields($uri_path_parts[0], true);
+						$this->View->create_webform_field_form_data = $this->getCreateFieldFormData($uri_path_parts[0]);
 					}
 					break;
 				case '':
-					$data['menu']['common']['selected'] = true;
-					$data['edit_webform_form_data'] = $this->getEditFormData($data['webform_data']);
+					$this->View->menu['common']['selected'] = true;
+					$this->View->edit_webform_form_data = $this->getEditFormData($this->View->webform_data);
 					break;
 				default;
 			}
 		}
 		// Список всех форм и форма создания новой.
 		elseif (empty($uri_path_parts[0])) {
-			$data['webforms_list'] = $this->getWebformsList();
-			$data['create_webform_form_data'] = $this->getCreateFormData();
+			$this->View->webforms_list = $this->getWebformsList();
+			$this->View->create_webform_form_data = $this->getCreateFormData();
 		}
-		return $data;
 	}
 	
 	/**
@@ -396,14 +392,14 @@ class Module_WebForm_Admin extends Module_WebForm implements Admin_ModuleInterfa
 				break;
 			case 'update_field':
 				$this->updateField($_POST['pd']);
-				cf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/' . $_POST['pd']['form_id'] . '/fields/');
+				cmf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/' . $_POST['pd']['form_id'] . '/fields/');
 				break;
 			case 'delete_field':
 				$this->deleteField($_POST['pd']);
-				cf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/' . $_POST['pd']['form_id'] . '/fields/');
+				cmf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/' . $_POST['pd']['form_id'] . '/fields/');
 				break;
 			case 'cancel_field_edit':
-				cf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/' . $_POST['pd']['form_id'] . '/fields/');
+				cmf_redirect(HTTP_ROOT . ADMIN . '/module/WebForm/' . $_POST['pd']['form_id'] . '/fields/');
 				break;
 			default;
 		}
@@ -637,7 +633,7 @@ class Module_WebForm_Admin extends Module_WebForm implements Admin_ModuleInterfa
 			$webforms_list[$key] = $value['title'];
 		}
 		
-		$node_params = array(
+		return array(
 			'form_id' => array(
 				'label' => 'Форма',
 				'type' => 'select',
@@ -670,7 +666,6 @@ class Module_WebForm_Admin extends Module_WebForm implements Admin_ModuleInterfa
 				'value' => $this->reminder_period,
 				),
 			);
-		return $node_params;
 	}
 
 	/**

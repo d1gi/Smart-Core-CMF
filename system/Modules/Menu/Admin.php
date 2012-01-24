@@ -1,10 +1,8 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
- * @version 2011-11-01.0
+ * @version 2012-01-24.0
  */
 class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 {
@@ -12,7 +10,6 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 	 * NewFunction
 	 *
 	 * @param
-	 * @return
 	 */
 	public function admin($uri_path)
 	{
@@ -28,21 +25,19 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 		
 		if (isset($_GET['del_group']) and is_numeric($_GET['del_group'])) {
 			$this->deleteGroup($_GET['del_group']);
-			cf_redirect(HTTP_ROOT . ADMIN . '/module/Menu/');
+			cmf_redirect(HTTP_ROOT . ADMIN . '/module/Menu/');
 		}
 
-		$this->setTpl(DIR_MODULES . 'Menu/Admin.tpl');
+		$this->View->setTpl(DIR_MODULES . 'Menu/Admin.tpl');
 		
 //		$uri_path_parts = explode('/', $uri_path);
 		
-		$output_data = array();
-		
 		$result = $this->DB->query("SHOW TABLES LIKE '{$this->DB->prefix()}menu_groups' ");
 		if ($result->rowCount() == 0) {
-			return $output_data;
+			return false;
 		}
 		
-		$output_data['groups_list'] = $this->getGroupsList();
+		$this->View->groups_list = $this->getGroupsList();
 		
 //		if (isset($uri_path_parts[0]) and is_numeric($uri_path_parts[0])) {
 			$form_data = array(
@@ -75,10 +70,8 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 						),
 					),
 				);
-			$output_data['create_group_form_data'] = $form_data;
+			$this->View->create_group_form_data = $form_data;
 //		}
-		
-		return $output_data;
 	}
 	
 	/**
@@ -91,12 +84,7 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 	{
 		$name = $this->DB->quote($pd['name']);
 		$descr = $this->DB->quote($pd['descr']);
-		
-		if (is_numeric($pd['pos']) and strlen($pd['pos'] < 4)) {
-			$pos = $pd['pos'];
-		} else {
-			$pos = 0;
-		}
+		$pos = (is_numeric($pd['pos']) and strlen($pd['pos'] < 4)) ? $pd['pos'] : 0;
 		
 		$sql = "
 			INSERT INTO {$this->DB->prefix()}menu_groups
@@ -133,9 +121,7 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 		$data = array();
 		
 		if ($empty_first) {
-			$data[0] = array(
-				'title' => '[Не выбрана]',
-				);
+			$data[0] = array('title' => '[Не выбрана]');
 		}
 		
 		$sql = "SELECT * 
@@ -152,10 +138,10 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 			$row2 = $result2->fetchObject();
 			
 			$data[$row->group_id] = array(
-				'title' => $row->descr . ' (' . $row2->cnt . ')' , // Для списков select.
-				'descr' => $row->descr,
-				'name' => $row->name,
-				'pos' => $row->pos,
+				'title'	=> $row->descr . ' (' . $row2->cnt . ')' , // Для списков select.
+				'descr'	=> $row->descr,
+				'name'	=> $row->name,
+				'pos'	=> $row->pos,
 				'items_count' => $row2->cnt,
 				);
 		}
@@ -170,7 +156,7 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'menu_group_id' => array(
 				'label' => 'Группа меню:',
 				'type' => 'select',
@@ -195,10 +181,9 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 			'tpl' => array(
 				'label' => 'Шаблон:',
 				'type' => 'string',
-				'value' => $this->getTpl(),
+				'value' => $this->View->getTpl(),
 				),
 			);
-		return $node_params;
 	}
 	
 	/**
@@ -226,7 +211,7 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 	 */
 	public function nodeAction($params)
 	{
-		$this->setTpl('Edit');
+		$this->View->setTpl('Edit');
 		$path_parts = explode('/', $params);
 		$link = $this->Node->getUri() . ACTION . '/' . $this->Node->id . '/';
 		
@@ -297,8 +282,7 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 						),
 					),
 				);
-			
-			$this->output_data['edit_item_form_data'] = $form_data;
+			$this->View->edit_item_form_data = $form_data;
 		}
 		// Не выбран никакой пункт меню, отображается древовидный список меню и форма добаления пункта меню.
 		else { 
@@ -359,10 +343,10 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 			// Собирается массив $this->_folder_tree_list_arr
 			$this->_getTreeList($this->getTree(0, 0));
 			
-			$this->output_data['list'] = $this->_folder_tree_list_arr;
-			$this->output_data['new_item_form_data'] = $form_data;
+			$this->View->list = $this->_folder_tree_list_arr;
+			$this->View->new_item_form_data = $form_data;
 		}
-		$this->output_data['link'] = $link;
+		$this->View->link = $link;
 	}
 
 	/**
@@ -374,42 +358,13 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 			return false;
 		}
 		
-		if (is_numeric($pd['is_active'])) {
-			$is_active = $pd['is_active'];
-		} else {
-			$is_active = 1;
-		}
+		$is_active	 = is_numeric($pd['is_active']) ? $pd['is_active'] : 1;
+		$pos		 = is_numeric($pd['pos']) ? $pd['pos'] : 0;
+		$pid		 = is_numeric($pd['pid']) ? $pd['pid'] : 0;
+		$folder_id	 = is_numeric($pd['folder_id']) ? $pd['folder_id'] : 0;
+		$direct_link = empty($pd['direct_link']) ? 'NULL' : $this->DB->quote($pd['direct_link']);
+		$title		 = strlen($pd['title']) > 0 ? $this->DB->quote($pd['title']) : 'NULL';
 		
-		if (is_numeric($pd['pos'])) {
-			$pos = $pd['pos'];
-		} else {
-			$pos = 0;
-		}
-		
-		if (is_numeric($pd['pid'])) {
-			$pid = $pd['pid'];
-		} else {
-			$pid = 0;
-		}
-		
-		if (is_numeric($pd['folder_id'])) {
-			$folder_id = $pd['folder_id'];
-		} else {
-			$folder_id = 1;
-		}
-		
-		if (empty($pd['direct_link'])) {
-			$direct_link = 'NULL';
-		} else {
-			$direct_link = $this->DB->quote($pd['direct_link']);
-		}
-		
-		if (strlen($pd['title']) > 0) {
-			$title = $this->DB->quote($pd['title']);
-		} else {
-			$title = 'NULL';
-		}
-							
 		$sql = "
 			UPDATE {$this->DB->prefix()}menu_items SET
 				is_active = '$is_active',
@@ -428,11 +383,16 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 	 */
 	protected function deleteItem($pd)
 	{
+		return is_numeric($pd['item_id'])
+			? $this->DB->exec("DELETE FROM {$this->DB->prefix()}menu_items WHERE item_id = '$pd[item_id]' AND site_id = '{$this->Env->site_id}' ")
+			: false;
+		/*		
 		if (is_numeric($pd['item_id'])) {
 			return $this->DB->exec("DELETE FROM {$this->DB->prefix()}menu_items WHERE item_id = '$pd[item_id]' AND site_id = '{$this->Env->site_id}' ");
 		} else {
 			return false;
 		}
+		*/
 	}
 	
 	/**
@@ -440,42 +400,13 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 	 */
 	protected function createItem($pd)
 	{
-		if (is_numeric($pd['is_active'])) {
-			$is_active = $pd['is_active'];
-		} else {
-			$is_active = 1;
-		}
-		
-		if (is_numeric($pd['pos'])) {
-			$pos = $pd['pos'];
-		} else {
-			$pos = 0;
-		}
-		
-		if (is_numeric($pd['pid'])) {
-			$pid = $pd['pid'];
-		} else {
-			$pid = 0;
-		}
-		
-		if (is_numeric($pd['folder_id'])) {
-			$folder_id = $pd['folder_id'];
-		} else {
-			$folder_id = 1;
-		}
-		
-		if (empty($pd['direct_link'])) {
-			$direct_link = 'NULL';
-		} else {
-			$direct_link = $this->DB->quote($pd['direct_link']);
-		}
-		
-		if (strlen($pd['title']) > 0) {
-			$title = $this->DB->quote($pd['title']);
-		} else {
-			$title = 'NULL';
-		}
-		
+		$is_active	 = is_numeric($pd['is_active']) ? $pd['is_active'] : 1;
+		$pos		 = is_numeric($pd['pos']) ? $pd['pos'] : 0;
+		$pid		 = is_numeric($pd['pid']) ? $pd['pid'] : 0;
+		$folder_id	 = is_numeric($pd['folder_id']) ? $pd['folder_id'] : 0;
+		$direct_link = empty($pd['direct_link']) ? 'NULL' : $this->DB->quote($pd['direct_link']);
+		$title		 = strlen($pd['title']) > 0 ? $this->DB->quote($pd['title']) : 'NULL';
+
 		$sql = "
 			INSERT INTO {$this->DB->prefix()}menu_items
 				(pid, site_id, pos, is_active, folder_id, group_id, direct_link, title)
@@ -494,7 +425,6 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 		$this->DB->import(dirname(__FILE__) . '/sql/install', array(
 			'prefix' => trim($this->DB->prefix()),
 			));
-		
 		$params = parent::createNode();
 		return $params;
 	}

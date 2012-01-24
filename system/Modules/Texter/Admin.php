@@ -1,10 +1,8 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
- * @version 2012-01-09.0
+ * @version 2012-01-24.0
  */
 class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 {
@@ -16,7 +14,7 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 	 */
 	public function admin($uri_path)
 	{
-		// Обработчик POST данных.
+		// Обработчик POST данных. @todo переделать.
 		if (isset($_POST['action'])) {
 			switch ($_POST['action']) {
 				case 'update_text_item':
@@ -28,24 +26,23 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 		
 		if (isset($_GET['del_item']) and is_numeric($_GET['del_item'])) {
 			$this->deleteText($_GET['del_item']);
-			cf_redirect(HTTP_ROOT . ADMIN . '/module/Texter/');
+			cmf_redirect(HTTP_ROOT . ADMIN . '/module/Texter/');
 		}
 
-		$this->setTpl('Admin');
-		$data = array();
+		$this->View->setTpl(DIR_MODULES . 'Texter/Admin.tpl');
 		
 		$result = $this->DB->query("SHOW TABLES LIKE '{$this->DB->prefix()}text_items' ");
 		if ($result->rowCount() == 0) {
-			return $data;
+			return false;
 		}
 
 		$uri_path_parts = explode('/', $uri_path);
 		
 		if (isset($uri_path_parts[0]) and is_numeric($uri_path_parts[0])) {
 			// Редактирование записи.
-			$this->EE->addBreadCrumb($uri_path_parts[0] . '/', 'Редактирование записи: ' . $uri_path_parts[0]);
+			$this->Breadcrumbs->add($uri_path_parts[0] . '/', 'Редактирование записи: ' . $uri_path_parts[0]);
 			$text_item = $this->getText($uri_path_parts[0]);
-			$form_data = array(
+			$this->View->edit_form_data = array(
 				'class' => 'texter-edit',
 				'action' => HTTP_ROOT . ADMIN . '/module/Texter/',
 				'hiddens' => array(
@@ -70,7 +67,6 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 						),
 					),
 				);
-			$data['edit_form_data'] = $form_data;
 		} else {
 			// Получение списка всех текстовых записей.
 			// @todo постраничность.			
@@ -85,6 +81,7 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 				$limit = " LIMIT $start_item, {$items_per_page} ";
 			}
 
+			$this->View->all_items = array();
 			$sql = "SELECT item_id, text
 				FROM {$this->DB->prefix()}text_items
 				WHERE site_id = '{$this->Env->site_id}'
@@ -92,7 +89,7 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 				$limit ";
 			$result = $this->DB->query($sql);
 			while ($row = $result->fetchObject()) {
-				$data['all_items'][$row->item_id] = array(
+				$this->View->all_items[$row->item_id] = array(
 					//'text' => $row->text,
 					'content_length' => mb_strlen($row->text),
 					'nodes' => $this->getItemDataById($row->item_id),
@@ -104,7 +101,7 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 				FROM {$this->DB->prefix()}text_items
 				WHERE site_id = '{$this->Env->site_id}' ";
 			$row = $this->DB->getRow($sql);
-			$data['pages'] = new Helper_Paginator(array(
+			$this->View->pages = new Helper_Paginator(array(
 					'items_count' => $row['cnt'],
 					'items_per_page' => 20,
 					'current_page' => $page_num,
@@ -112,15 +109,13 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 					)
 				);
 		}
-		
-		return $data;
 	}
 	
 	/**
 	 * Удаление текста.
 	 *
 	 * @param
-	 * @return
+	 * @return bool
 	 */
 	public function deleteText($item_id)
 	{
@@ -140,8 +135,8 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 	/**
 	 * Получить данные о записи по её id.
 	 *
-	 * @param
-	 * @return
+	 * @param int $item_id
+	 * @return array
 	 * 
 	 * @todo оптимизировать работу, а то сейчас каждый раз ломится в бд.
 	 */
@@ -171,7 +166,7 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 	{
 		$this->default_action = 'edit';
 
-		$items = array(
+		return array(
 			'edit' => array(
 				'popup_window_title' => 'Редактирование текстового блока',
 				'title' => 'Редактировать',
@@ -187,20 +182,17 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 				),
 			*/
 			);
-		return $items;
 	}
 	
 	/**
 	 * Обработка дейсвий над нодой.
 	 * 
 	 * @uses Component_Editor
-	 * 
-	 * @return void
 	 */
 	public function nodeAction($params)
 	{
 		$uri_path_parts = explode('/', $params);
-		$this->setTpl('Edit');
+		$this->View->setTpl('Edit');
 		
 		$text_item = $this->getText($this->text_item_id);
 		
@@ -239,12 +231,12 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 							),
 						),
 					);
-				$this->output_data['edit_form_data'] = $form_data;
+				$this->View->edit_form_data = $form_data;
 				break;
 			case 'meta':
 				
 				$Meta = new Component_Meta($text_item['meta']);
-				$this->output_data['meta_controls'] = $Meta->getControls(array('node_id' => $this->Node->id));
+				$this->View->meta_controls = $Meta->getControls(array('node_id' => $this->Node->id));
 				break;
 			default;
 		}
@@ -258,7 +250,7 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'text_item_id' => array(
 				'label' => 'ID текстового поля:',
 				'type' => 'text',
@@ -270,7 +262,6 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 				'value' => $this->editor,
 				),
 			);
-		return $node_params;
 	}
 
 	/**
@@ -286,11 +277,10 @@ class Module_Texter_Admin extends Module_Texter implements Admin_ModuleInterface
 			'prefix' => trim($this->DB->prefix()),
 			));
 	
-		$params = array(
+		return array(
 			'text_item_id' => $this->createText(),
 			'editor' => 1,
 			);
-		return $params;
 	}
 	
 }

@@ -1,7 +1,6 @@
 <?php
-//echo $data['text'] . "\n";
 
-foreach ($data['albums'] as $key => $value) {
+foreach ($this->albums as $key => $value) {
 	echo "<div class=\"gallery_album\" id=\"news_item_id_$key\">";
 	echo "\t<table class=\"design\"><tr><td><a href=\"?album=$key\" class=\"gallery_image\"><img src=\"$value[thumbnail_link]\" alt=\"\"></a></td><td>\n";
 	

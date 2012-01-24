@@ -6,20 +6,20 @@
  * @author		Artem Ryzhkov
  * @copyright	Copyright &copy; 2010-2011 Smart Core CMF 
  * @link		http://smart-core.org/
- * @license		http://smart-core.org/license/
+ * @license		http://www.opensource.org/licenses/gpl-2.0
  * 
- * @version 	2011-11-19.0
+ * @version 	2012-01-25.0
  */
 define('START_TIME', microtime(true));	// Время старта проекта.
 define('DIR_ROOT',   getcwd() . '/');	// Корневая папка платформы.
-define('INDEX_PHP_VERSION', 3);			// Версия index.php 
+define('INDEX_PHP_VERSION', 4);			// Версия index.php 
 
 // Читается файл конфига.
 $cfg_ini = parse_ini_file('config.ini', true);
 
-// Сначала пытается прочитать конфиг который совпадает с девелоперским IP.
+// Попытка прочитать конфиг который совпадает с девелоперским IP.
 if (isset($cfg_ini['developer_addresses']) and array_search($_SERVER['SERVER_ADDR'], explode(';', $cfg_ini['developer_addresses'])) !== false and file_exists('config_' . $_SERVER['SERVER_ADDR'] . '.ini')) {
-	foreach (parse_ini_file('config_' . $_SERVER['SERVER_ADDR'] . '.ini', true) as $key => $value) $cfg_ini[$key] = $value;
+	$cfg_ini = parse_ini_file('config_' . $_SERVER['SERVER_ADDR'] . '.ini', true) + $cfg_ini;
 }
 
 // Формируется константа DIR_SYSTEM - системная папка.
@@ -36,4 +36,5 @@ require_once DIR_SYSTEM . 'bootstrap.php';
 Cache_Preloader::run();
 
 // Запуск ядра.
-Kernel::getInstance($config)->run();
+$App = new Kernel($config);
+$App->run();

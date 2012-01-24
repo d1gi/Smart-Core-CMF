@@ -6,13 +6,9 @@
 $level = 0;
 $first_child = true;
 
-if (strlen(@$data['css_class']) > 0) {
-	echo "\n<ul class=\"{$data['css_class']}\">\n";
-} else {
-	echo "\n<ul>\n";
-}
+echo strlen($this->css_class) > 0 ? "\n<ul class=\"{$this->css_class}\">\n" : "\n<ul>\n";
 
-foreach ($data['categories_list'] as $key => $value) {
+foreach ($this->categories_list as $key => $value) {
 	
 	$tab = '';
 	for ($i = 0; $i <= $value['level'] - 1; $i++) {

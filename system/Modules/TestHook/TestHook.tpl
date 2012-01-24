@@ -1,2 +1,2 @@
 <?php
-cf_debug($data);
+cmf_dump($data);

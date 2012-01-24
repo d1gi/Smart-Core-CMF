@@ -9,7 +9,7 @@
  * @uses DB
  * @uses Permissions
  * 
- * @version 2012-01-09.0
+ * @version 2012-01-14.0
  */
 class Module_Catalog extends Module
 {
@@ -57,10 +57,6 @@ class Module_Catalog extends Module
 			'unicat_db_prefix'		=> 'unicat_',
 			));
 
-		$this->class_prefix				= $this->Node->getParam('class_prefix');
-		$this->items_per_page 			= $this->Node->getParam('items_per_page');
-		//$this->link_related_by_property	= $this->Node->params['link_related_by_property'];
-		
 		$this->unicat_params = array(
 			'entity_id'				=> $this->Node->getParam('entity_id'),
 			'node'					=> &$this->Node,
@@ -88,24 +84,45 @@ class Module_Catalog extends Module
 	}
 	
 	/**
+	 * NewFunction
+	 *
+	 * @param
+	 * @return
+	 */
+	public function showItem($params)
+	{
+		$this->View->setTpl('Item');
+		$this->View->item = $this->Unicat->getItem($params['item_id'], array(
+			'show_in_view' => 1,
+			));
+		// Мета-тэги
+		if (!empty($this->View->item['meta'])) {
+			foreach ($this->View->item['meta'] as $key => $value) {
+				$this->EE->addHeadMeta($key, $value);
+			}
+		}
+		$this->View->categories = "@todo принадлежность к разделам";
+	}
+	
+	/**
 	 * Стандартный запуск модуля.
 	 *
 	 * @param mixed $parser_data
 	 * @param array $user_options
 	 * @return void
 	 */
-	protected function _catalogRun($parser_data, $user_options)
+	protected function _catalogRun($parser_data, $user_options = array())
 	{
 		// Если таблиц не существует, предлагается создать.
 		// или если экземпляр не установлен, пледлагается создать новый.
 		if ($this->Permissions->isRoot()) {
 			if ($this->unicat_params['entity_id'] == 0) {
-				$this->output_data['create_entity_form_data'] = $this->Unicat->getCreateEntityFormData();
-				$this->setTpl($this->Unicat->getCreateEntityFormTemplate());
-//cf_debug("123");
+				$this->View->create_entity_form_data = $this->Unicat->getCreateEntityFormData();
+				$this->View->setTpl($this->Unicat->getCreateEntityFormTemplate());
+//cmf_dump("123");
 			} else if ($this->Unicat->isTablesExist() == false) {
-				$this->output_data['create_tables_form_data'] = $this->Unicat->getCreateTablesFormData();
-				$this->setTpl($this->Unicat->getCreateTablesFormTemplate());
+				$this->View->create_tables_form_data = $this->Unicat->getCreateTablesFormData();
+				$this->View->setTpl($this->Unicat->getCreateTablesFormTemplate());
 			}
 		}
 		
@@ -129,26 +146,28 @@ class Module_Catalog extends Module
 			$page_num = $_GET['page'];
 			
 			if ($page_num > 1) {
-				$this->EE->addBreadCrumb($this->Env->current_folder_path, 'Страница № ' . $page_num);
+				$this->Breadcrumbs->add($this->Env->current_folder_path, 'Страница № ' . $page_num);
 			}
 		}
 		
 		// Префикс CSS классов
-		$this->output_data['class_prefix'] = $this->class_prefix;
+		$this->View->class_prefix = $this->class_prefix;
 		
 		// Выбрана запись. Парсер вернул ID записи, которае находится в массиве $parser_data.
 		if (isset($parser_data['item_id']) and is_numeric($parser_data['item_id'])) {
-			$this->setTpl('Item');
-			$this->output_data['item'] = $this->Unicat->getItem($parser_data['item_id'], array(
+			/* // @todo убрать т.к. тепеь запакован в методе showItem
+			$this->View->setTpl('Item');
+			$this->View->item = $this->Unicat->getItem($parser_data['item_id'], array(
 				'show_in_view' => 1,
 				));
 			// Мета-тэги
-			if (!empty($this->output_data['item']['meta'])) {
-				foreach ($this->output_data['item']['meta'] as $key => $value) {
+			if (!empty($this->View->item['meta'])) {
+				foreach ($this->View->item['meta'] as $key => $value) {
 					$this->EE->addHeadMeta($key, $value);
 				}
 			}
-			$this->output_data['categories'] = "@todo принадлежность к разделам";
+			$this->View->categories = "@todo принадлежность к разделам";
+			*/
 		}
 		// Запись не выбрана - генерируется список записей.
 		else { 
@@ -179,19 +198,16 @@ class Module_Catalog extends Module
 					//'related_by_property' => $this->link_related_by_property,				
 					),
 				);
-			foreach ($user_options as $key => $value) {
-				$options[$key] = $value;
-			}
-
-			$this->output_data['items'] = $this->Unicat->getItems($options);
+			$options = $options + $user_options;
+			$this->View->items = $this->Unicat->getItems($options);
 			
 			// Постраничность 
-			$this->output_data['pages'] = new Helper_Paginator(array(
-					'items_count' => $this->Unicat->getItemsCount($options),
+			$this->View->Pages = new Helper_Paginator(array(
+					'items_count'	 => $this->Unicat->getItemsCount($options),
 					'items_per_page' => $this->items_per_page,
-					'current_page' => $page_num,
-					//'link_tpl' => $this->Unicat->getUriByCategoryId($category_id) . 'page_{PAGE}/',
-					'link_tpl' => '?page={PAGE}',
+					'current_page'	 => $page_num,
+					//'link_tpl'	 => $this->Unicat->getUriByCategoryId($category_id) . 'page_{PAGE}/',
+					'link_tpl'		 => '?page={PAGE}',
 					)
 				);
 		}
@@ -211,26 +227,23 @@ class Module_Catalog extends Module
 				break;
 			case 'getCategoriesTree':
 				if (empty($args)) {
-					return false;
+					return null;
 				} else {
 					$parser_node_data = Kernel::getParserNodeData();
-					if (empty($parser_node_data) or $args['use_parcer_node_data'] == 0) {
-						return $this->Unicat->getCategoriesTree($args['structure_id'], $args['category_id'], $args['max_depth']);
-					} else {
-						return $this->Unicat->getCategoriesTree($args['structure_id'], $parser_node_data['data']['structures'][$args['structure_id']], $args['max_depth']);
-					}
+//cmf_dump($parser_node_data);					
+					return (empty($parser_node_data) or $args['use_parcer_node_data'] == 0)
+						? $this->Unicat->getCategoriesTree($args['structure_id'], $args['category_id'], $args['max_depth'])
+						: $this->Unicat->getCategoriesTree($args['structure_id'], $parser_node_data['data']['structures'][$args['structure_id']], $args['max_depth']);
 				}
 				break;
 			case 'getCategoriesList':
 				if (empty($args)) {
-					return false;
+					return null;
 				} else {
 					$parser_node_data = Kernel::getParserNodeData();
-					if (empty($parser_node_data) or $args['use_parcer_node_data'] == 0) {
-						return $this->Unicat->getCategoriesList($args['structure_id'], $args['category_id']);
-					} else {
-						return $this->Unicat->getCategoriesList($args['structure_id'], $parser_node_data['data']['structures'][$args['structure_id']]);
-					}
+					return (empty($parser_node_data) or $args['use_parcer_node_data'] == 0)
+						? $this->Unicat->getCategoriesList($args['structure_id'], $args['category_id'])
+						: $this->Unicat->getCategoriesList($args['structure_id'], $parser_node_data['data']['structures'][$args['structure_id']]);
 				}
 				break;
 			case 'getItems':
@@ -244,11 +257,7 @@ class Module_Catalog extends Module
 				break;
 			case 'getUniqueId':
 				$item_id = Kernel::getParserNodeData();
-				if (isset($item_id['data']['item_id'])) {
-					return $item_id['data']['item_id'];
-				} else {
-					return false;
-				}
+				return isset($item_id['data']['item_id']) ? $item_id['data']['item_id'] : null;
 				break;
 			case 'getUriByCategoryId':
 				return $this->Unicat->getUriByCategoryId($args['category_id']);
@@ -259,14 +268,17 @@ class Module_Catalog extends Module
 	}
 	
 	/**
-	 * Парсер части УРИ
+	 * Роутинг.
 	 * 
 	 * @param string $path
 	 * @return array
 	 */
-	public function parser($path)
+	public function router($path)
 	{
-		return $this->Unicat->parser($path);
+//		$route = $this->Unicat->router($path);
+		//$route['controller'] = __CLASS__;
+//		return $route;
+		return $this->Unicat->router($path);
 	}
 	
 	/**

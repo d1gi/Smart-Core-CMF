@@ -1,8 +1,8 @@
 <?php
-// Шаблон отображения выбранной новости.
-echo "\n<div class=\"$data[class_prefix]item\">\n";
-foreach ($data['item']['content'] as $key => $value) {
-	echo "\t<div class=\"$data[class_prefix]$key\">";
+// Шаблон отображения выбранной записи.
+echo "\n<div class=\"{$this->class_prefix}item\">\n";
+foreach ($this->item['content'] as $key => $value) {
+	echo "\t<div class=\"{$this->class_prefix}$key\">";
 	if ($value['type'] === 'img') {
 		echo "<img src=\"$value[value]\" alt=\"\" />";
 	} else {

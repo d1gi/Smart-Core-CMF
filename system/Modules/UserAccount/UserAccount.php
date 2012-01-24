@@ -71,7 +71,7 @@ class Module_UserAccount extends Module
 					// echo "VALID " . htmlspecialchars($id);
 					// Если пользователь существует, то редирект на папку с профилем юзера.
 					if ($this->User->login($_GET['openid_identity'])) {
-						cf_redirect();
+						cmf_redirect();
 					}
 					// Если пользователя не существует, то предлагается зарегистрироваться.
 					else {
@@ -81,29 +81,27 @@ class Module_UserAccount extends Module
 						$this->Session->openid_sreg		= $sreg->getProperties();
 						$this->Session->openid_identity = $_GET['openid_identity'];
 						// @todo если модуль регистрации не указан - сделать сообщение, что такого юзера нету, иначе редиректнуть на регистрацию с режимом openid
-						cf_redirect($this->Node->getUri($this->register_node_id) . '?openid');
+						cmf_redirect($this->Node->getUri($this->register_node_id) . '?openid');
 					}
 				} else {
 					// @todo сообщение об ошибке.
 					// echo "INVALID " . htmlspecialchars($id);
-					cf_redirect($this->Env->current_folder_path);
+					cmf_redirect($this->Env->current_folder_path);
 				}			
 			}
 
-			$this->setTpl('AuthForm');
+			$this->View->setTpl('AuthForm');
 			
-			$this->EE->addBreadCrumb('', 'Авторизация');
-
 			// Сформировать ссылку на папку с регистацией
-			$this->output_data['register_link'] = $this->register_node_id == 0 ? null : $this->Node->getUri($this->register_node_id);
+			$this->View->register_link = $this->register_node_id == 0 ? null : $this->Node->getUri($this->register_node_id);
 			
 			// Сформировать ссылку на папку с восстановлением пароля
-			$this->output_data['recover_link'] = $this->recover_node_id == 0 ? null : $this->Node->getUri($this->recover_node_id);
+			$this->View->recover_link = $this->recover_node_id == 0 ? null : $this->Node->getUri($this->recover_node_id);
 			
-			$this->output_data['auth_form_data'] = $this->getAuthFormData();
+			$this->View->auth_form_data = $this->getAuthFormData();
 			
 			if ($this->enable_openid) {
-				$this->output_data['auth_openid_form_data'] = $this->getAuthOpenIdFormData();
+				$this->View->auth_openid_form_data = $this->getAuthOpenIdFormData();
 			}
 		}
 		// Авторизованный пользователь
@@ -115,32 +113,32 @@ class Module_UserAccount extends Module
 			} else {
 				if (cf_is_get('logout')) {
 					$this->User->logout();
-					cf_redirect($_SERVER['HTTP_REFERER']);
+					cmf_redirect($_SERVER['HTTP_REFERER']);
 				}
 				
-				$this->output_data['user_data'] = $this->User->getData();
+				$this->View->user_data = $this->User->getData();
 				
 				// Если логин начинается с 'http://', то считается, что это OpenID, иначе нативный логин.
 				if (strpos($this->User->getLogin(), 'http://') === false) {
-					$this->output_data['password'] = array(
+					$this->View->password = array(
 						'title' => 'изменить пароль',
 						'change_link' => '?mode=changepass',
 						);
 				} else {
-					$this->output_data['password'] = false;
+					$this->View->password = false;
 				}
 				
-				$this->output_data['welcome_text'] = 'Добро пожаловать';
+				$this->View->welcome_text = 'Добро пожаловать';
 
-				$this->output_data['logout'] = array(
+				$this->View->logout = array(
 					'title' => 'Выход',
 					'link' =>  Folder::getUri($this->Node->folder_id) . '?logout',
 					'form_element' => 'logout',
 					);
 				
-				$this->output_data['changereg_link'] = '?mode=changereg';
+				$this->View->changereg_link = '?mode=changereg';
 				
-				$this->output_data['profile_link'] = $this->profile_node_id != 0 ? $this->Node->getUri($this->profile_node_id) : null;
+				$this->View->profile_link = $this->profile_node_id != 0 ? $this->Node->getUri($this->profile_node_id) : null;
 			}
 		}
 	}	
@@ -212,11 +210,12 @@ class Module_UserAccount extends Module
 	 */
 	protected function changepassMode()
 	{
-		$this->EE->addBreadCrumb('', 'Изменение пароля');
-		$this->setTpl('Changepass');
+		$this->Breadcrumbs->add('', 'Изменение пароля');
+		
+		$this->View->setTpl('Changepass');
 
 		if ($this->Session->isKeyExist('update_password_success')) {
-			$this->output_data['update_password_success'] = $this->Session->update_password_success;
+			$this->View->update_password_success = $this->Session->update_password_success;
 			$this->Session->deleteKey('update_password_success');
 		} else {
 			$form_data = array(
@@ -263,8 +262,8 @@ class Module_UserAccount extends Module
 					);
 			}
 			
-			$this->output_data['messages'] = $this->Session->messages;
-			$this->output_data['password_form_data'] = $form_data;
+			$this->View->messages = $this->Session->messages;
+			$this->View->password_form_data = $form_data;
 		}
 		$this->Session->deleteKey('messages');
 	}
@@ -277,8 +276,8 @@ class Module_UserAccount extends Module
 	 */
 	protected function changeregMode()
 	{
-		$this->EE->addBreadCrumb('', 'Редактирование персональных данных');
-		$this->setTpl('Changereg');
+		$this->Breadcrumbs->add('', 'Редактирование персональных данных');
+		$this->View->setTpl('Changereg');
 		
 		$data = $this->User->getData();
 		
@@ -349,8 +348,8 @@ class Module_UserAccount extends Module
 			'help' => 'Cправка по редактированию регистрационных данных'
 			);
 
-		$this->output_data['messages'] = $this->Session->messages;
-		$this->output_data['personal_form_data'] = $form_data;
+		$this->View->messages = $this->Session->messages;
+		$this->View->personal_form_data = $form_data;
 		$this->Session->deleteKey('messages');
 	}
 	
@@ -369,7 +368,7 @@ class Module_UserAccount extends Module
 				}
 				break;
 			case 'cancel':
-				cf_redirect($this->Env->current_folder_path);
+				cmf_redirect($this->Env->current_folder_path);
 				break;
 			case 'update_password':
 				$capcha_passed = true;
@@ -385,18 +384,18 @@ class Module_UserAccount extends Module
 				if ($capcha_passed and $this->User->updatePassword($pd['old_pass'], $pd['pass1'], $pd['pass2'])) {
 					$this->Session->update_password_success = 'Пароль успешно обновлён';
 				}
-				cf_redirect();
+				cmf_redirect();
 				break;
 			case 'update_personal':
 				if ($this->User->updateAccount($pd)) {
-					cf_redirect($this->Env->current_folder_path);
+					cmf_redirect($this->Env->current_folder_path);
 				} else {
-					cf_redirect();
+					cmf_redirect();
 				}
 				break;
 			case 'auth_openid':
 				if (strlen($pd['openid_identifier']) == 0) {
-					cf_redirect();
+					cmf_redirect();
 				}
 				// Simple Registration Extension
 				$sreg = new Zend_OpenId_Extension_Sreg(array(

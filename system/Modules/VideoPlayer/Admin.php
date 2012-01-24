@@ -15,7 +15,7 @@ class Module_VideoPlayer_Admin extends Module_VideoPlayer implements Admin_Modul
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'uri' => array(
 				'label' => 'Ссылка:',
 				'type' => 'text',
@@ -32,22 +32,5 @@ class Module_VideoPlayer_Admin extends Module_VideoPlayer implements Admin_Modul
 				'value' => $this->height,
 				),
 			);
-		return $node_params;
 	}
-
-	/**
-	 * Вызывается при создании ноды.
-	 * 
-	 * @return array $params
-	 */
-	public function createNode()
-	{
-		$params = array(
-			'uri' => '',
-			'width' => 320,
-			'height' => 240,
-			);
-		return $params;
-	}
-	
 }

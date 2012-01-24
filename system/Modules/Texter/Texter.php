@@ -11,7 +11,7 @@
  * 
  * @package Module
  * 
- * @version 2011-12-27.0
+ * @version 2012-01-20.0
  */
 class Module_Texter extends Module
 {
@@ -38,12 +38,9 @@ class Module_Texter extends Module
 		$this->setVersion(0.4);
 		
 		$this->Node->setDefaultParams(array(
-			'text_item_id' => 0,
-			'editor' => 1,
+			'text_item_id'	=> 0,
+			'editor'		=> 1,
 			));
-
-		$this->text_item_id	= $this->Node->getParam('text_item_id');
-		$this->editor		= $this->Node->getParam('editor');
 	}
 	
 	/**
@@ -61,7 +58,8 @@ class Module_Texter extends Module
 			}
 		}
 		
-		$this->output_data['text'] = $text_item['text'];
+		$this->View->setActionMethod('echoProperties');
+		$this->View->text = $text_item['text'];
 	}	
 	
 	/**
@@ -127,8 +125,7 @@ class Module_Texter extends Module
 	 */
 	protected function getText($item_id)
 	{
-		$sql = "
-			SELECT text, item_id, meta
+		$sql = "SELECT text, item_id, meta
 			FROM {$this->DB->prefix()}text_items
 			WHERE item_id = '$item_id'
 			AND language_id = '{$this->Env->language_id}'
@@ -136,6 +133,7 @@ class Module_Texter extends Module
 		if ($row = $this->DB->getRow($sql)) {
 			return $row;
 		} else {
+			// @todo сделать нормальный логгер системных ошибок с применением debug_backtrace()
 			$stack = "\nFile: " . __FILE__ . "\nLine: ". __LINE__ . "\nClass: " . __CLASS__ . "\nMethod: " . __METHOD__;
 			Log::getInstance()->write('system', "Message: item_id = $item_id is not accessible. $stack");
 			return false;

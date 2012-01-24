@@ -1,10 +1,8 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
- * @version 2011-09-08.0
+ * @version 2012-01-25.0
  */
 class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterface
 {
@@ -25,9 +23,8 @@ class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterfa
 	 */
 	public function nodeAction($params)
 	{
-		$this->output_data = $this->Unicat->action($params);
-		$this->setTpl($this->Unicat->getTpl());
-		$this->setTplPath($this->Unicat->getTplPath());
+		$this->Unicat->action($params);
+		$this->View = $this->Unicat->View;
 		return true;
 	}
 
@@ -41,17 +38,17 @@ class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterfa
 		$front_controls = array();
 		
 		// Действие по умолчанию для ноды является "Редактировать запись"
-		if (isset($this->output_data['item'])) {
+		if ($this->View->item) {
 			$this->default_action = 'edit';
 			$front_controls['edit'] = array(
 				'popup_window_title' => 'Редактирование записи',
 				'title' => 'Редактировать',
-				'link' => $this->Unicat->getEditItemLink($this->output_data['item']['item_id']),
+				'link' => $this->Unicat->getEditItemLink($this->View->item['item_id']),
 				'ico' => 'edit',
 				);
 		}
 		// Действием по умолчанию для ноды является "Добавить запись"
-		else if (isset($this->output_data['items'])){
+		else if ($this->View->items){
 			$this->default_action = 'create_item';
 			$front_controls['add'] = array(
 				'popup_window_title' => 'Добавить запись',
@@ -80,8 +77,8 @@ class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterfa
 	{
 		// @todo проверки на права юзера.
 		$frontend_inner_controls = array();
-		if (isset($this->output_data['items'])) {
-			foreach ($this->output_data['items'] as $key => $value) {
+		if ($this->View->items) {
+			foreach ($this->View->items as $key => $value) {
 				$frontend_inner_controls[$this->class_prefix . 'item_id_' . $key]['edit'] = array(
 					'popup_window_title' => 'Редактировать запись',
 					'title' => 'Редактировать',
@@ -110,7 +107,7 @@ class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterfa
 		$media_collections = array('0' => '[ Не выбрана ]');
 		$media_collections = array_merge($media_collections, $Media->getCollectionsList());
 		
-		$node_params = array(
+		return array(
 			'items_per_page' => array(
 				'label' => 'Записей на страницу:',
 				'type' => 'text',
@@ -139,7 +136,6 @@ class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterfa
 				'value' => $this->Node->getParam('unicat_db_prefix'),
 				),
 			);
-		return $node_params;
 	}
 
 	/**

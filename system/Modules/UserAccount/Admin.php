@@ -15,7 +15,7 @@ class Module_UserAccount_Admin extends Module_UserAccount implements Admin_Modul
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'profile_node_id' => array(
 				'label' => 'Нода профиля: (обычно в http://' . HTTP_HOST . HTTP_ROOT . 'user/profile/)',
 				'type' => 'text',
@@ -42,6 +42,5 @@ class Module_UserAccount_Admin extends Module_UserAccount implements Admin_Modul
 				'value' => $this->Node->getParam('enable_openid'),
 				),
 			);
-		return $node_params;
 	}
 }

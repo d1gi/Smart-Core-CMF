@@ -40,7 +40,7 @@ function OpenFile(fileUrl)
 ?>
 <div id="filemanager_container">
 	<?php
-	$Form = new Helper_Form($data['upload_form']);
+	$Form = new Helper_Form($this->upload_form);
 	echo $Form;
 	?>
 	<div class="filemanager_order_by">
@@ -50,7 +50,7 @@ function OpenFile(fileUrl)
 		<a href="?sort_size=<?php echo (@$_GET['sort_size'] == 'asc')? 'desc' : 'asc';?>">размеру</a></div>
 	<div class="clear"></div>
 	<?php
-	foreach ($data['file_list'] as $key => $value) {
+	foreach ($this->file_list as $key => $value) {
 		echo "\t<div class=\"filemanager_file_entry\" onclick=\"OpenFile('$value[uri]');return false;\">\n\t<div class=\"filemanager_file_thumb\">";
 		echo "\t<img src=\"$value[thumb]\" alt=\"\" title=\"Дата загрузки: $value[upload_datetime], Размер $value[size]\" />\n";
 		echo "\t</div><div class=\"filemanager_file_name\">$value[original_filename]</div></div>\n";

@@ -1,3 +1,3 @@
 <?php 
-$Form = new Helper_Form($data['form_data']);
+$Form = new Helper_Form($this->form_data);
 echo $Form;

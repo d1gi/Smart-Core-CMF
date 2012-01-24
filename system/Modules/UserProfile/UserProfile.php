@@ -42,7 +42,7 @@ class Module_UserProfile extends Module
 		if ($this->user_id === 0) {
 			$login_folder_id = $Node->getProperties($this->login_node_id, 'folder_id');
 			if ($this->Env->current_folder_id != $login_folder_id) {
-				cf_redirect(Folder::getUri($login_folder_id));
+				cmf_redirect(Folder::getUri($login_folder_id));
 			}
 			$this->output_data['profile_form'] = '';
 		}
@@ -117,7 +117,7 @@ class Module_UserProfile extends Module
 		$Node = new Node();
 
 		if ($submit === 'cancel') {
-			cf_redirect(Folder::getUri($Node->getProperties($this->welcome_node_id, 'folder_id')));
+			cmf_redirect(Folder::getUri($Node->getProperties($this->welcome_node_id, 'folder_id')));
 		}
 		
 		$status = true;
@@ -181,7 +181,7 @@ class Module_UserProfile extends Module
 		if (!$status) {
 			$this->Session->messages = $messages;
 			$this->Session->form_data = $form_data;
-			cf_redirect();
+			cmf_redirect();
 		}
 		
 		$this->Session->deleteKey('messages');
@@ -213,7 +213,7 @@ class Module_UserProfile extends Module
 				// @todo надо сделать опцию для времени запоминания куки (это будут общие настройки движка)
 				setcookie(COOKIE_NAME, serialize($cookie), time()+60*60*24*90, '/');
 			} 
-			cf_redirect(Folder::getUri($Node->getProperties($this->welcome_node_id, 'folder_id')));
+			cmf_redirect(Folder::getUri($Node->getProperties($this->welcome_node_id, 'folder_id')));
 		}
 	}
 	

@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Админские методы компонента: Универсальный каталог.
  * 
@@ -11,7 +9,7 @@
  * @uses Helper_Paginator
  * @uses spyc-0.5
  * 
- * @version 2012-01-11.0
+ * @version 2012-01-24.0
  */
 class Component_Unicat_Admin extends Component_Unicat
 {
@@ -23,23 +21,21 @@ class Component_Unicat_Admin extends Component_Unicat
 	 */
 	public function action($params)
 	{
-		$this->setTplPath(dirname(__FILE__) . '/');
-		
-		$output_data = array();
+		$this->View->setTplPath('Components/Unicat');
 		
 		// Редактирование записи.
 		if (isset($_GET['edit_item']) and is_numeric($_GET['edit_item'])) {
-			$this->setTpl('EditItem');
-			$output_data['form_data'] = $this->getEditItemFormData($params);
+			$this->View->setTpl('EditItem');
+			$this->View->form_data = $this->getEditItemFormData($params);
 		}
 		// Создание новой записи.
 		elseif (isset($_GET['create_item'])) {
-			$this->setTpl('EditItem');
-			$output_data['form_data'] = $this->getCreateItemFormData($params);
+			$this->View->setTpl('EditItem');
+			$this->View->form_data = $this->getCreateItemFormData($params);
 		}
 		// Редактирование записей.
 		elseif (isset($_GET['items'])) {
-			$this->setTpl('EditItems');
+			$this->View->setTpl('EditItems');
 
 			if (isset($_GET['items_per_page']) and is_numeric($_GET['items_per_page'])) {
 				$this->items_per_page = $_GET['items_per_page'];
@@ -57,8 +53,8 @@ class Component_Unicat_Admin extends Component_Unicat
 					'current_page' => $this->current_page,
 					),
 				);
-			$output_data['items'] = $this->getItems($options);
-			$output_data['pages'] = new Helper_Paginator(array(
+			$this->View->items = $this->getItems($options);
+			$this->View->pages = new Helper_Paginator(array(
 					'items_count' => $this->getItemsCount($options),
 					'items_per_page' => $this->items_per_page,
 					'current_page' => $this->current_page,
@@ -68,49 +64,47 @@ class Component_Unicat_Admin extends Component_Unicat
 		}
 		// Редактирование свойств.
 		elseif (isset($_GET['properties'])) {
-			$this->setTpl('EditProperties');
-			$output_data['new_properties_group_form_data']	= $this->getCreatePropertiesGroupFormData();
-			$output_data['properties_groups_list']			= $this->getPropertiesGroupsList();
+			$this->View->setTpl('EditProperties');
+			$this->View->new_properties_group_form_data	= $this->getCreatePropertiesGroupFormData();
+			$this->View->properties_groups_list	   		= $this->getPropertiesGroupsList();
 		}
 		// Редактирование группы свойств.
 		elseif (isset($_GET['edit_properties_group']) and is_numeric($_GET['edit_properties_group'])) {
-			$this->setTpl('EditPropertiesGroup');
-			$output_data['create_property_form_data']		= $this->getCreatePropertyFormData($_GET['edit_properties_group']);
-			//$output_data['category_relation']				= $this->getPropertyGroupCategoryRelationList($_GET['edit_properties_group']);
-			$output_data['edit_properties_group_form_data']	= $this->getEditPropertiesGroupFormData($_GET['edit_properties_group']);
-			$output_data['properties_list']			   		= $this->getPropertiesList($_GET['edit_properties_group'], true, true);
+			$this->View->setTpl('EditPropertiesGroup');
+			$this->View->create_property_form_data		= $this->getCreatePropertyFormData($_GET['edit_properties_group']);
+			//$this->View->category_relation			= $this->getPropertyGroupCategoryRelationList($_GET['edit_properties_group']);
+			$this->View->edit_properties_group_form_data = $this->getEditPropertiesGroupFormData($_GET['edit_properties_group']);
+			$this->View->properties_list			   	= $this->getPropertiesList($_GET['edit_properties_group'], true, true);
 		}
 		// Редактирование списка структур.
 		elseif (isset($_GET['structures'])) {
-			$this->setTpl('EditStructures');
-			$output_data['node_id'] 						= $this->Node->id;
-			$output_data['structures_list'] 				= $this->getStructuresList();
-			$output_data['new_structure_form_data']			= $this->getCreateStructureFormData();
+			$this->View->setTpl('EditStructures');
+			$this->View->node_id 						= $this->Node->id;
+			$this->View->structures_list 				= $this->getStructuresList();
+			$this->View->new_structure_form_data		= $this->getCreateStructureFormData();
 		}
 		// Редактирование структуры.
 		elseif (isset($_GET['structure']) and is_numeric($_GET['structure'])) {
 			// Редактирование категории.
 			if (isset($_GET['edit_category']) and is_numeric($_GET['edit_category'])) {
-				$this->setTpl('EditCategory');
-				$output_data['edit_category_form_data'] 	= $this->getEditCategoryFormData($_GET['structure'], $_GET['edit_category']);
+				$this->View->setTpl('EditCategory');
+				$this->View->edit_category_form_data 	= $this->getEditCategoryFormData($_GET['structure'], $_GET['edit_category']);
 			} else {
-				$this->setTpl('EditCategories');
-				$output_data['categories_list'] 			= $this->getCategoriesList($_GET['structure'], 0, false, 'all');
-				$output_data['new_category_form_data']		= $this->getCreateCategoryFormData($_GET['structure']);
+				$this->View->setTpl('EditCategories');
+				$this->View->categories_list 			= $this->getCategoriesList($_GET['structure'], 0, false, 'all');
+				$this->View->new_category_form_data		= $this->getCreateCategoryFormData($_GET['structure']);
 			}
 		}
 		// Редактирование cвойства.
 		elseif (isset($_GET['edit_property']) and is_numeric($_GET['edit_property'])) {
-			$this->setTpl('EditProperty');
-			$output_data['edit_property_form_data'] 		= $this->getEditPropertyFormData($_GET['edit_property']);
+			$this->View->setTpl('EditProperty');
+			$this->View->edit_property_form_data 		= $this->getEditPropertyFormData($_GET['edit_property']);
 		}
 		// Управление каталогом.
 		else {
-			$this->setTpl('Manage');
-			$output_data['structures_list']					= $this->getStructuresList();
+			$this->View->setTpl('Manage');
+			$this->View->structures_list				= $this->getStructuresList();
 		}
-		
-		return $output_data;
 	}
 	
 	/**
@@ -377,8 +371,8 @@ class Component_Unicat_Admin extends Component_Unicat
 		if (strlen($path) == 0) {
 			$structures = array();
 		} else {
-			$tmp = $this->parser($path);
-			$structures = $tmp['data']['structures'];
+			$tmp = $this->router($path);
+			$structures = $tmp['params']['structures'];
 			//$category_id = $tmp['data']['category_id'];
 			unset($tmp);
 		}
@@ -727,7 +721,6 @@ class Component_Unicat_Admin extends Component_Unicat
 	/**
 	 * Получить данные формы создания новой группы свойств.
 	 *
-	 * @param void
 	 * @return array
 	 */
 	public function getCreatePropertiesGroupFormData()
@@ -876,8 +869,8 @@ class Component_Unicat_Admin extends Component_Unicat
 		if (strlen($path) == 0) {
 			$structures = array();
 		} else {
-			$tmp = $this->parser($path);
-			$structures = $tmp['data']['structures'];
+			$tmp = $this->router($path);
+			$structures = $tmp['params']['structures'];
 			//$category_id = $tmp['data']['category_id'];
 			unset($tmp);
 		}

@@ -1,5 +1,5 @@
 <?php
 
-if (isset($data['send_success']) and !empty($data['send_success'])) {
-	echo "<div id=\"success-messages\">$data[send_success]</div>";
+if (!empty($this->send_success)) {
+	echo "<div id=\"success-messages\">{$this->send_success}</div>";
 }

@@ -89,13 +89,14 @@ class Module_Reflex extends Module
 		$Node = new Node($this->hook_node_id);
 		
 		if (empty($this->hook_output_data_key)) {
-			$this->output_data = $Node->hook($this->hook_method, $this->hook_args);
+			foreach ($Node->hook($this->hook_method, $this->hook_args) as $key => $value) {
+				$this->View->$key = $value;
+			}
 		} else {
-			$this->output_data[$this->hook_output_data_key] = $Node->hook($this->hook_method, $this->hook_args);
+			$this->View->set($this->hook_output_data_key, $Node->hook($this->hook_method, $this->hook_args));
 		}
 		
-		$this->setTpl($this->hook_tpl);
-		$this->setTplPath('Modules/' . $Node->getProperties($this->hook_node_id, 'module_id') . '/');
-	}	
-
+		$this->View->setTpl($this->hook_tpl);
+		$this->View->setTplPath('Modules/' . $Node->getProperties($this->hook_node_id, 'module_id') . '/');
+	}
 }

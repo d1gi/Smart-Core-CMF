@@ -8,7 +8,7 @@
  * @uses Component_Unicat
  * @uses DB
  * 
- * @version 2011-12-05.0
+ * @version 2011-12-14.0
  */
 class Module_News extends Module_Catalog_Admin
 {
@@ -24,9 +24,7 @@ class Module_News extends Module_Catalog_Admin
 	protected function init()
 	{
 		parent::init();
-
 		$this->Node->addDefaultParam('use_publication_period', 0);
-		$this->use_publication_period = $this->Node->getParam('use_publication_period');
 	}
 	
 	/**

@@ -1,10 +1,8 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
- * @version 2012-01-11.0
+ * @version 2012-01-25.0
  */
 class Module_Subscribe_Admin extends Module_Subscribe
 {
@@ -175,19 +173,20 @@ class Module_Subscribe_Admin extends Module_Subscribe
 		$front_controls = array();
 		
 		// Действие по умолчанию для ноды является "Редактировать запись"
-		if (isset($this->output_data['item'])) {
+		if ($this->View->item) {
 			$this->default_action = 'edit';
 			$front_controls['edit'] = array(
 				'popup_window_title' => 'Редактирование записи',
 				'title' => 'Редактировать',
-				'link' => $this->Unicat->getEditItemLink($this->output_data['item']['item_id']),
+				'link' => $this->Unicat->getEditItemLink($this->View->item['item_id']),
 				'ico' => 'edit',
 				);
 		}
 		// Действием по умолчанию для ноды является "Добавить запись"
-		else if (isset($this->output_data['items'])){
+		else if ($this->View->items) {
+			
 		}
-//cf_debug($this->Node->parser_data);
+
 		$this->default_action = 'create_item';
 		$front_controls['add'] = array(
 			'popup_window_title' => 'Добавить выпуск',
@@ -215,8 +214,8 @@ class Module_Subscribe_Admin extends Module_Subscribe
 	{
 		// @todo проверки на права юзера.
 		$frontend_inner_controls = array();
-		if (isset($this->output_data['items'])) {
-			foreach ($this->output_data['items'] as $key => $value) {
+		if ($this->View->items) {
+			foreach ($this->View->items as $key => $value) {
 				$frontend_inner_controls[$this->css_prefix . 'item_id_' . $key]['edit'] = array(
 					'popup_window_title' => 'Редактировать запись',
 					'title' => 'Редактировать',
@@ -236,10 +235,8 @@ class Module_Subscribe_Admin extends Module_Subscribe
 	 */
 	public function nodeAction($params)
 	{
-		$this->output_data = $this->Unicat->action($params);
-		$this->setTpl($this->Unicat->getTpl());
-		$this->setTplPath($this->Unicat->getTplPath());
+		$this->Unicat->action($params);
+		$this->View = $this->Unicat->View;
 		return true;
 	}
-
 }

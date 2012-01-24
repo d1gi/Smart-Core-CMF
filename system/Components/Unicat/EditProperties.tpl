@@ -5,7 +5,7 @@
 <fieldset><legend>Группы свойств</legend>
 <ul>
 <?php
-	foreach ($data['properties_groups_list'] as $key => $value) {
+	foreach ($this->properties_groups_list as $key => $value) {
 		echo "\t<li><a href=\"?edit_properties_group=$key\">$value[title]</a></li>\n";				
 	}
 ?>
@@ -13,7 +13,7 @@
 </fieldset>
 
 <fieldset><legend>Добавить новую группу свойств</legend>
-<?php $Form = new Helper_Form($data['new_properties_group_form_data']); echo $Form;?>
+<?php $Form = new Helper_Form($this->new_properties_group_form_data); echo $Form;?>
 </fieldset>
 
 </div>

@@ -5,14 +5,14 @@
 
 
 // Редактирование текстера
-if (isset($data['edit_form_data'])) {
-	$Form = new Helper_Form($data['edit_form_data']);
+if (isset($this->edit_form_data)) {
+	$Form = new Helper_Form($this->edit_form_data);
 	echo $Form;
 	//&nbsp;|&nbsp;<a href="javascript:toggletinyMCE('id-pd-text-0');">Вкл/Выкл визуальный редактор</a>
 	?><div style="width: 100%; text-align: right; margin-top: -40px;"><a href="meta/">Мета-данные</a></div><?php
 }
 
-if (isset($data['all_items'])) {
+if (isset($this->all_items)) {
 	?>
 	<table class="admin-table" width="100%">
 		<tr>
@@ -26,7 +26,7 @@ if (isset($data['all_items'])) {
 			<th>Действие</th>
 		</tr>        
 		<?php
-		foreach ($data['all_items'] as $item_id => $value) {
+		foreach ($this->all_items as $item_id => $value) {
 			$rowspan = count($value['nodes']);
 			
 			echo "<tr>\n";
@@ -79,7 +79,7 @@ if (isset($data['all_items'])) {
 	</table>
 	
 	<div class="paginator">
-	<?php echo @$data['pages'];?>
+	<?php echo $this->pages?>
 	</div>
 	
 	<?php

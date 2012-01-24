@@ -1,23 +1,21 @@
 <?php 
+/*
+foreach ($this as $key => $value) {
+	cmf_dump($key);
+}
 
+cmf_dump(self::getPaths());
+
+if (in_array('\var\www\site.ru\system\\', self::getPaths())) {
+	cmf_dump('<b>yes</b>');
+}
+*/
 $level = 0;
 $first_child = true;
 
-/*
-if ($class) {
-	echo "<ul class=\"$class\">\n";
-} else {
-	echo "<ul>\n";
-}
-*/
+echo strlen($this->css_class) > 0 ? "\n<ul class=\"{$this->css_class}\">\n" : "\n<ul>\n";
 
-if (strlen($data['css_class']) > 0) {
-	echo "\n<ul class=\"{$data['css_class']}\">\n";
-} else {
-	echo "\n<ul>\n";
-}
-
-foreach ($data['items'] as $key => $value) {
+foreach ($this->items as $key => $value) {
 	$tab = '';
 	for ($i = 0; $i <= $value['level'] - 1; $i++) {
 		$tab .= "\t";

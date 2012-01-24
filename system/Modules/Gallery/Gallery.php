@@ -41,16 +41,19 @@ class Module_Gallery extends Module
 	protected function init()
 	{
 		$this->setVersion(0.1);
-		$this->gallery_id = $this->Node->params['gallery_id'];
-		$this->media_collection_id = $this->Node->params['media_collection_id'];
+		
+		$this->Node->setDefaultParams(array(
+			'gallery_id'			=> 0,
+			'media_collection_id'	=> 0,
+			));
 		
 		$sql = "SELECT thumbnail_width AS width, thumbnail_height AS height
 			FROM {$this->DB->prefix()}galleries
 			WHERE site_id = '{$this->Env->site_id}'
-			AND gallery_id = '{$this->gallery_id}' ";
+			AND gallery_id = '{$this->Node->getParam('gallery_id')}' ";
 		$this->thumbnail_params = $this->DB->getRow($sql);
-				
-		$this->Media = new Component_Media($this->media_collection_id);
+		
+		$this->Media = new Component_Media($this->Node->getParam('media_collection_id'));
 	}
 	
 	/**
@@ -65,7 +68,7 @@ class Module_Gallery extends Module
 		// Просмотр альбома.
 		if (isset($_GET['album']) and is_numeric($_GET['album'])) {
 			$album_id = $_GET['album'];
-			$this->setTpl('Album');
+			$this->View->setTpl('Album');
 			
 			$front_controls = array();
 			$front_controls['add_image'] = array(
@@ -81,7 +84,8 @@ class Module_Gallery extends Module
 				WHERE site_id = '{$this->Env->site_id}'
 				AND gallery_id = {$this->gallery_id}
 				AND album_id = '$album_id' ";
-			$this->output_data['album'] = $this->DB->getRow($sql);
+			$this->View->album = $this->DB->getRow($sql);
+			$this->Breadcrumbs->add('', $this->View->album['title'], $this->View->album['descr']);
 			
 			$images = array();
 			$images_count = 0;
@@ -108,8 +112,8 @@ class Module_Gallery extends Module
 				$this->frontend_inner_controls['news_item_id_' . $row->image_id] = $frontend_inner_control;
 					
 			}			
-			$this->output_data['album']['images_count'] = $images_count;
-			$this->output_data['images'] = $images;
+			$this->View->album['images_count'] = $images_count;
+			$this->View->images = $images;
 			return; 
 		}
 		
@@ -168,8 +172,8 @@ class Module_Gallery extends Module
 			$this->frontend_inner_controls['news_item_id_' . $row->album_id] = $frontend_inner_control;
 		}
 	
-		$this->output_data['albums'] = $albums;
-		$this->output_data['albums_count'] = $albums_count;
+		$this->View->albums = $albums;
+		$this->View->albums_count = $albums_count;
 	}	
 	 
 	/**
@@ -504,7 +508,7 @@ class Module_Gallery extends Module
 			$this->DB->query($sql);
 		}
 		// @todo ненадо тут редиректиться!
-		cf_redirect("?album=$album_id");
+		cmf_redirect("?album=$album_id");
 	}
 	
 	/**
@@ -538,7 +542,7 @@ class Module_Gallery extends Module
 			";
 		$this->DB->query($sql);
 		// @todo ненадо тут редиректиться!
-		cf_redirect("?album=$album_id#image_$image_id");
+		cmf_redirect("?album=$album_id#image_$image_id");
 	}
 	
 	/**
@@ -593,7 +597,7 @@ class Module_Gallery extends Module
 		}
 		
 		// @todo ненадо тут редиректиться!
-		cf_redirect("?album=$album_id");
+		cmf_redirect("?album=$album_id");
 	}
 	
 	/**
@@ -622,7 +626,7 @@ class Module_Gallery extends Module
 				$this->deleteImage($pd);
 				break;
 			case 'cancel_image':
-				cf_redirect('?album=' . $pd['album_id'] . '#image_' . $pd['image_id'] );
+				cmf_redirect('?album=' . $pd['album_id'] . '#image_' . $pd['image_id'] );
 				break;
 			default:
 		}

@@ -5,10 +5,9 @@
  * @author	Artem Ryzhkov
  * @package	Kernel
  * 
- * @uses	EE
- * @uses	Kernel
+ * @uses	DB
  * 
- * @version 2011-12-03.1
+ * @version 2012-01-25.0
  */
 class Component_Media_Admin extends Component_Media
 {
@@ -40,11 +39,11 @@ class Component_Media_Admin extends Component_Media
 		/*
 		if (isset($_GET['del_item']) and is_numeric($_GET['del_item'])) {
 			$this->deleteText($_GET['del_item']);
-			cf_redirect(HTTP_ROOT . ADMIN . '/module/Texter/');
+			cmf_redirect(HTTP_ROOT . ADMIN . '/module/Texter/');
 		}
 		*/
-		$this->setTpl('Admin');
-		$data = array();
+		$this->View->setTpl('Admin');
+		$this->View->setTplPath('Components/Media');
 
 		$uri_path_parts = explode('/', $uri_path);
 		
@@ -52,9 +51,8 @@ class Component_Media_Admin extends Component_Media
 			switch ($uri_path_parts[0]) {
 				case 'collection':
 					$breadcrumb_title = 'Редактирование коллекции: ' . $uri_path_parts[1];
-					$this->setTpl('AdminCollection');
-					
-					$data['edit_collection_form_data'] = $this->getEditCollectionFormData($uri_path_parts[1]);
+					$this->View->setTpl('AdminCollection');
+					$this->View->edit_collection_form_data = $this->getEditCollectionFormData($uri_path_parts[1]);
 					
 					break;
 				case 'storage':
@@ -63,17 +61,15 @@ class Component_Media_Admin extends Component_Media
 				default;
 			}
 
-			$this->EE->addBreadCrumb($uri_path_parts[0] . '/', $breadcrumb_title);
+			$this->Breadcrumbs->add($uri_path_parts[0] . '/', $breadcrumb_title);
 		}
 		// Главная страничка управления.
 		else {
-			$data['collections'] = $this->getCollectionsList();
-			$data['storages']	 = $this->getStoragesList();
-			$data['create_collection_form_data'] = $this->getCreateCollectionFormData();
-			$data['create_storage_form_data'] = $this->getCreateStorageFormData();
+			$this->View->collections = $this->getCollectionsList();
+			$this->View->storages	 = $this->getStoragesList();
+			$this->View->create_collection_form_data = $this->getCreateCollectionFormData();
+			$this->View->create_storage_form_data = $this->getCreateStorageFormData();
 		}
-		
-		return $data;
 	}
 	
 	/**

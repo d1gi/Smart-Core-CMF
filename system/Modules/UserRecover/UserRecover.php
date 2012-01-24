@@ -73,7 +73,7 @@ class Module_UserRecover extends Module
 						);
 					$this->output_data['update_password_form_data'] = $form_data;
 				} else {
-					cf_redirect($this->Node->getUri());
+					cmf_redirect($this->Node->getUri());
 				}
 			}
 			// Пароль успешно обновлен
@@ -112,7 +112,7 @@ class Module_UserRecover extends Module
 			}
 		} else { // Авторизнутые юзеры редиректятся на главную страничку авторизации.
 			$Node = new Node();
-			cf_redirect($this->Node->getUri($this->account_node_id));
+			cmf_redirect($this->Node->getUri($this->account_node_id));
 		}
 	}	
 	
@@ -200,7 +200,7 @@ class Module_UserRecover extends Module
 					WHERE site_id = '{$this->Env->site_id}'
 					AND code = {$this->DB->quote($_GET['key'])} ";
 				$this->DB->exec($sql);
-				cf_redirect($this->Node->getUri());
+				cmf_redirect($this->Node->getUri());
 				break;
 			default;
 		}

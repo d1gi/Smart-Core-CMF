@@ -4,7 +4,7 @@
  */
 
 // включение кеширования страниц целиком для гостей.
-define('_IS_CACHE_PAGES', 1);
+define('_IS_CACHE_PAGES', 0);
 
 // включение кеширование нод.
 define('_IS_CACHE_NODES', 0);
@@ -18,6 +18,11 @@ if (!file_exists(DIR_VAR_PLATFORM . '.htaccess')) file_put_contents(DIR_VAR_PLAT
 if (!file_exists(DIR_CACHE . 'pages/'))	mkdir(DIR_CACHE . 'pages/', 0755, true);
 if (!file_exists(DIR_CACHE . 'nodes/'))	mkdir(DIR_CACHE . 'nodes/', 0755, true);
 
+function exception_handler($exception) {
+  echo "Неперехватываемое исключение: " , $exception->getMessage(), "\n";
+}
+
+set_exception_handler('exception_handler');
 
 /**
  * Отображение отладочной информации.
@@ -27,8 +32,9 @@ if (!file_exists(DIR_CACHE . 'nodes/'))	mkdir(DIR_CACHE . 'nodes/', 0755, true);
  * @param bool $to_file - вывести данные в файл.
  * @return int
  */
-function cf_debug($input, $title = false, $to_file = false)
+function cmf_dump($input, $title = false, $to_file = false)
 {
+//	cmf_dump_backtrace();
 	if (isset($input)) {
 		if ($to_file) {
 			$handle = fopen('e:\debug.txt', 'a+');
@@ -62,10 +68,8 @@ function cf_debug($input, $title = false, $to_file = false)
 
 /**
  * Обёртка для debug_print_backtrace().
- *
- * @return void
  */
-function cf_debug_print_backtrace($to_file = false)
+function cmf_dump_backtrace($to_file = false)
 {
 	if ($to_file) {
 		ob_start();

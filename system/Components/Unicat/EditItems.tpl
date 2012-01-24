@@ -1,7 +1,7 @@
 <h3>Записи</h3>
 
 <div class="paginator">
-<?php echo $data['pages'];?>
+<?php echo $this->pages;?>
 </div>
 
 <?php
@@ -23,7 +23,7 @@
 		<!--<th><a href="<?php echo $query_string;?>order_by_title=asc">Заголовок</a></th>-->
 		<th>URI</th>
 <?php
-	foreach ($data['items'] as $item_id => $value) {
+	foreach ($this->items as $item_id => $value) {
 		foreach ($value['properties']['content'] as $property) {
 			echo "<th>{$property['title']}</th>\n\t";
 		}
@@ -36,7 +36,7 @@
 		
 	</tr>
 <?php
-	foreach ($data['items'] as $item_id => $value) {
+	foreach ($this->items as $item_id => $value) {
 		echo "<tr>\n";
 		echo "\t<td><a href=\"?edit_item=$item_id&admin\">$item_id</a></td>\n";
 		echo "\t<td><b>{$value['properties']['uri_part']}</b></td>\n";
@@ -57,10 +57,10 @@
 </table>
 
 <div class="paginator">
-<?php echo $data['pages'];?>
+<?php echo $this->pages;?>
 </div>
 
 <br />
-Отображается по <?php echo $data['pages']->getItemsPerPage();?> записей на страницу.
+Отображается по <?php echo $this->pages->getItemsPerPage();?> записей на страницу.
 <br /><br />
 <a href="?">&laquo; Назад</a>

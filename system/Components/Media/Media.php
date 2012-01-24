@@ -8,7 +8,7 @@
  * 
  * @version 2011-12-03.1
  */
-class Component_Media extends Base // implements Component_Media_Interface
+class Component_Media extends Controller // implements Component_Media_Interface
 {
 	/**
 	 * ID коллекции.
@@ -566,7 +566,6 @@ class Component_Media extends Base // implements Component_Media_Interface
 	 * Установить коллекцию.
 	 *
 	 * @param int $collection_id
-	 * @return void
 	 */
 	public function setCollection($collection_id)
 	{

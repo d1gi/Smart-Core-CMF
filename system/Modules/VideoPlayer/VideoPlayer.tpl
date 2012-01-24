@@ -1,2 +1,2 @@
-<?php
-echo "<iframe width=\"$data[width]\" height=\"$data[height]\" src=\"$data[uri]\" frameborder=\"0\" allowfullscreen></iframe>";
+
+<iframe width="<?php echo $this->width?>" height="<?php echo $this->height?>" src="<?php echo $this->uri?>" frameborder="0" allowfullscreen></iframe>

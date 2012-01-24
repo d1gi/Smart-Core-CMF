@@ -110,7 +110,7 @@ class Module_Basket extends Module
 							'data' => $row->data,
 							);
 					} else {
-						cf_redirect('/orders/');
+						cmf_redirect('/orders/');
 					}
 				}
 				
@@ -123,7 +123,7 @@ class Module_Basket extends Module
 					";
 				$result = $this->DB->query($sql);
 				if ($result->rowCount() == 0) {
-					cf_redirect('/orders/');
+					cmf_redirect('/orders/');
 				}
 				while ($row = $result->fetchObject()) {
 					$orders[$row->order_id] = array(
@@ -156,7 +156,7 @@ class Module_Basket extends Module
 				break;
 			case 'normal':
 				if ($this->User->getId() == 0) {
-					cf_redirect('/user/registration/');
+					cmf_redirect('/user/registration/');
 				}
 				
 				// Удаление товаров из корзины.
@@ -168,7 +168,7 @@ class Module_Basket extends Module
 							";
 						$this->DB->exec($sql);
 					}
-					cf_redirect('/basket/');
+					cmf_redirect('/basket/');
 				}
 				
 				// Действие добавления товара в корзинку.
@@ -190,7 +190,7 @@ class Module_Basket extends Module
 							";
 						$this->DB->query($sql);
 					}
-					cf_redirect($_SERVER['HTTP_REFERER']);
+					cmf_redirect($_SERVER['HTTP_REFERER']);
 				}
 				
 				// Действие история заказов
@@ -333,20 +333,6 @@ class Module_Basket extends Module
 	}
 	
 	/**
-	 * Парсер части УРИ.
-	 * 
-	 * @param string $path - часть URI запроса
-	 * @return array|false
-	 */
-/*
-	public function parser($path)
-	{
-		$data = array();
-		return $data;
-	}
-*/
-
-	/**
 	 * Обработчик POST данных
 	 * 
 	 * @param int $pd
@@ -437,7 +423,7 @@ $data .= "\n\nНа сумму $order_price рублей.";
 					";
 				$this->DB->exec($sql);
 				
-				cf_redirect('?action=success');
+				cmf_redirect('?action=success');
 				
 				break;
 			case 'recalculate':

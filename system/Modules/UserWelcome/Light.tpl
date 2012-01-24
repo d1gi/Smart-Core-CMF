@@ -1,9 +1,9 @@
 <?php
 
-if ($data['login_link'] !== false ) {
-	echo "<a href=\"{$data['login_link']}\">Авторизация</a>";
+if ($this->login_link) {
+	echo "<a href=\"{$this->login_link}\">Авторизация</a>";
 }
 
-if ($data['register_link'] !== false ) {
-	echo " | <a href=\"{$data['register_link']}\">Регистрация</a>";
+if ($this->register_link) {
+	echo " | <a href=\"{$this->register_link}\">Регистрация</a>";
 }

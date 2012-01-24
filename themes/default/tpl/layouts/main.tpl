@@ -32,7 +32,9 @@
 <div id="logo"><h1>Smart Core CMF</h1>платформа управления сайтами</div><!-- <div id="lang-switch">Рус | Eng</div> -->
 		
 <div id="v-menu">
-<?php $this->container('v-menu')?>
+<?php //$this->container('v_menu')?>
+<?php //echo $this->View->Container->v_menu?>
+<?php $this->Containers->v_menu->render()?>
 </div>
 
 <div id="breadcrumbs">
