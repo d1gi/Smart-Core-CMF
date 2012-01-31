@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Хелпер валидации.
  * 
@@ -24,10 +22,7 @@ class Helper_Validator
 	private $messages;
 	
 	/**
-	 * Constructor
-	 *
-	 * @param void
-	 * @return void
+	 * Constructor.
 	 */
 	public function __construct()
 	{
@@ -44,7 +39,7 @@ class Helper_Validator
 	 * NewFunction
 	 *
 	 * @param
-	 * @return
+	 * @return bool
 	 */
 	public function isValid($value, $validator, $params)
 	{

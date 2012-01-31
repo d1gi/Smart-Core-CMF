@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Хелпер по работе с изображениями.
  * 
@@ -55,7 +53,6 @@ class Helper_Image
 	 *
 	 * @param string $input_file
 	 * @param string $output_file
-	 * @return
 	 */
 	public function __construct($input_file = false, $output_file = false)
 	{
@@ -180,7 +177,7 @@ class Helper_Image
 	 * @param
 	 * @return
 	 */
-	public function rotate()
+	public function rotate() // @todo
 	{
 	
 		return true;

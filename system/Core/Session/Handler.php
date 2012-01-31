@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс Session_Handler.
  *  
@@ -23,7 +21,7 @@ class Session_Handler extends Base
 	 * Таблица с сессиями.
 	 * @var string
 	 */
-	private $table = 'sessions';
+	private $table = 'sessions'; // @todo 
 	
 	/**
 	 * Время жизни сесии в сеундах.
@@ -49,7 +47,7 @@ class Session_Handler extends Base
 	public function __construct(array $cfg = null)
 	{
 //		echo __METHOD__ . " called<br />\n";
-		parent::__construct();
+		//parent::__construct();
 		
 		if (isset($cfg['maxlifetime']) and is_numeric($cfg['maxlifetime'])) {
 			$this->maxlifetime = $cfg['maxlifetime'];
@@ -90,7 +88,6 @@ class Session_Handler extends Base
 	/**
 	 * NewFunction
 	 *
-	 * @param
 	 * @return
 	 */
 	public function getUserData()
@@ -126,7 +123,6 @@ class Session_Handler extends Base
 	 * NewFunction
 	 *
 	 * @param
-	 * @return
 	 */
 	public function setUserData($data)
 	{
@@ -146,13 +142,11 @@ class Session_Handler extends Base
 		*/
 		
 		$this->user_data = $data;
-		return true;
 	}
 	
 	/**
 	 * NewFunction
 	 *
-	 * @param
 	 * @return
 	 */
 	public function getToken()
@@ -179,7 +173,6 @@ class Session_Handler extends Base
 	 * NewFunction
 	 *
 	 * @param
-	 * @return
 	 */
 	public function setToken($token)
 	{

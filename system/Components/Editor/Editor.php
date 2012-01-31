@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Компонент, предоставляющий модулям интерфейс работы с визуальным редакторами текста.
  * 
@@ -99,5 +97,4 @@ class Component_Editor extends Controller
 			default:
 		}
 	}
-	
 }

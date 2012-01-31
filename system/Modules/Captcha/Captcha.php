@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module CAPTCHA.
  * 
@@ -23,8 +21,6 @@ class Module_Captcha extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -56,10 +52,8 @@ class Module_Captcha extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		//$Captcha = new Module_Captcha_Kcaptcha2_Kcaptcha2();
 		$Captcha = new Module_Captcha_Kcaptcha_Kcaptcha();
@@ -84,8 +78,6 @@ class Module_Captcha extends Module
 		}
 
 		$this->Response->setDirectData(ob_get_clean());
-		
 		$this->Session->captcha_keystring = $Captcha->getKeyString();
 	}
-	
 }

@@ -107,7 +107,7 @@ class Component_Unicat extends Controller
 	public function __construct(array $params)
 	{
 		parent::__construct();
-		if (isset($params['db_connection']) and $params['db_connection'] !== false) {
+		if (isset($params['db_connection']) and !empty($params['db_connection'])) {
 			$this->DB = $params['db_connection'];
 		}
 		
@@ -1081,6 +1081,11 @@ class Component_Unicat extends Controller
 		
 		// Обработчик категорий и итемов.
 		foreach ($path_parts as $key => $value) {
+			// @todo централизовать валидацию uri.
+			if (!empty($value) and !preg_match('/^[a-z_@0-9.-]*$/iu', $value)) {
+				return false;
+			}
+			
 			// @todo прокомментировать!
 			if($value == '' and $key != 0) { 
 				break;
@@ -1127,32 +1132,36 @@ class Component_Unicat extends Controller
 			// Если часть запроса не относится к "записи", то пробуем обработать его как "категорию".
 			else {
 				// @todo оптимизировать код.
-				if (isset($this->structures[0]['table'])) {
-					$sql = "SELECT category_id, meta, title
-						FROM {$this->structures[0]['table']}
-						WHERE pid = '$category_pid'
-						AND uri_part = '$value'
-						AND is_active = 1 ";
-					$result = $this->DB->query($sql);
-					if ($result->rowCount() == 1) {
-						$row = $result->fetchObject();
-						$uri .= $value . '/';
-						$breadcrumbs[] = array (
-							'uri'	=> $value . '/',
-							'title' => $row->title,
-							'descr' => '', // @todo сделать :) хотя непонятно пока из чего может браться...
-							);
-						$category_pid = $row->category_id;
-						$meta = unserialize($row->meta);
-						$is_success = true;
+				$id = 0;
+				foreach ($this->structures as $struct_key => $struct_value) {
+					if (isset($struct_value['table'])) {
+						$sql = "SELECT category_id, meta, title
+							FROM {$struct_value['table']}
+							WHERE pid = '$category_pid'
+							AND uri_part = '$value'
+							AND is_active = 1 ";
+						$result = $this->DB->query($sql);
+						if ($result->rowCount() == 1) {
+							$row = $result->fetchObject();
+							$uri .= $value . '/';
+							$breadcrumbs[] = array (
+								'uri'	=> $value . '/',
+								'title' => $row->title,
+								'descr' => '', // @todo сделать :) хотя непонятно пока из чего может браться...
+								);
+							$category_pid = $row->category_id;
+							$id = $struct_key; // запоминаем ид структуры, где нашли запрошенную категорию
+							$meta = unserialize($row->meta);
+							$is_success = true;
+							break; // выходим из цикла, т.к. нашли, что искали
+						} else {
+							$is_success = false;
+						}
 					} else {
 						$is_success = false;
 					}
-				} else {
-					$is_success = false;
 				}
 			}
-
 		} // __end foreach $path_parts
 		
 		// @todo сделать мультиструктурность! пока юзается первая (rubrics)

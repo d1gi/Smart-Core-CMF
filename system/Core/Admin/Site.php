@@ -79,20 +79,13 @@ class Admin_Site extends Site
 	 */
 	public function getMetaData($site_id = false)
 	{
+		/*
 		if ($site_id === false) {
 			$site_id = $this->Env->site_id;
 		}
-
-		$Folder = new Folder();
-		$folder = $Folder->getData('', 0);
-
-		if (empty($folder->meta)) {
-			$meta = false;
-		} else {
-			$meta = unserialize($folder->meta);
-		}
-	
-		return $meta;
+		*/
+		$folder = $this->Folder->getData('', 0);
+		return empty($folder->meta) ? false : unserialize($folder->meta);
 	}
 	
 	/**

@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
@@ -15,7 +13,7 @@ class Module_Reflex_Admin extends Module_Reflex implements Admin_ModuleInterface
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'hook_node_id' => array(
 				'label' => 'ID ноды',
 				'type' => 'string',
@@ -42,6 +40,5 @@ class Module_Reflex_Admin extends Module_Reflex implements Admin_ModuleInterface
 				'value' => $this->Node->getParam('hook_output_data_key')
 				),
 			);
-		return $node_params;
 	}
 }

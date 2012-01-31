@@ -1,14 +1,16 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Выполнение задач по расписанию.
  * 
  * @author		Artem Ryzhkov
  * @package		Kernel
- * @copyright	Copyright &copy; 2010-2011 Smart Core CMF 
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF 
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
+ * 
+ * @uses		DB
+ * @uses		Node
+ * @uses		Site
  * 
  * @version 	2011-11-19.2
  */

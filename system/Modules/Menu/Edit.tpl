@@ -5,7 +5,7 @@ $Form = new Helper_Form($this->edit_item_form_data);
 echo $Form;
 
 
-if ($this->list) {
+if (is_array($this->list)) {
 	echo "<fieldset><legend>Пункты меню</legend>\n<ul>\n";
 	
 	$level = 0;

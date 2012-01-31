@@ -1,8 +1,6 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
- * Класс по работе с Нодами.
+ * Класс для работы с Нодами.
  * 
  * @author		Artem Ryzhkov
  * @category	System
@@ -11,9 +9,11 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
+ * @uses		DB
+ * @uses		Cache
  * @uses		Kernel
  * 
- * @version		2012-01-05.0
+ * @version		2012-01-31.0
  */
 class Node extends Controller
 {
@@ -113,7 +113,6 @@ class Node extends Controller
 				[container_id] => 3
 				[params] => a:1:{s:12:"text_item_id";s:1:"1";}
 				[permissions] => 
-				[parser_data] => 
 				[database_id] => 0
 				[node_action_mode] => popup
 				[session] => 0
@@ -220,20 +219,9 @@ class Node extends Controller
 		$sql_folder = $folder_id === false ? '' : " AND folder_id = '$folder_id' ";
 		
 		$nodes = array();
-		$sql = "SELECT
-				n.node_id,
-				n.container_id,
-				n.folder_id,
-				n.pos,
-				n.module_id,
-				n.params,
-				n.plugins,
-				n.is_cached,
-				n.is_active,
-				n.database_id,
-				n.descr,
-				c.name AS container_name,
-				c.descr AS container_descr
+		$sql = "SELECT n.node_id, n.container_id, n.folder_id, n.pos, n.module_id,
+				n.params, n.plugins, n.is_cached, n.is_active, n.database_id, 
+				n.descr, c.name AS container_name, c.descr AS container_descr
 			FROM {$this->DB->prefix()}engine_nodes AS n
 			LEFT JOIN {$this->DB->prefix()}engine_containers AS c	USING (container_id)
 			WHERE n.site_id = '{$this->Env->site_id}'

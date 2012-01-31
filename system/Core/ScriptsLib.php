@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Работа с библиотеками скриптов.
  * 
@@ -9,6 +7,7 @@
  * @package		Kernel
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
+ * @uses		DB
  * @uses		Settings
  * 
  * @version		2011-12-23
@@ -34,12 +33,10 @@ class ScriptsLib extends Base
 	protected $profiles;
 	
 	/**
-	 * Constructor. Singleton pattern.
+	 * Constructor.
 	 */
 	public function __construct()
 	{
-		parent::__construct();
-		
 		// @todo пока принимается только один профиль, далее надо сделать перебор...
 		$this->default_profile = 'local';
 		$this->profiles = $this->Settings->getParam('scripts_profiles');

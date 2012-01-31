@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Хлебные крошки (Дублирующая навигация).
  * 
@@ -40,7 +38,7 @@ class Module_Breadcrumbs extends Module
 	 * 
 	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		$this->View->delimiter = $this->delimiter;
 		$this->View->items = array();

@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс для определения браузера пользователя.
  * 
@@ -21,7 +19,6 @@ class Component_UserAgent
 	/**
 	 * Получить имя браузера
 	 *
-	 * @param
 	 * @return
 	 */
 	public function getBrowser()
@@ -33,7 +30,6 @@ class Component_UserAgent
 	/**
 	 * Получить платфому (операционную систему) на который работает пользователь
 	 *
-	 * @param
 	 * @return
 	 */
 	public function getPlatform()
@@ -45,7 +41,6 @@ class Component_UserAgent
 	/**
 	 * Получить версию браузера
 	 *
-	 * @param
 	 * @return
 	 */
 	public function getVersion()
@@ -57,7 +52,6 @@ class Component_UserAgent
 	/**
 	 * NewFunction
 	 *
-	 * @param
 	 * @return
 	 */
 	public function isMobile()
@@ -65,5 +59,4 @@ class Component_UserAgent
 	
 		return true;
 	}
-
 }

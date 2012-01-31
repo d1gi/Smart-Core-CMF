@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Контейнеры.
  * 
@@ -8,8 +6,7 @@
  * @package	Kernel
  * @license	http://opensource.org/licenses/gpl-2.0
  * 
- * @uses	EE
- * @uses	Kernel
+ * @uses	DB
  * 
  * @version 2011-07-13.0
  */
@@ -18,7 +15,7 @@ class Container extends Controller
 	private $container_list = array();
 	
 	/**
-	 * Конструктор
+	 * Конструктор.
 	 */
 	public function __construct()
 	{
@@ -70,5 +67,4 @@ class Container extends Controller
 		
 		return $multi_options;
 	}
-	
 }

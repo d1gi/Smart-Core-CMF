@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module Reflex.
  * 
@@ -41,15 +39,13 @@ class Module_Reflex extends Module
 	/**
 	 * Использовать массив для помещения выходных данных.
 	 * 
-	 * Например $this->output_data['hook_result']
+	 * Например $this->View->hook_result
 	 * @var string
 	 */
 	protected $hook_output_data_key;
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -70,10 +66,8 @@ class Module_Reflex extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		if ($this->hook_node_id == 0 or empty($this->hook_method)) {
 			return;

@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Хранилище доступных подключеный к БД.
  * 
@@ -25,7 +23,6 @@ class DB_Resources extends Singleton
 	 */
 	protected function __construct()
 	{
-//		$DB = DB::getInstance();
 		$DB = Registry::get('DB');
 		$sql = "SELECT * FROM {$DB->prefix()}engine_database_resources";
 		$result = $DB->query($sql);

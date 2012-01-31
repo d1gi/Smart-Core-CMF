@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module Comments.
  * 
@@ -25,8 +23,6 @@ class Module_Comments extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -39,9 +35,9 @@ class Module_Comments extends Module
 	/**
 	 * Запуск модуля.
 	 * 
-	 * @return void
+	 * @param array $params
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		if ($this->source_node_id != 0) {
 			$Node = new Node($this->source_node_id);

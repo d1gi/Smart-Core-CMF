@@ -11,7 +11,7 @@
  * @uses 	Node
  * @uses 	Output
  * 
- * @version 2012-01-24.0
+ * @version 2012-01-26.0
  */
 class Action extends Controller
 {
@@ -49,6 +49,7 @@ class Action extends Controller
 		} else {
 			return false;
 		}
+		
 		
 		$uri_path = $path['action_path'];
 		$uri_path_parts = explode('/', $uri_path);
@@ -104,6 +105,27 @@ class Action extends Controller
 					// @todo подумать над правами на запись в ноду, видимо можно вообще модулю не передавать эти данные.
 				}
 
+				// @todo переделать!
+				switch ($_SERVER['REQUEST_METHOD']) {
+					case 'POST':
+					
+						// @todo сделать проверку на валидность сабмита.
+						// Вытаскиваем имя ключа в поле $submit
+						foreach ($_POST['submit'] as $key => $dummy) {
+							$submit = $key;
+						}
+						
+						if (isset($_POST['pd'])) {
+							$Module->postProcessor($_POST['pd'], $submit);
+						} else {
+							$Module->postProcessor(array(), $submit);
+						}
+					
+						cmf_redirect();
+						break;
+					default;
+				}				
+
 				// Удаляется первый слеш и запускается действие.
 				$Module->nodeAction(substr($uri_path, 1));
 				
@@ -130,13 +152,6 @@ class Action extends Controller
 			}
 		} else {
 			return false;
-		}
-		
-		switch ($_SERVER['REQUEST_METHOD']) {
-			case 'POST':
-				cmf_redirect();
-				break;
-			default;
 		}
 			
 		return true;

@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Модуль отображения карты Google.
  * 
@@ -49,8 +47,6 @@ class Module_GoogleMap extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -64,10 +60,8 @@ class Module_GoogleMap extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		$sql = "SELECT * FROM {$this->DB->prefix()}google_map_keys WHERE domain = '" . HTTP_HOST . "' ";
 		$result = $this->DB->query($sql);

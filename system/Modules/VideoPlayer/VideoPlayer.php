@@ -7,17 +7,12 @@
  */
 class Module_VideoPlayer extends Module
 {
-	/**
-	 * Some value...
-	 */
 	protected $uri;
 	protected $width;
 	protected $height;
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -30,10 +25,8 @@ class Module_VideoPlayer extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		$this->View->uri = $this->uri;
 		$this->View->width = $this->width;

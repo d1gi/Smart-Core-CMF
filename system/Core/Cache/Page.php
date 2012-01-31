@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Кеширование страниц целиком.
  * 
@@ -15,7 +13,7 @@
 class Cache_Page extends Cache
 {
 	/**
-	 * Конструктор. Синглтон паттерн.
+	 * Constructor.
 	 */
 	protected function __construct()
 	{
@@ -30,7 +28,7 @@ class Cache_Page extends Cache
 	 */
 	public function save($keys, $data)
 	{
-		$id    = md5(trim($keys['id']));
+		$id = md5(trim($keys['id']));
 		$valid_to_timestamp = time() + $keys['lifetime'];
 		
 		$this->remove($id, 'page');
@@ -68,7 +66,6 @@ class Cache_Page extends Cache
 				);
 			file_put_contents($this->dir_cache_pages . $id . '.meta', serialize($meta));
 			file_put_contents($this->dir_cache_pages . $id . '.stat', '0');
-			
 			return true;			
 		} else {
 			return false;

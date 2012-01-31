@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Хелпер для отрисовки форм.
  * 
@@ -439,5 +437,4 @@ class Helper_Form
 			default:
 		}
 	}
-	
 }

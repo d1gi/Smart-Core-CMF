@@ -10,7 +10,7 @@ if (is_array($this->messages)) {
 
 echo "<br />";
 
-$Form = new Helper_Form($data['recover_form_data']);
+$Form = new Helper_Form($this->recover_form_data);
 echo $Form;
 
 if ($this->update_password_form_data) {

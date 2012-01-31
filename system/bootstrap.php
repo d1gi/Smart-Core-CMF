@@ -11,9 +11,9 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2012-01-25.0
+ * @version 	2012-01-31.0
  */
-// Проверка на версию index.php
+// Проверка версии index.php
 if (!defined('INDEX_PHP_VERSION') or INDEX_PHP_VERSION !== 4) {
 	echo '<h1>Bad index version, please update your index.php file!</h1>';
 }
@@ -100,6 +100,7 @@ if (isset($config['http_sys_resources'])) {					// HTTP путь к папке �
 }
 
 define('DIR_CORE',			DIR_SYSTEM . 'Core/');			// Папка ядра системы.
+define('DIR_FRAMEWORK',		DIR_SYSTEM . 'Framework/');		// Путь к фреймворку.
 define('DIR_COMPONENTS',	DIR_SYSTEM . 'Components/');	// Путь к компонентам.
 define('DIR_MODULES',		DIR_SYSTEM . 'Modules/');		// Путь к модулям.
 define('DIR_LIB',			$config['dir_lib']);			// Путь к сторонним библиотекам.
@@ -133,8 +134,9 @@ if (!empty($config['debug_error_log'])) {
 require_once '_temporary.php';
 
 // Регистрация автозагрузчика классов.
-require_once DIR_SYSTEM . 'Core/Class/Loader.php';
+require_once DIR_FRAMEWORK . 'Class/Loader.php';
 Class_Loader::registerAutoload();
+Class_Loader::registerNamespace(array('*' => array(DIR_CORE, DIR_FRAMEWORK, DIR_PEAR_CLASSES, DIR_LIB)) );
 
 // Описание некоторых глобальных функций.
 

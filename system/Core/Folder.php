@@ -1,19 +1,21 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс по работе с Папками.
  * 
  * @author		Artem Ryzhkov
  * @category	System
  * @package		Kernel
- * @copyright	Copyright &copy; 2010-2011 Smart Core CMF 
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF 
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @uses		Kernel
+ * @uses		Cache
+ * @uses		DB
+ * @uses		Env
+ * @uses		Helper_Uri
+ * @uses		Site
  * 
- * @version		2011-12-27.0
+ * @version		2012-01-31.0
  */
 class Folder extends Controller
 {
@@ -100,6 +102,7 @@ class Folder extends Controller
 		$parser_node_id	= (is_numeric($pd['parser_node_id']) and $pd['parser_node_id'] != 0) ? $pd['parser_node_id'] : 'NULL';
 		$pos			= is_numeric($pd['pos']) ? $pd['pos'] : 0;
 		$permissions 	= strlen(trim($pd['permissions'])) == 0 ? 'NULL' : $this->DB->quote(trim($pd['permissions']));
+		$layout 		= strlen(trim($pd['layout'])) == 0 ? 'NULL' : $this->DB->quote(trim($pd['layout']));
 		
 		if ($folder_id == 1) {
 			$is_active = 1;
@@ -155,7 +158,8 @@ class Folder extends Controller
 				permissions = $permissions,
 				nodes_blocks = $nodes_blocks,
 				title = $title,
-				descr = $descr
+				descr = $descr,
+				layout = $layout
 			WHERE
 				folder_id = '$folder_id'
 			AND site_id = '{$this->Env->site_id}' ";
@@ -189,6 +193,7 @@ class Folder extends Controller
 		$parser_node_id	= (is_numeric($pd['parser_node_id']) and $pd['parser_node_id'] != 0) ? $pd['parser_node_id'] : 'NULL';
 		$pos			= is_numeric($pd['pos']) ? $pd['pos'] : 0;
 		$permissions 	= strlen(trim($pd['permissions'])) == 0 ? 'NULL' : $this->DB->quote(trim($pd['permissions']));
+		$layout 		= strlen(trim($pd['layout'])) == 0 ? 'NULL' : $this->DB->quote(trim($pd['layout']));
 		
 		if (is_numeric($pd['pid'])) {
 			$pid = $pd['pid'];
@@ -224,13 +229,13 @@ class Folder extends Controller
 				 pos, uri_part, is_active, 
 				 redirect_to, parser_node_id, transmit_nodes, 
 				 is_file, permissions, create_datetime,
-				 owner_id, title, descr)
+				 owner_id, title, descr, layout)
 			VALUES
 				('$folder_id', '$pid', '{$this->Env->site_id}',
 				 '$pos', $uri_part, '$is_active',
 				  $redirect_to, $parser_node_id, '$transmit_nodes',
 				 '$is_file', $permissions, NOW(),
-				 '{$this->User->getId()}', $title, $descr) ";
+				 '{$this->User->getId()}', $title, $descr, $layout) ";
 		$result = $this->DB->query($sql);
 		
 		// Если $uri_part не указан или указан неверно, то ставится равным ИД новой папки.
@@ -356,7 +361,7 @@ class Folder extends Controller
 					);
 
 				if ($parent_id == 0) {
-					$this->_folder_tree = $tree;
+					$this->_folder_tree = &$tree;
 				}
 
 				$this->buildTree($row->folder_id, $max_depth, $tree[$row->folder_id]['folders']);
@@ -468,7 +473,7 @@ class Folder extends Controller
 	static public function getUri($folder_id = false)
 	{
 		if ($folder_id === false) {
-			$folder_id = Environment::getInstance()->current_folder_id;
+			$folder_id = Env::getInstance()->current_folder_id;
 		}
 
 		$uri_parts = array();

@@ -1,8 +1,6 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
- * Класс по работе с локальной базой аккаунтов, т.е. таблицы users_accounts
+ * Класс для работы с локальной базой аккаунтов, т.е. таблицы users_accounts
  * находятся в в одной базе с инсталляцией платформы.
  * 
  * Используется только классом User.
@@ -33,8 +31,7 @@ class User_Account_Local extends Controller
 	/**
 	 * Constructor.
 	 *
-	 * @param void
-	 * @return void
+	 * @param int $site_id
 	 */
 	public function __construct($site_id)
 	{

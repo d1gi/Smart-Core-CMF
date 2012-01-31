@@ -1,17 +1,15 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
  * @version 2011-06-29.0
+ * 
+ * @todo актуализировать!
  */
 class Module_Slider_Admin extends Module_Slider implements Admin_ModuleInterface
 {
 	/**
 	 * Обработка дейсвий над нодой.
-	 * 
-	 * @return void
 	 */
 	public function nodeAction($params)
 	{

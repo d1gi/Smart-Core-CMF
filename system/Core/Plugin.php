@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Абстрактный класс для всех плагинов.
  * 
@@ -21,7 +19,6 @@ abstract class Plugin extends Controller
 	/**
 	 * NewFunction
 	 *
-	 * @param
 	 * @return
 	 */
 	public function __getEventsList()

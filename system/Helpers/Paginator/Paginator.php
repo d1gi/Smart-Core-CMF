@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Хелпер для отрисовки постраничного вывода.
  * 
@@ -56,28 +54,19 @@ class Helper_Paginator
 		$this->items_per_page	= $data['items_per_page'];
 		$this->current_page		= $data['current_page'];
 		$this->link_tpl			= $data['link_tpl'];
-		if (isset($data['all'])) {
-			$this->all			= $data['all'];
-		} else {
-			$this->all			= 'disabled';
-		}
-		
+		$this->all				= isset($data['all']) ? $data['all'] : 'disabled';
+
 		if ($this->all == 'active') {
 			$this->current_page = -1;
 		}
 		
-		if ($this->items_per_page == 0) {
-			$this->pages_count = 0;
-		} else {
-			$this->pages_count		= ceil($this->items_count /  $this->items_per_page);
-		}
+		$this->pages_count = ($this->items_per_page == 0) ? 0 : ceil($this->items_count /  $this->items_per_page);
 	}	
 	
 	/**
 	 * NewFunction
 	 *
 	 * @param
-	 * @return
 	 */
 	public function allPages($is_enable = false)
 	{
@@ -91,9 +80,6 @@ class Helper_Paginator
 	/**
 	 * Отрисовка хтмл списка 
 	 *
-	 * @param
-	 * @return
-	 * 
 	 * @todo установку класса для списка.
 	 */
 	public function render()
@@ -126,8 +112,6 @@ class Helper_Paginator
 		}
 		
 		echo "</ul>\n";
-		
-		return true;
 	}
 	
 	/**

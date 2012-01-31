@@ -11,10 +11,12 @@
  * @uses		DB
  * @uses		DB_Resources
  * @uses		NodeProperties
+ * @uses		Registry
+ * @uses		View
  * 
- * @version		2012-01-25.0
+ * @version		2012-01-31.0
  */
-abstract class Module extends Controller implements ModuleInterface
+abstract class Module extends Controller
 {
 	/**
 	 * Действие по умолчанию.
@@ -67,9 +69,13 @@ abstract class Module extends Controller implements ModuleInterface
 		// При database_id = 0 модуль будет использовать тоже подключение, что и ядро, иначе создаётся новое подключение.
 		if ($this->Node->database_id != 0) {
 			// @todo для совместимости с эмуляцией функции get_called_class для РНР 5.2, дальше для PHP 5.3 only можно будет записывать в одну строку, без $con_data.
-			$con_data = DB_Resources::getInstance()->getConnectionData($this->Node->database_id);
-			$this->DB = DB::connect($con_data);
-			unset($con_data);
+			$db_key = 'DB.' . $this->Node->database_id;
+			if (!Registry::exists($db_key)) {
+				$con_data = $this->DB_Resources->getConnectionData($this->Node->database_id);
+				Registry::set($db_key, DB::connect($con_data));
+			}
+			$this->DB = Registry::get($db_key);
+			unset($con_data, $db_key);
 		}
 		
 		// Запуск метода init(), который является заменой конструктора для модулей.

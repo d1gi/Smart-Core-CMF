@@ -7,6 +7,7 @@
  * @package		Kernel
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
+ * @uses		DB
  * @uses		Settings
  * @uses		User_Groups
  * 
@@ -18,7 +19,7 @@ class Permissions extends Controller
 	private $user_groups;
 	
 	/**
-	 * Конструктор синглтон класса.
+	 * Constructor.
 	 * 
 	 * - Заполняется массив со значениями прав доступа по умолчанию для всех объектов
 	 * 
@@ -68,7 +69,6 @@ class Permissions extends Controller
 	
 	/**
 	 * Перестройка значенией.
-	 *
 	 */
 	public function rebuild()
 	{

@@ -6,8 +6,10 @@
  * @package		Kernel
  * @subpackage	Module
  * 
+ * @uses 		Breadcrumbs
  * @uses 		User
  * @uses 		User_Groups
+ * @uses 		View
  * 
  * @version		2012-01-24.0
  */
@@ -15,9 +17,6 @@ class Admin_Users extends Controller
 {
 	/**
 	 * Constructor.
-	 *
-	 * @param void
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -156,5 +155,4 @@ class Admin_Users extends Controller
 			'help' => 'Cправка по добавлению ноды.'
 			);
 	}
- 
 }

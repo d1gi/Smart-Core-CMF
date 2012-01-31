@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
@@ -11,11 +9,11 @@ class Module_Taxonomy_Admin extends Module_Taxonomy implements Admin_ModuleInter
 	/**
 	 * Получить параметры подключения модуля.
 	 * 
-	 * @return array $node_params
+	 * @return array
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'items_per_page' => array(
 				'label' => 'Записей на страницу:',
 				'type' => 'text',
@@ -32,7 +30,6 @@ class Module_Taxonomy_Admin extends Module_Taxonomy implements Admin_ModuleInter
 				'value' => $this->class_prefix,
 				),
 			);
-		return $node_params;
 	}
 
 	/**
@@ -50,5 +47,4 @@ class Module_Taxonomy_Admin extends Module_Taxonomy implements Admin_ModuleInter
 			);
 		return $params;
 	}
-
 }

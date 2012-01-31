@@ -112,7 +112,7 @@ class Module_News_Admin extends Module_News
 		$this->View = $this->Unicat->View;
 		
 		// Если не используется период публикации, то и не отображаются свойства дат начала и конца отображения.
-		if ($this->use_publication_period == 0) {
+		if ($this->use_publication_period == 0 and !empty($this->View->form_data)) {
 			unset($this->View->form_data['elements']['pd[content][8]']);
 			unset($this->View->form_data['elements']['pd[content][9]']);
 		}

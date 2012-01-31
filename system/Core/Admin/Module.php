@@ -6,7 +6,9 @@
  * @package		Kernel
  * @subpackage	Module
  * 
+ * @uses 		Breadcrumbs
  * @uses 		DB
+ * @uses 		View
  * 
  * @version		2012-01-24.0
  */

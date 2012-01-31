@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс User.
  * 
@@ -14,6 +12,7 @@
  * 
  * @uses 		Cookie
  * @uses 		DB
+ * @uses 		Env
  * @uses 		Log
  * @uses 		Session
  * @uses 		User_Groups
@@ -37,12 +36,10 @@ class User extends Base
 	private $config;
 	
 	/**
-	 * Конструктор. Синглтон паттерн.
+	 * Constructor.
 	 */
 	public function __construct($config = null)
 	{
-		parent::__construct();
-//cmf_dump_backtrace();
 		$this->config = $config;
 		
 		// Инициализация пользователя по умолчанию как "гость".
@@ -144,7 +141,7 @@ class User extends Base
 	
 	/**
 	 * Получить имя пользователя.
-	 * 
+	 * @var string
 	 */
 	public function getName()
 	{
@@ -153,7 +150,7 @@ class User extends Base
 
 	/**
 	 * Получить е-маил пользователя.
-	 * 
+	 * @var string
 	 */
 	public function getEmail()
 	{

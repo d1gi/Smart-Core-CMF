@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Хелпер транслитерации.
  * 
@@ -37,5 +35,4 @@ class Helper_Translit
 			);
 		return strtr($str, $tr);
 	}
-	
 }

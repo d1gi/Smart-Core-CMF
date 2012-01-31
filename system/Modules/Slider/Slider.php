@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module Slider.
  * 
@@ -18,8 +16,6 @@ class Module_Slider extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -28,10 +24,8 @@ class Module_Slider extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		$this->output_data['time_interval'] = $this->time_interval;
 		$this->output_data['slides'] = $this->getSlides();

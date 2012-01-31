@@ -1,10 +1,9 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 /**
  * Smart Core CMF (Content Managment Framework/System)
  * 
  * @author		Artem Ryzhkov
- * @copyright	Copyright &copy; 2010-2011 Smart Core CMF 
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF 
  * @link		http://smart-core.org/
  * @license		http://www.opensource.org/licenses/gpl-2.0
  * 

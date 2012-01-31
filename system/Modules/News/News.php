@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Модуль новостей.
  * 
@@ -29,10 +27,8 @@ class Module_News extends Module_Catalog_Admin
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		// По умолчанию применяется обратная сортировка.
 		$options = array(
@@ -51,7 +47,7 @@ class Module_News extends Module_Catalog_Admin
 				);
 		}
 		
-		$this->_catalogRun($parser_data, $options);
+		$this->_catalogRun($params, $options);
 	}
 		
 	/**

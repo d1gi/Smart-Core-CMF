@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module приветствия пользователя.
  * 
@@ -18,8 +16,6 @@ class Module_UserWelcome extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -34,10 +30,8 @@ class Module_UserWelcome extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		if (empty($this->account_node_id)) {
 			return null;

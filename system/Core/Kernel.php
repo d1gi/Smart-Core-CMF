@@ -14,13 +14,13 @@
  * 
  * @uses 		Cookie
  * @uses 		DB
- * @uses 		Environment
+ * @uses 		Env
  * @uses 		Log
  * @uses 		Permissions
  * @uses 		Site
  * @uses 		User
  * 
- * @version 	2012-01-25.0
+ * @version 	2012-01-31.0
  */
 class Kernel extends Base
 {
@@ -30,7 +30,7 @@ class Kernel extends Base
 	 */
 	const VERSION		= '0.40beta';
 	const VERSION_BUILD	= '175';
-	const VERSION_DATE	= '2012-01-25';
+	const VERSION_DATE	= '2012-01-31';
 	
 	/**
 	 * Подключения ядра к БД.
@@ -67,13 +67,11 @@ class Kernel extends Base
 	private $config;
 	
 	/**
-	 * Конструктор. Синглтон паттерн.
-	 * 
-	 * @access protected
+	 * Constructor.
 	 * 
 	 * @uses Class_Loader
 	 * @uses DB
-	 * @uses Environment
+	 * @uses Env
 	 * 
 	 * @param array $config
 	 */
@@ -121,7 +119,7 @@ class Kernel extends Base
 		Registry::set('DB', $this->DB);
 		
 		// Установка системного окружения.
-		$this->Env = Environment::getInstance(array(
+		$this->Env = Env::getInstance(array(
 			'dir_sites'				=> $this->config['dir_sites'],
 			'site_id'				=> 0,
 			'language_id'			=> 'ru',
@@ -188,9 +186,7 @@ class Kernel extends Base
 //		$this->Response->sendHeaders();
 		$this->Response->send($Controller->View);
 
-//		cmf_dump(View::getPaths());
 //		cmf_dump($Controller->View);
-//		cmf_dump($this->Breadcrumbs->get());
 		
 		$this->profilerStop('kernel', 'output');
 	}
@@ -225,7 +221,9 @@ class Kernel extends Base
 			'controller'	=> 'NodeMapper',	// По умолчанию NodeMapper.
 			'action'		=> 'run', 			// Метод по умолчанию: run();
 			'path'			=> $path,
-			'params'		=> array(),
+			'params'		=> array(
+				'views'	=> false,
+				),
 			);
 		$current_folder_path = HTTP_ROOT;
 		$parser_node_id = null;
@@ -233,7 +231,15 @@ class Kernel extends Base
 		$Folder = new Folder();
 
 		$path_parts = explode('/', $path);
+		
 		foreach ($path_parts as $key => $segment) {
+			// Проверка строки запроса на допустимые символы.
+			// @todo сделать проверку на разрешение круглых скобок.
+			if (!empty($segment) and !preg_match('/^[a-z_@0-9.-]*$/iu', $segment)) {
+				$route['status'] = 404;
+				break;
+			}
+
 			if ($key == 1 and $segment === ADMIN) {
 				$route['controller'] = 'Admin';
 				$Controller = new Admin();
@@ -471,7 +477,11 @@ class Kernel extends Base
 //		cmf_dump(DB::getQueryesDublicates(), 'getQueryesDublicates:');
 		
 //		cmf_dump(Profiler::getResult());
-	
+//		cmf_dump(Class_Loader::getInfo());
+//		cmf_dump(Registry::getInfo());
+//		cmf_dump(View::getPaths());
+//		cmf_dump($this->Breadcrumbs->get());
+
 //		unset($this->EE->admin);
 //		cmf_dump($this->EE);		
 //		cmf_dump($this->EE->template, 'Массив template');

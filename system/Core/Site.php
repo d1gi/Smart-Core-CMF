@@ -1,31 +1,30 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Работа с экземплярами сайтов.
  * 
  * @author		Artem Ryzhkov
  * @package		Kernel
- * @copyright	Copyright &copy; 2010-2011 Smart Core CMF 
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF 
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2011-12-27.0
+ * @uses		DB
+ * @uses		Env
+ * @uses		Registry
+ * 
+ * @version 	2011-12-31.0
  */
-class Site extends Controller
+class Site extends Base
 {
-	protected static $_cookie_prefix		= '';
-	protected static $_dir_application		= 'application/';
-	protected static $_is_multi_language	= false;
-	protected static $_http_lang_prefix		= '';
-	protected static $_robots_txt			= '';
-	protected static $_site_id				= false;
+	protected static $_cookie_prefix	 = '';
+	protected static $_dir_application	 = 'application/';
+	protected static $_is_multi_language = false;
+	protected static $_http_lang_prefix	 = '';
+	protected static $_robots_txt		 = '';
+	protected static $_site_id			 = false;
 
 	/**
 	 * Constructor.
-	 *
-	 * @param void
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -136,7 +135,7 @@ class Site extends Controller
 	public static function init($site_id = false, $domain = false)
 	{
 		$DB = Registry::get('DB');
-		$Env = Environment::getInstance();
+		$Env = Env::getInstance();
 		
 		// @todo пока так включается сайт по умолчанию, по принципу, самый младший site_id в БД.
 		if (empty($Env->dir_sites)) {

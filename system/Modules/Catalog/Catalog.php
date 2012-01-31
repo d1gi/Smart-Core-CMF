@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Базовый Модуль Каталога.
  * 
@@ -71,23 +69,20 @@ class Module_Catalog extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		// Опции выборки записей.
 		$options = array(
 			'is_active' => 1,
 			);
-		$this->_catalogRun($parser_data, $options);
+		$this->_catalogRun($params, $options);
 	}
 	
 	/**
 	 * NewFunction
 	 *
 	 * @param
-	 * @return
 	 */
 	public function showItem($params)
 	{
@@ -107,11 +102,11 @@ class Module_Catalog extends Module
 	/**
 	 * Стандартный запуск модуля.
 	 *
-	 * @param mixed $parser_data
+	 * @param mixed $params
 	 * @param array $user_options
 	 * @return void
 	 */
-	protected function _catalogRun($parser_data, $user_options = array())
+	protected function _catalogRun($params, $user_options = array())
 	{
 		// Если таблиц не существует, предлагается создать.
 		// или если экземпляр не установлен, пледлагается создать новый.
@@ -131,11 +126,11 @@ class Module_Catalog extends Module
 		}
 		
 		// Парсер может вернуть данные по выбранной категории и номер страницы, а также ид записи.
-		if (count($parser_data) > 0) {
-			$structures = $parser_data['structures'];
-			//$category_id = $parser_data['category_id'];
-			if (isset($parser_data['page'])) {
-				$page_num = $parser_data['page'];
+		if (count($params) > 0) {
+			$structures = $params['structures'];
+			//$category_id = $params['category_id'];
+			if (isset($params['page'])) {
+				$page_num = $params['page'];
 			}
 		} else {
 			$structures = false;
@@ -153,11 +148,11 @@ class Module_Catalog extends Module
 		// Префикс CSS классов
 		$this->View->class_prefix = $this->class_prefix;
 		
-		// Выбрана запись. Парсер вернул ID записи, которае находится в массиве $parser_data.
-		if (isset($parser_data['item_id']) and is_numeric($parser_data['item_id'])) {
+		// Выбрана запись. Парсер вернул ID записи, которае находится в массиве $params.
+		if (isset($params['item_id']) and is_numeric($params['item_id'])) {
 			/* // @todo убрать т.к. тепеь запакован в методе showItem
 			$this->View->setTpl('Item');
-			$this->View->item = $this->Unicat->getItem($parser_data['item_id'], array(
+			$this->View->item = $this->Unicat->getItem($params['item_id'], array(
 				'show_in_view' => 1,
 				));
 			// Мета-тэги
@@ -179,8 +174,8 @@ class Module_Catalog extends Module
 			*/
 			
 			// Мета-тэги
-			if (!empty($parser_data['meta'])) {
-				foreach ($parser_data['meta'] as $key => $value) {
+			if (!empty($params['meta'])) {
+				foreach ($params['meta'] as $key => $value) {
 					$this->EE->addHeadMeta($key, $value);
 				}
 			}

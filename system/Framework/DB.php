@@ -11,11 +11,9 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2012-01-04.0
- * 
- * @todo #310 переделать на Registry.
+ * @version 	2012-01-31.0
  */
-class DB // extends Singleton
+class DB
 {
 	/**
 	 * Indicates the current default fetch mode should be used
@@ -51,39 +49,17 @@ class DB // extends Singleton
 	static public $query_log_profiler = array();
 	
 	/**
-	 * Синглтон паттерн.
-	 * 
-	 * @return db resource
-	 *
-	private static $_instance;
-	public static function getInstance(array $cfg = null)
-	{
-		if (!isset(self::$_instance)) {
-			self::connect($cfg, true);
-		}
-		return self::$_instance;
-	}
-
-	*/
-	
-	/**
-	 * NewFunction
+	 * Constructor.
 	 */
-	private function __construct(array $cfg = null)
-	{
-		self::connect($cfg, true);
-		return true;
-	}
-	
+	private function __construct() {}
 	
 	/**
 	 * Подключение к БД.
 	 * 
 	 * @param array $cfg
-	 * @param bool $instance - поместить ссылку на ресурс в self::$_instance вместе возврата. 
 	 * @return db resource|void
 	 */
-	public static function connect(array $cfg = null, $instance = false)
+	static public function connect(array $cfg = null)
 	{
 		// Выполнение подключения.
 		switch ($cfg['db_lib']) {
@@ -144,18 +120,14 @@ class DB // extends Singleton
 		} else {
 			$conn->setDbType($cfg['db_type']);
 		}
-		
-		if ($instance) {
-			self::$_instance = $conn;
-		} else {
-			return $conn;
-		}
+
+		return $conn;
 	}
 	
 	/**
 	 * Увеличение счетчика запросов на единицу.
 	 */
-	public static function incrementQueryCount()
+	static public function incrementQueryCount()
 	{
 		self::$_query_count++;
 	}
@@ -165,7 +137,7 @@ class DB // extends Singleton
 	 * 
 	 * @return int
 	 */
-	public static function getQueryCount()
+	static public function getQueryCount()
 	{
 		return self::$_query_count;
 	}
@@ -175,7 +147,7 @@ class DB // extends Singleton
 	 * 
 	 * @return array
 	 */
-	public static function getQueryesDublicates()
+	static public function getQueryesDublicates()
 	{
 		$data = array();
 		$tmp = array();
@@ -196,7 +168,7 @@ class DB // extends Singleton
 	 * 
 	 * @return array
 	 */
-	public static function getStat()
+	static public function getStat()
 	{
 		$slowest_query = '';
 		$slowest_query_id = 'NULL';

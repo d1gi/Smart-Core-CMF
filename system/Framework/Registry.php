@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Паттерн Registry.
  * 
@@ -11,7 +9,7 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version		2012-01-17.0
+ * @version		2012-01-31.0
  */ 
 class Registry
 {
@@ -72,5 +70,19 @@ class Registry
 				return null;
 			}
 		}
+	}
+	
+	/**
+	 * Получение информации.
+	 * 
+	 * @return array
+	 */
+	static public function getInfo()
+	{
+		$output = array();
+		foreach (self::$registry as $key => $_dummy) {
+			$output[] = $key;
+		}
+		return $output;
 	}
 }

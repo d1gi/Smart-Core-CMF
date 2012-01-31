@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Базовый контроллер.
  * 
@@ -11,10 +9,9 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @uses		DB
- * @uses		Env
+ * @uses		View
  * 
- * @version		2012-01-16.0
+ * @version		2012-01-31.0
  */
 abstract class Controller extends Base
 {
@@ -46,12 +43,9 @@ abstract class Controller extends Base
 	 * Constructor.
 	 * 
 	 * Вызывается как parent::__construct(); из дочерних классов.
-	 * 
-	 * @access protected
 	 */
 	public function __construct()
 	{
-		parent::__construct();
 		$this->View	= new View();
 	}
 	

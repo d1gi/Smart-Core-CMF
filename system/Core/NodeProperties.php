@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Node Properties.
  * 
@@ -12,6 +10,7 @@
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
  * @uses		DB
+ * @uses		Env
  * @uses		Kernel
  * 
  * @version		2012-01-14.0 
@@ -30,9 +29,9 @@ class NodeProperties
 	public $container_id;
 	public $cache_params;
 	public $params;
-	public $parser_data;
 	public $permissions;
 	public $plugins;
+	public $route_params;
 	// @todo подумать как лучше поступать с $node_folder_path т.к. он нужен не всегда, но для его генерации нужно затрачивать ресурсы. задача № 200.
 	public $node_folder_path_todo;
 	
@@ -183,13 +182,12 @@ class NodeProperties
 			$node_id = $this->id;
 		}
 		
-//		$DB = DB::getInstance();
 		$DB = Registry::get('DB');
 		
 		$sql = "SELECT folder_id
 			FROM " . $DB->prefix() . "engine_nodes
 			WHERE node_id = '{$node_id}' 
-			AND site_id = '" . Environment::getInstance()->site_id . "' ";
+			AND site_id = '" . Env::getInstance()->site_id . "' ";
 		return Folder::getUri($DB->getRowObject($sql)->folder_id);
 	}
 }

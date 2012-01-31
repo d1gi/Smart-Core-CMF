@@ -53,7 +53,7 @@ class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterfa
 			$front_controls['add'] = array(
 				'popup_window_title' => 'Добавить запись',
 				'title' => 'Добавить запись',
-				'link' => $this->Unicat->getCreateItemLink($this->Node->parser_data['path']),
+				'link' => $this->Unicat->getCreateItemLink($this->Node->route_params['path']),
 				'ico' => 'edit',
 				);
 			$front_controls['manage_category'] = array(
@@ -146,7 +146,7 @@ class Module_Catalog_Admin extends Module_Catalog implements Admin_ModuleInterfa
 	 *
 	public function createNode()
 	{
-		$this->Unicat->_systemCreateNode();
+		$this->Unicat->_systemCreateNode(); // @todo 
 		$params = parent::createNode();
 		return $params;
 	}

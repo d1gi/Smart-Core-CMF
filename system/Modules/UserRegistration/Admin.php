@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
@@ -15,7 +13,7 @@ class Module_UserRegistration_Admin extends Module_UserRegistration implements A
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'account_node_id' => array(
 				'label' => 'Нода учетной записи: (обычно в http://site.ru/user/)',
 				'type' => 'text',
@@ -26,8 +24,6 @@ class Module_UserRegistration_Admin extends Module_UserRegistration implements A
 				'type' => 'text',
 				'value' => $this->Node->getParam('captcha_node_id'),
 				),
-		);
-		return $node_params;
+			);
 	}
-	
 }

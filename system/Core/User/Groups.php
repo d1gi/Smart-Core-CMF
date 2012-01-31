@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс по работе с группами пользователей.
  * 
@@ -10,6 +8,7 @@
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
  * @uses		DB
+ * @uses		Session
  * 
  * @version 	2011-11-05.0
  */
@@ -21,13 +20,10 @@ class User_Groups extends Base
 
 	/**
 	 * Constructor.
-	 *
-	 * @param void
-	 * @return void
 	 */
 	protected function __construct()
 	{
-		parent::__construct();
+//		parent::__construct();
 		$this->groups = array();
 		$this->groups[0] = 'guest';
 	}
@@ -171,7 +167,6 @@ class User_Groups extends Base
 	
 	/**
 	* @todo видимо надо переделать ;))
-	* 
 	*/
 	public function getCurrentUsersGroupList()
 	{

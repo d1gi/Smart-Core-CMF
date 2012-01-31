@@ -1,18 +1,16 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс Cookie.
  *  
  * @author		Artem Ryzhkov
  * @package		Kernel
- * @copyright	Copyright &copy; 2010-2011 Smart Core CMF
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2011-12-27.0
+ * @version 	2012-01-31.0
  */
-class Cookie extends Singleton
+class Cookie
 {
 	private $prefix;
 	private $expire;
@@ -28,7 +26,7 @@ class Cookie extends Singleton
 	private $data;
 	
 	/**
-	 * Конструктор. Синглтон паттерн.
+	 * Constructor.
 	 */
 	public function __construct()
 	{
@@ -54,7 +52,7 @@ class Cookie extends Singleton
 	}
 	
 	/**
-	 * NewFunction
+	 * Получить данные.
 	 *
 	 * @return array
 	 */

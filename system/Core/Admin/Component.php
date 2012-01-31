@@ -5,7 +5,9 @@
  * @category	System
  * @package		Kernel
  * 
+ * @uses 		Breadcrumbs
  * @uses 		DB
+ * @uses 		View
  * 
  * @version		2012-01-25.0
  */
@@ -13,9 +15,6 @@ class Admin_Component extends Controller
 {
 	/**
 	 * Constructor.
-	 *
-	 * @param void
-	 * @return void
 	 */
 	public function __construct()
 	{

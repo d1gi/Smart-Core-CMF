@@ -1,8 +1,7 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Базовый класс, предоставляющий общие системные данные.
+ * Dependency Injection.
  * 
  * @author		Artem Ryzhkov
  * @category	System
@@ -11,40 +10,17 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @uses		DB
- * @uses		Env
  * @uses		Profiler
  * @uses		Registry
  * 
- * @version		2012-01-22.0
+ * @version		2012-01-31.0
  */
 abstract class Base
 {
 	static protected $profiler_enable = false;
-	
+
 	/**
-	 * Database connection.
-	 * 
-	 * @access protected
-	 * @var object
-	 */
-	protected $DB;
-	
-	/**
-	 * Constructor.
-	 * 
-	 * Вызывается как parent::__construct(); из дочерних классов.
-	 * 
-	 * @access protected
-	 */
-	protected function __construct()
-	{
-		$this->DB	= Registry::get('DB');
-		$this->Env	= Environment::getInstance();
-	}
-	
-	/**
-	 * "Магическое" обращение к системным синглтон классам.
+	 * "Магическое" обращение к классам.
 	 *
 	 * @param string $class_name
 	 * @return Singleton object
@@ -68,11 +44,6 @@ abstract class Base
 			return $this->$class_name;
 		}
 		
-		if ($class_name == 'Env') {
-			$this->Env	= Environment::getInstance();
-			return $this->Env;
-		}
-		
 		return null;
 	}
 
@@ -90,7 +61,7 @@ abstract class Base
 	}	
 			
 	/**
-	 * Оствновка профилировщика.
+	 * Остановка профилировщика.
 	 * 
 	 * @param string $tag - Тэг, например kernel или node.
 	 * @param string $name - Имя ключа, наприме init или номер ноды.

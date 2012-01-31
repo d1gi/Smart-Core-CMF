@@ -6,6 +6,8 @@
  * @package	Kernel
  * 
  * @uses	Kernel
+ * @uses	View
+ * @uses	Zend_Version
  * 
  * @version 2012-01-24.0
  */

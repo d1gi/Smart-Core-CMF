@@ -1,8 +1,6 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
- * Logger
+ * Logger.
  * 
  * @author		Artem Ryzhkov
  * @copyright	Copyright &copy; 2010-2011 Smart Core CMF
@@ -32,11 +30,8 @@ class Log extends Singleton
 	 */
 	protected function __construct($user_id = false, $user_login = false)
 	{
-		parent::__construct();
-		
-//		$this->DB	= DB::getInstance();
 		$this->DB 	= Registry::get('DB');
-		$this->Env	= Environment::getInstance();
+		$this->Env	= Env::getInstance();
 		$this->User	= Registry::get('User');
 		
 		if ($user_id === false or $user_login === false) {
@@ -54,7 +49,7 @@ class Log extends Singleton
 	 * @param string $type
 	 * @param string $message
 	 * 
-	 * @todo убрать инфу о браузере в класс Environment.
+	 * @todo убрать инфу о браузере в класс Env.
 	 */
 	public function write($type, $message = false) // $stack = false
 	{
@@ -136,5 +131,4 @@ class Log extends Singleton
 		fputs($file, $Date->getDatetime() . ' GET: ' . @$_SERVER['REQUEST_URI'] . ', Ref: ' . @$_SERVER['HTTP_REFERER'] . ', UA: ' . @$_SERVER['HTTP_USER_AGENT'] . "\n");
 		fclose($file);
 	}
-	
 }

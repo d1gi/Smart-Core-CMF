@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Кеширование
  * 
@@ -23,7 +21,7 @@ class Cache extends Controller
 	protected $dir_cache_nodes;
 	
 	/**
-	 * Конструктор. Синглтон паттерн.
+	 * Constructor.
 	 */
 	public function __construct()
 	{
@@ -37,8 +35,8 @@ class Cache extends Controller
 	/**
 	 * NewFunction
 	 *
-	 * @param
-	 * @return
+	 * @param 
+	 * @return bool
 	 */
 	public function create($id, $element, $valid_to_timestamp)
 	{
@@ -70,7 +68,6 @@ class Cache extends Controller
 				$values .= "\n\t('{$this->Env->site_id}', '{$id}', '$element', '$object', '$key' ),";
 			}
 			$values = substr($values, 0, strlen($values)-1);
-
 		} else {
 			$values .= "\n\t('{$this->Env->site_id}', '{$id}', '$element', '$object', '$object_id' )";
 		}		
@@ -210,5 +207,4 @@ class Cache extends Controller
 			}			
 		}
 	}
-	
 }

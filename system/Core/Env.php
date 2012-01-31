@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Базовый класс, предоставляющий данные окружения.
  * 
@@ -22,7 +20,7 @@
  * - requested_uri
  * - referer
  */
-class Environment extends Singleton
+class Env extends Singleton
 {
 	public $cache_enable;
 	public $dir_application;

@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Турбар.
  * 
@@ -39,7 +37,7 @@ class Admin_Toolbar extends Controller
 			);
 		*/
 		
-		$current_folder_id = Environment::getInstance()->current_folder_id;
+		$current_folder_id = $this->Env->current_folder_id;
 		
 		$edit_folder = array(
 			'title' => 'Редактировать папку',

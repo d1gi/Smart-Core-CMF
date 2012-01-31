@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
@@ -15,7 +13,7 @@ class Module_UserWelcome_Admin extends Module_UserWelcome implements Admin_Modul
 	 */
 	public function getParams()
 	{
-		$node_params = array(
+		return array(
 			'account_node_id' => array(
 				'label' => 'Основная нода: (обычно в http://site.ru/user/)',
 				'type' => 'text',
@@ -27,6 +25,5 @@ class Module_UserWelcome_Admin extends Module_UserWelcome implements Admin_Modul
 				'value' => $this->Node->getParam('register_node_id'),
 				),
 			);
-		return $node_params;
 	}
 }

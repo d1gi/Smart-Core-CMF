@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Класс с административными методами.
  * 
@@ -11,7 +9,6 @@ class Module_Gallery_Admin extends Module_Gallery implements Admin_ModuleInterfa
 	/**
 	 * Обработка действий над нодой.
 	 * 
-	 * @return void
 	 */
 	public function nodeAction($params)
 	{

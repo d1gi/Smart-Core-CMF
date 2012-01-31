@@ -5,7 +5,11 @@
  * @author	Artem Ryzhkov
  * @package	Kernel
  *          
+ * @uses	Breadcrumbs
  * @uses	DB
+ * @uses	Env
+ * @uses	View
+ * @uses	User
  * 
  * @version 2012-01-24.0
  */
@@ -212,6 +216,11 @@ class Admin_Folder extends Folder
 //					'value' => '0|read:0', // По умолчанию запрещено читать для гостей.					
 					'value' => '',
 					),
+				'pd[layout]' => array(
+					'label' => 'Макет',
+					'type' => 'string',
+					'value' => '',
+					),
 				),
 			'buttons' => array(
 				'submit[new]' => array(
@@ -346,6 +355,11 @@ class Admin_Folder extends Folder
 					'type' => 'string',
 					'value' => $folder->permissions,
 					),
+				'pd[layout]' => array(
+					'label' => 'Макет',
+					'type' => 'string',
+					'value' => $folder->layout,
+					),
 				'pd[nodes_blocks][single]' => array(
 					'label' => 'Блокировка нод single',
 					'type' => 'string',
@@ -376,5 +390,4 @@ class Admin_Folder extends Folder
 			'help' => 'Cправка по редактированию папки'
 			);
 	}
-	
 }

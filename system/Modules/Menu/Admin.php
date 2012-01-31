@@ -411,7 +411,7 @@ class Module_Menu_Admin extends Module_Menu implements Admin_ModuleInterface
 			INSERT INTO {$this->DB->prefix()}menu_items
 				(pid, site_id, pos, is_active, folder_id, group_id, direct_link, title)
 			VALUES
-				('$pid', '{$this->Env->site_id}', '$pos', '$is_active', $folder_id, '{$this->menu_group_id}', $direct_link, $title) ";
+				('$pid', '{$this->Env->site_id}', '$pos', '$is_active', $folder_id, '{$this->menu_group_id}', $direct_link, $title) ";				
 		$this->DB->exec($sql);
 	}
 

@@ -9,7 +9,7 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version		2012-01-24.0
+ * @version		2012-01-25.0
  */
 class Html extends View
 {
@@ -169,7 +169,7 @@ class Html extends View
 			$theme_path			= HTTP_ROOT . $theme_tmp;
 		}
 		
-		$doctype	 = isset($theme_ini['doctype']) ? $theme_ini['doctype'] : 'XHTML1_STRICT';
+		self::$doctype	 = isset($theme_ini['doctype']) ? $theme_ini['doctype'] : 'XHTML1_STRICT';
 		$css_path	 = isset($theme_ini['css_path']) ? $theme_ini['css_path'] : 'css/';
 		$images_path = isset($theme_ini['images_path']) ? $theme_ini['images_path'] : 'images/';
 		$js_path	 = isset($theme_ini['js_path']) ? $theme_ini['js_path'] : 'js/';
@@ -258,7 +258,11 @@ class Html extends View
 	 */
 	protected function container($container, $options = false)
 	{
-		$this->Containers->$container->render();
+		if (is_object($this->Containers->$container) and method_exists($this->Containers->$container, 'render')) {
+			$this->Containers->$container->render();
+		} else {
+			echo $this->Containers->$container;
+		}
 	}
 	
 	/**

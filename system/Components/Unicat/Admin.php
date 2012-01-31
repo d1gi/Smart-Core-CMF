@@ -582,8 +582,8 @@ class Component_Unicat_Admin extends Component_Unicat
 			'value' => 1,
 			);
 		
-		$categories_list = array();
 		foreach ($this->structures as $struct_key => $struct_value) {
+			$categories_list = array();
 			$categories_list[0] = '[ выбрать ]';
 			
 			foreach ($this->getCategoriesList($struct_value['id'], 0) as $key => $value) {
@@ -1198,8 +1198,10 @@ class Component_Unicat_Admin extends Component_Unicat
 			'type' => 'checkbox',
 			'value' => $structs_tmp[0],
 			);
-		$categories_list = array();
+
+		
 		foreach ($this->structures as $struct_key => $struct_value) {
+			$categories_list = array();
 			$categories_list[0] = '[ выбрать ]';
 			
 			foreach ($this->getCategoriesList($struct_value['id'], 0) as $key => $value) {
@@ -1247,7 +1249,6 @@ class Component_Unicat_Admin extends Component_Unicat
 			}
 			
 			// @todo сделать обработку "ограниченных множественных вхождений".
-			
 			$form_data['fieldsets']['structures']['elements'][] = "pd[structures][$struct_value[id]]";
 		}
 

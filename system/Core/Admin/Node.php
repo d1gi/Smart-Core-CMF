@@ -5,7 +5,9 @@
  * @author	Artem Ryzhkov
  * @package	Kernel
  * 
+ * @uses	Breadcrumbs
  * @uses	Container
+ * @uses	DB
  * @uses	Folder
  * @uses	Kernel
  * @uses	User

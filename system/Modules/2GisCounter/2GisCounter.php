@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module счетчика переходов с 2Гис-а.
  * 
@@ -18,7 +16,7 @@ class Module_2GisCounter extends Module
 	 * 
 	 * @todo возможно есть смысл сделать обработчик реферера, типа http://link.2gis.ru/42E294C5/grym/20110801/novosibirsk/807d0000ac4c?http://www.noogen.ru
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		$city = 'NULL';
 		if (isset($_GET)) {

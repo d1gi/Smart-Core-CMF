@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * View
  * 
@@ -11,23 +9,38 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @uses		DB
- * @uses		Env
- * 
- * @version		2012-01-20.0
+ * @version		2012-01-31.0
  */
 class View
 {
 	/**
 	 * Список всех доступных путей, в которых будет производиться поиск файла с шаблоном.
 	 */
-	protected static $__paths = array();
+	static protected $__paths = array();
 	
 	/**
 	 * Опции.
 	 * @var array
 	 */
 	protected $__options = array();
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param array $options
+	 */
+	public function __construct(array $options = array())
+	{
+		$this->__options = array(
+			'comment'	=> null,
+			'tpl_name'	=> null,
+			'tpl_path'	=> null,
+			'controller'=> false, // $this
+			'action'	=> 'includeTpl', // echoProperties
+			'decorators' => null,
+			);
+		$this->__options = $options + $this->__options;
+	}
 	
 	/**
 	 * Получить глобальные пути в которых производится поиск шаблонов.
@@ -69,24 +82,6 @@ class View
 		array_unshift(self::$__paths, $path);
 	}
 		
-	/**
-	 * Constructor.
-	 *
-	 * @param array $options
-	 */
-	public function __construct(array $options = array())
-	{
-		$this->__options = array(
-			'comment'	=> null,
-			'tpl_name'	=> null,
-			'tpl_path'	=> null,
-			'controller'=> false, // $this
-			'action'	=> 'includeTpl', // echoProperties
-			'decorators' => null,
-			);
-		$this->__options = $options + $this->__options;
-	}
-	
 	/**
 	 * Отобразить все свойства.
 	 */
@@ -201,7 +196,7 @@ class View
 	/**
 	 * Проверить существует ли свойство.
 	 *
-	 * @param
+	 * @param $name
 	 * @return bool
 	 */
 	public function isExist($name)

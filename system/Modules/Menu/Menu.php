@@ -25,8 +25,6 @@ class Module_Menu extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -41,10 +39,8 @@ class Module_Menu extends Module
 
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		if (!empty($this->tpl)) {
 			$this->View->setTpl($this->tpl);

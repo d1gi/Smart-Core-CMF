@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Почтовые рассылки.
  * 
@@ -8,7 +6,8 @@
  * @package	Kernel
  * @license	http://opensource.org/licenses/gpl-2.0
  * 
- * @uses	Kernel
+ * @uses	DB
+ * @uses	Env
  * 
  * @version 2011-12-27.0
  */

@@ -1,5 +1,4 @@
-<?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+<?php
 /**
  * Smart Core CMF (Content Managment Framework/System)
  * 
@@ -44,4 +43,4 @@ if (!isset($_GET['cron_key']) or empty($_GET['cron_key']) or $_GET['cron_key'] !
 
 // Запуск крона.
 $App = new Kernel($config);
-$App->run();
+$App->cron();

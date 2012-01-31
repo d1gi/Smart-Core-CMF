@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Модуль восстановление пароля.
  * 
@@ -31,7 +29,7 @@ class Module_UserRecover extends Module
 	/**
 	 * Запуск модуля.
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		// Форма восстановления пароля доступна только для гостя.
 		if ($this->Env->user_id === 0) {
@@ -71,18 +69,18 @@ class Module_UserRecover extends Module
 							),
 						'help' => 'Cправка по восстановлению пароля'
 						);
-					$this->output_data['update_password_form_data'] = $form_data;
+					$this->View->update_password_form_data = $form_data;
 				} else {
 					cmf_redirect($this->Node->getUri());
 				}
 			}
 			// Пароль успешно обновлен
 			else if ($this->Session_Force->update_password_success == 'PASSED') {
-				$this->output_data['update_password_success'] = 'Пароль успешно обновлен, можете войти в систему, используя ваш новый пароль.';
+				$this->View->update_password_success = 'Пароль успешно обновлен, можете войти в систему, используя ваш новый пароль.';
 			}
 			// в Сессии есть ключ об успешном отправлении емаила.
 			else if ($this->Session_Force->send_recover_success == 'PASSED') {
-				$this->output_data['send_recover_success'] = 'Информация с инструкциями для восстановления пароля выслана вам на указанный email.';
+				$this->View->send_recover_success = 'Информация с инструкциями для восстановления пароля выслана вам на указанный email.';
 			}
 			// Иначе выводится формочка.
 			else {
@@ -107,8 +105,8 @@ class Module_UserRecover extends Module
 					'help' => 'Cправка по восстановлению пароля'
 					);
 
-				$this->output_data['messages'] = $this->Session_Force->messages;
-				$this->output_data['recover_form_data'] = $form_data;
+				$this->View->messages = $this->Session_Force->messages;
+				$this->View->recover_form_data = $form_data;
 			}
 		} else { // Авторизнутые юзеры редиректятся на главную страничку авторизации.
 			$Node = new Node();

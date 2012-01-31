@@ -1,8 +1,8 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Системные настройки.
+ * 
+ * @uses	DB
  * 
  * @version	2011-12-23.0
  */
@@ -11,11 +11,11 @@ class Settings extends Base
 	private $_settings;
 
 	/**
-	 * Конструктор. Синглтон паттерн.
+	 * Constructor.
 	 */
 	public function __construct()
 	{
-		parent::__construct();
+		//parent::__construct();
 		$this->_settings = array();
 		
 		$sql = "SELECT variable, default_value FROM {$this->DB->prefix()}engine_settings ";
@@ -53,13 +53,6 @@ class Settings extends Base
 		$this->_settings[$name] = $value;
 	}
 	
-	/*
-	public function getArray()
-	{
-		return $this->_settings;
-	}
-	*/
-	
 	public function setLanguageID($id)
 	{
 		$this->_settings['language_id'] = $id;
@@ -67,7 +60,6 @@ class Settings extends Base
 
 	/**
 	 * при вызове маинтенанса, не будет происходить подключение к БД.
-	 * 
 	 */
 	public function getMaintenanceSettings()
 	{
@@ -76,6 +68,4 @@ class Settings extends Base
 	public function isMaintenance()
 	{
 	}
-
-	
 }

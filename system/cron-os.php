@@ -1,19 +1,17 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
- * Smart Core CMF
+ * Smart Core CMF.
  * 
  * Запуск задач по расписанию. Этот скрипт применяется для запуска системным кроном ОС.
  * 
  * @category	System
  * @package 	Kernel
  * @author		Artem Ryzhkov
- * @copyright	Copyright &copy; 2010-2011 Smart Core CMF
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF
  * @link		http://smart-core.org/
  * @license		http://www.opensource.org/licenses/gpl-2.0
  * 
- * @version 	2011-11-19.0
+ * @version 	2012-01-31.0
  */
 // Для запуска, необходимо корректно указать абсолютный путь к корню платформы в формате '/www/path/to/platform/'.
 $dir_platform_root = '/www/path/to/platform/';
@@ -37,4 +35,4 @@ require_once DIR_SYSTEM . 'bootstrap.php';
 
 // Запуск крона.
 $App = new Kernel($config);
-$App->run();
+$App->cron();

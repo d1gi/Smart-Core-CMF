@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module ???.
  * 
@@ -18,8 +16,6 @@ class Module_??? extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -28,13 +24,10 @@ class Module_??? extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
-		$this->output_data['new_module'] = $this->getTplName() . ' under construction.';
-		//$this->output_data['val'] = $this->val;
+		$this->View->new_module = $this->View->getTpl() . ' under construction.';
 	}	
 
 	/**

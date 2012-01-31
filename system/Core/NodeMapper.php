@@ -1,6 +1,6 @@
 <?php
 /**
- * NodeMapper
+ * NodeMapper - Управляющий контроллер.
  * 
  * @author		Artem Ryzhkov
  * @package		Kernel
@@ -8,7 +8,14 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2012-01-25.0
+ * @uses		Cookie
+ * @uses		DB
+ * @uses		EE
+ * @uses		Env
+ * @uses		Session_Force
+ * @uses		View
+ * 
+ * @version 	2012-01-31.0
  */
 class NodeMapper extends Controller
 {
@@ -39,7 +46,7 @@ class NodeMapper extends Controller
 		$this->profilerStart('node_mapper', 'build_nodes_list');
 		$nodes_list = $this->buildNodesList($params['folders']);
 		$this->profilerStop('node_mapper', 'build_nodes_list');
-
+		
 		switch ($_SERVER['REQUEST_METHOD']) {
 			case 'GET':
 				// Сразу собираются хлебные крошки т.к. модули могут юзать их, например меню вычисляет по ним активные ссылки на папки.
@@ -52,7 +59,7 @@ class NodeMapper extends Controller
 					}
 				}	
 				
-				$this->EE->template['views']	= $params['views']; // @todo убрать
+				$this->EE->template['views'] = $params['views']; // @todo убрать
 				
 				$this->View = new Html();
 				$this->View->setTpl($params['layout']);
@@ -265,7 +272,7 @@ class NodeMapper extends Controller
 							case 'user_id':
 								$cache_id['user_id'] = $this->Env->user_id;
 								break;
-							case 'parser_data':
+							case 'parser_data': // @todo route_data
 								$cache_id['parser_data'] = $node_properties['parser_data'];
 								break;
 							case 'request_uri':
@@ -429,5 +436,4 @@ class NodeMapper extends Controller
 			cmf_redirect();
 		}
 	}
-	
 }

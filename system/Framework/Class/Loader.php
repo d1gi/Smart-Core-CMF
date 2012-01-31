@@ -1,16 +1,14 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Загрузчик классов.
  * 
  * @author		Artem Ryzhkov
  * @package		Kernel
- * @copyright	Copyright &copy; 2010-2013 Smart Core CMF 
+ * @copyright	Copyright &copy; 2010-2012 Smart Core CMF 
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2012-01-13
+ * @version 	2012-01-31.0
  */
 class Class_Loader
 {
@@ -19,7 +17,7 @@ class Class_Loader
 	 * 
 	 * Есть 2 алгоритма подгрузки:
 	 *  - Zend, когда например класс Zend_Config_Yaml подгружается из файла Zend/Config/Yaml.php
-	 *  - Smart Core, когда у класс Module_Texter_Admin, загружается из файла Module/Texter/Admin.php
+	 *  - Smart Core, класс Module_Texter_Admin, загружается из файла Module/Texter/Admin.php
 	 *                в тоже время класс Module_Texter, загружается из файла Module/Texter/Texter.php
 	 *                т.е. пространство имён распространяется еще и на изоляцию внутри папки.
 	 * @var array
@@ -30,13 +28,12 @@ class Class_Loader
 	 * Массив с пространствами имён для автозагрузки классов.
 	 * @var array
 	 */
-	static private $__namespaces = array(
-		'*' => array(
-			DIR_CORE,
-			DIR_PEAR_CLASSES,
-			DIR_LIB,
-			),
-		);
+	static private $__namespaces = array();
+	
+	/**
+	 * Храние истории всех подгруженных классов.
+	 */
+	static private $__store = array();
 	
 	/**
 	 * Регистрация пространств имён для автозагрузки классов.
@@ -107,6 +104,7 @@ class Class_Loader
 				foreach ($paths as $path) {
 					if (file_exists($path . $file_path)) {
 						require_once $path . $file_path;
+						self::$__store[$class] = $path . $file_path;
 						return true;
 					}
 				}
@@ -115,12 +113,29 @@ class Class_Loader
 		}
 		
 		// Загрузка класса из путей по умолчанию.
-		foreach (self::$__namespaces['*'] as $key => $path) {
+		foreach (self::$__namespaces['*'] as $path) {
 			if (file_exists($path . $file_path)) {
 				require_once $path . $file_path;
+				self::$__store[$class] = $path . $file_path;
 				return true;
 			}
 		}
+		
 		return false;
-	}	
+	}
+	
+	/**
+	 * Получение информации.
+	 * 
+	 * @return array
+	 */
+	static public function getInfo()
+	{
+		return array(
+			'namespaces' => self::$__namespaces,
+			'namespaces_isolated' => self::$__namespaces_isolated,
+			'store_count' => count(self::$__store),
+			'store' => self::$__store,
+			);
+	}
 }

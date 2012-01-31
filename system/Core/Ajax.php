@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Обработка Ajax запросов.
  * 
@@ -58,15 +56,8 @@ class Ajax extends Controller
 				return false;
 			}
 		}
-		
 	}
 
-	/**
-	 * NewFunction
-	 *
-	 * @param
-	 * @return
-	 */
 	public function getFrontEndActionMode()
 	{
 		return $this->front_end_action_mode;

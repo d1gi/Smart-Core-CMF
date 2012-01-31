@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Компонент позволяющий создавать разнообразные вспплывающие окна.
  * 
@@ -146,6 +144,5 @@ class Component_Popup extends Controller
 		// @todo может быть лучше убрать этот кусок в классы библиотек?
 		$link .= ">$this->link_name</a>";
 		return $link;
-	}	
-	
+	}
 }

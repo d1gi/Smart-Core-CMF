@@ -8,7 +8,7 @@
  * @uses DB
  * @uses Permissions
  * 
- * @version 2012-01-11.0
+ * @version 2012-01-31.0
  */
 class Module_Subscribe extends Module
 {
@@ -88,10 +88,13 @@ class Module_Subscribe extends Module
 		// При database_id = 0 модуль будет использовать тоже подключение, что и ядро, иначе создаётся новое подключение.
 		if ($this->unicat_database_id != 0) {
 			// @todo для совместимости с эмуляцией функции get_called_class для РНР 5.2, дальше для PHP 5.3 only можно будет записывать в одну строку, без $con_data.
-//			$con_data = DB_Resources::getInstance()->getConnectionData($this->unicat_database_id);
-			$con_data = $this->DB_Resources->getConnectionData($this->unicat_database_id);
-			$UnicatDB = DB::connect($con_data);
-			unset($con_data);
+			$db_key = 'DB.' . $this->unicat_database_id;
+			if (!Registry::exists($db_key)) {
+				$con_data = $this->DB_Resources->getConnectionData($this->unicat_database_id);
+				Registry::set($db_key, DB::connect($con_data));
+			}
+			$UnicatDB = Registry::get($db_key);
+			unset($con_data, $db_key);
 		} else {
 			$UnicatDB = &$this->DB;
 		}
@@ -112,10 +115,10 @@ class Module_Subscribe extends Module
 	/**
 	 * Запуск модуля.
 	 * 
-	 * @param array $parser_data
+	 * @param array $params
 	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		if ($this->unicat_params['entity_id'] == 0) {
 			if ($this->Permissions->isRoot()) {
@@ -125,13 +128,13 @@ class Module_Subscribe extends Module
 			return;
 		}
 		
-		if (($this->Permissions->isRoot() or $this->Permissions->isAdmin()) and @$parser_data['action'] !== 'releases') {
+		if (($this->Permissions->isRoot() or $this->Permissions->isAdmin()) and @$params['action'] !== 'releases') {
 			$this->View->manage_link = $this->Node->getUri() . 'releases/';
 		}
 		
-		switch ($parser_data['action']) {
+		switch ($params['action']) {
 			case 'activate':
-				if ($this->activate($parser_data['code'])) {
+				if ($this->activate($params['code'])) {
 					$this->View->notice_message = 'Активация на подписку прошла успешно.';
 				} else {
 					$this->View->error_message = $this->getErrorMessage();
@@ -139,21 +142,21 @@ class Module_Subscribe extends Module
 				return;
 				break;
 			case 'email':
-				if ($this->getSubscriberId($parser_data['email'])) {
+				if ($this->getSubscriberId($params['email'])) {
 					$this->View->notice_message = 'Указанный email уже существует в базе рассылок. Вы можете ввести другой email и продолжить процедуру подписки либо отписаться от рассылки.';
-					$this->View->subscribe_form = $this->getUnSubscribeFormData($parser_data['email']);
+					$this->View->subscribe_form = $this->getUnSubscribeFormData($params['email']);
 				} else {
-					$this->createActivation($parser_data['email']);
-					$this->View->success_message = 'На указанный email: ' . $parser_data['email'] . ' отправлено письмо с кодом активации подписки на рассылку.';
+					$this->createActivation($params['email']);
+					$this->View->success_message = 'На указанный email: ' . $params['email'] . ' отправлено письмо с кодом активации подписки на рассылку.';
 				}
 				return;
 				break;
 			case 'delete':
-				if ($this->getSubscriberId($parser_data['code'])) {
-					$this->createDeleteActivation($parser_data['code']);
-					$this->View->success_message = 'На указанный email: ' . $parser_data['code'] . ' отправлено письмо с кодом подтверждения операции.';
+				if ($this->getSubscriberId($params['code'])) {
+					$this->createDeleteActivation($params['code']);
+					$this->View->success_message = 'На указанный email: ' . $params['code'] . ' отправлено письмо с кодом подтверждения операции.';
 				} else {
-					if ($this->delete($parser_data['code'])) {
+					if ($this->delete($params['code'])) {
 						$this->View->notice_message = 'Удаление подписки прошло успешно.';
 					} else {
 						$this->View->error_message = $this->getErrorMessage();

@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Модуль регистрации пользоватея.
  * 
@@ -43,7 +41,7 @@ class Module_UserRegistration extends Module
 	/**
 	 * Запуск модуля.
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		// Форма регистрации доступна только для гостя.
 		if ($this->Env->user_id === 0) { 

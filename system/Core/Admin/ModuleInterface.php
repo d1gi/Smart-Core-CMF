@@ -1,6 +1,4 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Интерфейс для всех модулей.
  * 
@@ -42,5 +40,4 @@ interface Admin_ModuleInterface
 	 * @todo мультиязычность.
 	 */
 	public function createNode();
-	
 }

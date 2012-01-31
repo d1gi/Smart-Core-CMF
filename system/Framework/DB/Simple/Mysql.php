@@ -1,8 +1,6 @@
 <?php 
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
- * Адаптер mysqli.
+ * Адаптер mysql.
  * 
  * @package		Kernel
  * @author		Artem Ryzhkov
@@ -14,7 +12,7 @@
  * 
  * @version 2011-12-27.0
  */
-class DB_Simple_Mysqli extends DB_Simple_Common
+class DB_Simple_Mysql extends DB_Simple_Common
 {
 	/**
 	 * Подключение к БД.
@@ -22,11 +20,12 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	 * @param array $cfg
 	 * @param bool $persistent
 	 */
-	public function connect($cfg, $persistent = false)
+	public function connect(array $cfg, $persistent = false)
 	{
-		$this->connection = mysqli_connect($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], $cfg['db_port']) or die ('Not connected : ' . mysqli_error());
+		$this->connection = mysql_connect($cfg['db_host'] . ':' . $cfg['db_port'], $cfg['db_user'], $cfg['db_pass']) or die ('Not connected : ' . mysql_error());
+		mysql_select_db($cfg['db_name'], $this->connection) or die ('Can\'t use '. $cfg['db_name'] .' : ' . mysql_error());
 	}
-	
+
 	/**
 	 * Выполнение простого запроса.
 	 * 
@@ -35,7 +34,7 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	 */
 	protected function simpleQuery($query)
 	{
-		return mysqli_query($this->connection, $query); //or die("Invalid query: " . mysqli_errno() . ": " . mysqli_error() );	
+		return mysql_query($query, $this->connection);	
 	}	
 	
 	/**
@@ -46,33 +45,30 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	 */
 	protected function simpleExec($query)
 	{
-		mysqli_query($this->connection, $query); //or die("Invalid query: " . mysqli_errno() . ": " . mysqli_error() );
-		return mysqli_affected_rows($this->connection);
+		mysql_query($query, $this->connection); //or die("Invalid query: " . mysqli_errno() . ": " . mysqli_error() );
+		return mysql_affected_rows($this->connection);
 	}	
 	
 	/**
 	* @private !!!
-	* 
 	* @access private
 	* @return object
 	*/
 	public function _fetchObject($result, &$arr)
 	{
-		$arr = mysqli_fetch_object($result);
+		$arr = mysql_fetch_object($result);
 	}
 
 	/**
 	* @private !!!
-	* 
 	* @access private
 	* @return array
 	*/
 	public function _fetchRow($result, &$arr)
 	{
-		$arr = mysqli_fetch_row($result);
-		
+		$arr = mysql_fetch_row($result);
 	}
-
+	
 	/**
 	* Возвращает число строк, затронутых при выполнении последней инструкции.
 	* 
@@ -84,7 +80,7 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	*/
 	public function _rowCount($result)
 	{
-		return mysqli_num_rows($result);
+		return mysql_num_rows($result);
 	}	
 
 	/**
@@ -93,12 +89,14 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	* @access private
 	* 
 	* @return int
+	* 
+	* @todo реализовать через LAST_INSERT_ID(), подробности тут: http://php.net/manual/ru/function.mysql-insert-id.php
 	*/
 	public function lastInsertId()
 	{
-		return (int) mysqli_insert_id();
+		return (int) mysql_insert_id();
 	}	
-	
+
 	/**
 	* Экранирование строки, также добавляются одинарные кавычки в начале и в конце.
 	* 
@@ -107,9 +105,9 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	*/
 	public function quote($string)
 	{
-		return "'" . mysqli_real_escape_string($this->connection, $string) . "'";
+		return "'" . mysql_real_escape_string($string, $this->connection) . "'";
 	}	
-
+	
 	/**
 	 * Извлечение записи в виде массива или объекта.
 	 *
@@ -119,22 +117,22 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	 */
 	public function &getRow($query, $placeholders = array(), $fetchmode = DB::FETCHMODE_DEFAULT)
 	{
-		if (DEBUG_DB_QUERY) {
+		if (DEBUG_DB_QUERY) {	
 			DB::$query_log[DB::getQueryCount()] = $query;
 		}
 		
 		DB::incrementQueryCount();
-
+	
 		// Плейсхолдеров нет, по этому выполняются нативные запросы.
 		if (empty($placeholders)) {
-			$result = mysqli_query($this->connection, $query);
+			$result = mysql_query($query, $this->connection);
 			switch ($fetchmode) {
 				case DB::FETCHMODE_DEFAULT:
 				case DB::FETCHMODE_ASSOC:
-					$row = mysqli_fetch_assoc($result);
+					$row = mysql_fetch_assoc($result);
 					break;
 				case DB::FETCHMODE_OBJECT:
-					$row = mysqli_fetch_object($result);
+					$row = mysql_fetch_object($result);
 					break;
 				default;
 					$row = null;
@@ -143,35 +141,8 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 		// Плейсхолдеры применяются.
 		// @todo сделать поддержку Плейсхолдеров.
 		else {
-			die('DB_Simple_Mysqli does not support placeholders yet, please use db_lib = PDO');
-			/*
-			foreach ($placeholders as $key => $value) {
-				$query = str_replace($key, '?', $query);
-			}
-
-			$stmt = $this->connection->stmt_init();
-			$stmt->prepare($query);
-			
-			foreach ($placeholders as $key => $value) {
-				$stmt->bind_param($key, $value);
-			}
-
-			$stmt->execute(); // $params
-
-			switch ($fetchmode) {
-				case DB::FETCHMODE_DEFAULT:
-				case DB::FETCHMODE_ASSOC:
-					//$row = $stmt->fetch(PDO::FETCH_ASSOC);
-					break;
-				case DB::FETCHMODE_OBJECT:
-					$stmt->bind_result($row);
-					$stmt->fetch();
-					break;
-				default;
-					$row = null;
-			}
-			$stmt->close();
-			*/
+			die('DB_Simple_Mysql does not support placeholders yet, please use db_lib = PDO');
+			// @see DB_Simple_Mysqli->getRow()
 		}
 		
 		return $row;
@@ -185,5 +156,5 @@ class DB_Simple_Mysqli extends DB_Simple_Common
 	public function &getRowObject($query, $placeholders = array())
 	{
 		return $this->getRow($query, $placeholders = array(), DB::FETCHMODE_OBJECT);
-	}
+	}	
 }

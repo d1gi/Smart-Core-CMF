@@ -17,7 +17,7 @@ class Breadcrumbs extends View
 	protected $breadcrumbs = array();
 	
 	/**
-	 * NewFunction
+	 * Constructor.
 	 */
 	public function __construct()
 	{

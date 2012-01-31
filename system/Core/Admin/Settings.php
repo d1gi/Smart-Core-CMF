@@ -6,6 +6,7 @@
  * @package	Kernel
  * 
  * @uses	DB
+ * @uses	View
  * 
  * @version 2012-01-24.0
  */
@@ -112,7 +113,6 @@ class Admin_Settings extends Controller
 			}
 		}
 		
-		
 		$uri_path_parts = explode('/', $uri_path);
 		switch ($uri_path_parts[0]) {
 			case '':
@@ -121,5 +121,4 @@ class Admin_Settings extends Controller
 			default;
 		}
 	}
-	
 }

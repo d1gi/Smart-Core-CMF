@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module "Таксономиия" - систематизация по тэгам.
  * 
@@ -35,8 +33,6 @@ class Module_Taxonomy extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -48,16 +44,14 @@ class Module_Taxonomy extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		if ($this->catalog_node_id == 0) {
 			return;
 		}
 		
-		if (isset($parser_data)) {
+		if (isset($params)) {
 			if (isset($_GET['page']) and is_numeric($_GET['page'])) {
 				$page_num = $_GET['page'];
 			} else {
@@ -65,9 +59,9 @@ class Module_Taxonomy extends Module
 			}
 			
 			$Node = new Node($this->catalog_node_id);
-			$this->output_data['requested_tag'] = $Node->hook('getTagData', array('tag_id' => $parser_data));
+			$this->output_data['requested_tag'] = $Node->hook('getTagData', array('tag_id' => $params));
 			$this->output_data['items'] = $Node->hook('getItemsByTag', array('options' => array(
-				'tag' => $parser_data,
+				'tag' => $params,
 				'paginator' => array(
 					'items_per_page' => $this->items_per_page,
 					'current_page' => $page_num,
@@ -77,7 +71,7 @@ class Module_Taxonomy extends Module
 			// Постраничность 
 			$this->output_data['pages'] = new Helper_Paginator(array(
 					'items_count' => $Node->hook('getItemsCount', array('options' => array(
-						'tag' => $parser_data,
+						'tag' => $params,
 						))),
 					'items_per_page' => $this->items_per_page,
 					'current_page' => $page_num,

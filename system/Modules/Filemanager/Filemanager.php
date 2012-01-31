@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Module Filemanager.
  * 
@@ -27,8 +25,6 @@ class Module_Filemanager extends Module
 	
 	/**
 	 * Конструктор.
-	 * 
-	 * @return void
 	 */
 	protected function init()
 	{
@@ -43,10 +39,8 @@ class Module_Filemanager extends Module
 	
 	/**
 	 * Запуск модуля.
-	 * 
-	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		$this->EE->addHeadStyle('filemanager.css', HTTP_SYS_RESOURCES . 'styles/filemanager.css');
 		
@@ -169,10 +163,9 @@ class Module_Filemanager extends Module
 			case 'upload':
 				foreach ($_FILES as $key => $value) {
 					if ($value['error'] == 0) {
-						/*
-						$options = array(
-							);
-						*/
+						
+						$options = array();
+						
 						$this->Media->createFile($_FILES[$key], $options);
 					}
 				}

@@ -5,8 +5,8 @@
  * @author	Artem Ryzhkov
  * @package	Kernel
  * 
- * @uses	EE
- * @uses	Kernel
+ * @uses	DB
+ * @uses	Env
  * 
  * @version 2011-09-18.0
  */
@@ -14,9 +14,6 @@ class Admin_Container extends Container
 {
 	/**
 	 * Constructor.
-	 *
-	 * @param void
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -202,5 +199,4 @@ class Admin_Container extends Container
 			}
 		}
 	}
-	
 }

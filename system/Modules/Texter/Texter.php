@@ -1,6 +1,4 @@
 <?php
-/* vim: set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Модуль работы с типовым HTML текстом.
  * 
@@ -48,7 +46,7 @@ class Module_Texter extends Module
 	 * 
 	 * @return void
 	 */
-	public function run($parser_data)
+	public function run($params)
 	{
 		$text_item = $this->getText($this->text_item_id);
 

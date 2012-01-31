@@ -9,6 +9,7 @@
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
  * @uses		Cache
+ * @uses		Env
  * @uses		Settings
  * @uses		Template
  * 
