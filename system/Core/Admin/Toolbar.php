@@ -75,9 +75,9 @@ class Admin_Toolbar extends Controller
 			'title' => 'Сайт',
 			'link' => HTTP_ROOT . ADMIN . '/config/site/',
 			);
-		$containers = array(
-			'title' => 'Контейнеры',
-			'link' => HTTP_ROOT . ADMIN . '/structure/containers/',
+		$blocks = array(
+			'title' => 'Блоки',
+			'link' => HTTP_ROOT . ADMIN . '/structure/blocks/',
 			);
 		$sysinfo = array(
 			'title' => 'Системная информация',

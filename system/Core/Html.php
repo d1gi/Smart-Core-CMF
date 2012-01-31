@@ -242,31 +242,31 @@ class Html extends View
 	}
 	
 	/**
-	 * Метод отрисовки данных контейреров, вызывается из шаблонов т.е. представлений (views). 
+	 * Метод отрисовки данных блоков, вызывается из шаблонов т.е. представлений (views). 
 	 * 
 	 * Формат массива $options:
 	 * - class - имя класса.
 	 * - id - id тега.
-	 * - before - код предшествующий выводу шаблона в случае, если контейнер не пустой.
-	 * - after - код последующий выводу шаблона в случае, если контейнер не пустой.
+	 * - before - код предшествующий выводу шаблона в случае, если блок не пустой.
+	 * - after - код последующий выводу шаблона в случае, если блок не пустой.
 	 * 
-	 * @param string $container
+	 * @param string $block
 	 * @param string $start_tag
 	 * @param string $end_tag
 	 * @param array $options
 	 * @return bool
 	 */
-	protected function container($container, $options = false)
+	protected function block($block, $options = false)
 	{
-		if (is_object($this->Containers->$container) and method_exists($this->Containers->$container, 'render')) {
-			$this->Containers->$container->render();
+		if (is_object($this->Blocks->$block) and method_exists($this->Blocks->$block, 'render')) {
+			$this->Blocks->$block->render();
 		} else {
-			echo $this->Containers->$container;
+			echo $this->Blocks->$block;
 		}
 	}
 	
 	/**
-	 * Представление (view) контейнеров внутри макетов (layout).
+	 * Представление (view) блоков внутри макетов (layout).
 	 * 
 	 * @param string $name
 	 * @param bool $force

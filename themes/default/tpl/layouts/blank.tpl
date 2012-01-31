@@ -1,2 +1,2 @@
 
-<?php $this->container('content')?>
+<?php $this->block('content')?>

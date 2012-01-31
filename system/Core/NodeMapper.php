@@ -64,7 +64,7 @@ class NodeMapper extends Controller
 				$this->View = new Html();
 				$this->View->setTpl($params['layout']);
 				$this->View->setTplPath('layouts');
-				$this->View->Containers = new View();
+				$this->View->Blocks = new View();
 				
 				if ($this->Cookie->cmf_session_force_start == true) {
 					$this->Session->start();
@@ -87,7 +87,7 @@ class NodeMapper extends Controller
 	}
 	
 	/**
-	 * Создание списка всех запрошеных нод, в каких контейнерах они находятся и с какими 
+	 * Создание списка всех запрошеных нод, в каких блоках они находятся и с какими 
 	 * параметрами запускаются модули.
 	 * 
 	 * @access protected
@@ -149,15 +149,15 @@ class NodeMapper extends Controller
 			$sql = false;
 			if ($parsed_uri_value['transmit_nodes'] == 1) { // в этой папке есть ноды, которые наследуются...
 				$sql = "SELECT n.module_id, n.node_id, n.params, n.cache_params, n.plugins, n.database_id, 
-						n.permissions, n.is_cached, n.container_id AS container_id,	n.node_action_mode
+						n.permissions, n.is_cached, n.block_id AS block_id,	n.node_action_mode
 					FROM {$this->DB->prefix()}engine_nodes AS n,
-						{$this->DB->prefix()}engine_containers_inherit AS ci
-					WHERE n.container_id = ci.container_id 
+						{$this->DB->prefix()}engine_blocks_inherit AS bi
+					WHERE n.block_id = bi.block_id 
 						AND is_active = 1
 						AND n.folder_id = '{$folder_id}'
-						AND ci.folder_id = '{$folder_id}'
+						AND bi.folder_id = '{$folder_id}'
 						AND n.site_id = '{$this->Env->site_id}'
-						AND ci.site_id = '{$this->Env->site_id}'
+						AND bi.site_id = '{$this->Env->site_id}'
 					ORDER BY n.pos ";
 			}
 			
@@ -190,7 +190,7 @@ class NodeMapper extends Controller
 				$nodes_list[$row->node_id] = array(
 					'folder_id'		=> $folder_id,
 					'module_id'		=> $row->module_id,
-					'container_id'	=> $row->container_id,
+					'block_id'		=> $row->block_id,
 					'params'		=> $row->params,
 					'cache_params'	=> $row->cache_params,
 					'is_cached'		=> $row->is_cached,
@@ -227,25 +227,25 @@ class NodeMapper extends Controller
 	}	
 	
 	/**
-	 * Собирается массив $ЕЕ, исходя из контейнеров и подготовленного списка нод,
+	 * Собирается массив $ЕЕ, исходя из блоков и подготовленного списка нод,
 	 * по мере прохождения, подключаются и запускаются нужные модули с нужными параметрами.
 	 * 
 	 * @uses Module_*
 	 */
 	protected function buildModulesData($nodes_list)
 	{
-		$containers = array();
+		$blocks = array();
 
-		// Создаётся список всех доступных контейнеров в системе.
-		$sql = "SELECT container_id, name
-			FROM {$this->DB->prefix()}engine_containers
+		// Создаётся список всех доступных блоков в системе.
+		$sql = "SELECT block_id, name
+			FROM {$this->DB->prefix()}engine_blocks
 			WHERE site_id = '{$this->Env->site_id}'
 			ORDER BY pos ASC ";
 		$result = $this->DB->query($sql);
 		while ($row = $result->fetchObject()) {
-			$containers[$row->container_id] = $row->name;
+			$blocks[$row->block_id] = $row->name;
 			$name = $row->name;
-			$this->View->Containers->$name = new View();
+			$this->View->Blocks->$name = new View();
 		}
 		
 		$Node = new Node();
@@ -257,7 +257,7 @@ class NodeMapper extends Controller
 			
 			$this->profilerStart('node', $node_id);
 			
-			$container_name = $containers[$node_properties['container_id']];
+			$block_name = $blocks[$node_properties['block_id']];
 
 			// Обнаружены параметры кеша.
 			if (_IS_CACHE_NODES and $node_properties['is_cached'] and !empty($node_properties['cache_params']) and $this->Env->cache_enable ) {
@@ -299,7 +299,7 @@ class NodeMapper extends Controller
 				and $this->Cookie->cmf_frontend_mode !== 'edit'
 				and $html_cache = $this->Cache_Node->loadHtml($cache_params['id'])
 			) {
-				// $this->EE->data[$container_name][$node_id]['html_cache'] = $html_cache; @todo !!!!!!!!
+				// $this->EE->data[$block_name][$node_id]['html_cache'] = $html_cache; @todo !!!!!!!!
 			}
 			// Кеша нет.
 			else { 
@@ -320,7 +320,7 @@ class NodeMapper extends Controller
 				// @todo ПЕРЕДЕЛАТЬ!!! подумать где выполнять кеширование, внутри объекта View или где-то снаружи.
 				// @todo ВАЖНО подумать как тут поступить т.к. эта кука может стоять у гостя!!!
 				if (_IS_CACHE_NODES and !empty($cache_params) and $this->Cookie->cmf_frontend_mode !== 'edit') {
-//					$this->EE->data[$container_name][$node_id]['store_html_cache'] = $Module->getCacheParams($cache_params);
+//					$this->EE->data[$block_name][$node_id]['store_html_cache'] = $Module->getCacheParams($cache_params);
 				} 
 
 				// Получение данных для фронт-админки ноды.
@@ -360,7 +360,7 @@ class NodeMapper extends Controller
 				}
 			}
 			
-			$this->View->Containers->$container_name->$node_id = $Module->View;
+			$this->View->Blocks->$block_name->$node_id = $Module->View;
 
 			$this->profilerStop('node', $node_id);
 			unset($Module);

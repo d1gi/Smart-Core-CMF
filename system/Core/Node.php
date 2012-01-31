@@ -77,7 +77,7 @@ class Node extends Controller
 					'is_active'		=> $row->is_active,
 					'folder_id'		=> $row->folder_id,
 					'module_id'		=> $row->module_id,
-					'container_id'	=> $row->container_id,
+					'block_id'		=> $row->block_id,
 					'route_params'	=> false,
 					'cache_params'	=> $row->cache_params,
 					'params'		=> $row->params,
@@ -110,7 +110,7 @@ class Node extends Controller
 			(
 				[folder_id] => 1
 				[module_id] => Texter
-				[container_id] => 3
+				[block_id] => 3
 				[params] => a:1:{s:12:"text_item_id";s:1:"1";}
 				[permissions] => 
 				[database_id] => 0
@@ -144,17 +144,17 @@ class Node extends Controller
 	 */
 	public function create($pd)
 	{
-		if (is_numeric($pd['container_id'])) {
-			$container_id = $pd['container_id'];
+		if (is_numeric($pd['block_id'])) {
+			$block_id = $pd['block_id'];
 		} else {
 			return false;
 		}
 
-		// Вычисление максимальной позиции, чтобы поместить новую ноду в конец внутри контейнера.
+		// Вычисление максимальной позиции, чтобы поместить новую ноду в конец внутри блока.
 		/*
 		$sql = "SELECT max(pos) as max_pos 
 			FROM {$this->DB->prefix()}engine_nodes
-			WHERE container_id = '$pd[container_id]'
+			WHERE block_id = '$pd[block_id]'
 			AND folder_id = '$pd[folder_id]'
 			AND site_id = '{$this->Env->site_id}' ";
 		$result = $this->DB->query($sql);
@@ -171,9 +171,9 @@ class Node extends Controller
 		$descr = $this->DB->quote(trim($pd['descr']));
 		$sql = "
 			INSERT INTO {$this->DB->prefix()}engine_nodes
-				(folder_id, site_id, descr, container_id, module_id, database_id, params, is_active, is_cached, pos, permissions, create_datetime, owner_id)
+				(folder_id, site_id, descr, block_id, module_id, database_id, params, is_active, is_cached, pos, permissions, create_datetime, owner_id)
 			VALUES
-				('$folder_id', '{$this->Env->site_id}', $descr, '$container_id', '$pd[module_id]', '$database_id', NULL, '$is_active', '$is_cached', '$pos', $permissions, NOW(), '{$this->Env->user_id}') ";
+				('$folder_id', '{$this->Env->site_id}', $descr, '$block_id', '$pd[module_id]', '$database_id', NULL, '$is_active', '$is_cached', '$pos', $permissions, NOW(), '{$this->Env->user_id}') ";
 		$this->DB->query($sql);
 		$node_id = $this->DB->lastInsertId();
 		
@@ -219,13 +219,13 @@ class Node extends Controller
 		$sql_folder = $folder_id === false ? '' : " AND folder_id = '$folder_id' ";
 		
 		$nodes = array();
-		$sql = "SELECT n.node_id, n.container_id, n.folder_id, n.pos, n.module_id,
+		$sql = "SELECT n.node_id, n.block_id, n.folder_id, n.pos, n.module_id,
 				n.params, n.plugins, n.is_cached, n.is_active, n.database_id, 
-				n.descr, c.name AS container_name, c.descr AS container_descr
+				n.descr, b.name AS block_name, b.descr AS block_descr
 			FROM {$this->DB->prefix()}engine_nodes AS n
-			LEFT JOIN {$this->DB->prefix()}engine_containers AS c	USING (container_id)
+			LEFT JOIN {$this->DB->prefix()}engine_blocks AS b USING (block_id)
 			WHERE n.site_id = '{$this->Env->site_id}'
-			AND c.site_id = '{$this->Env->site_id}'
+			AND b.site_id = '{$this->Env->site_id}'
 			$sql_folder
 			ORDER BY n.pos ";
 		$result = $this->DB->query($sql);
@@ -239,8 +239,8 @@ class Node extends Controller
 				'database_id'	=> $row->database_id,
 				'params'		=> $row->params,
 				'plugins'		=> $row->plugins,
-				'container_name' => $row->container_name,
-				'container_descr' => $row->container_descr,
+				'block_name'	=> $row->block_name,
+				'block_descr'	=> $row->block_descr,
 			);
 		}
 		return $nodes;
@@ -275,8 +275,8 @@ class Node extends Controller
 	 */
 	public function update($node_id, $pd)
 	{
-		if (is_numeric($pd['container_id'])) {
-			$container_id = $pd['container_id'];
+		if (is_numeric($pd['block_id'])) {
+			$block_id = $pd['block_id'];
 		} else {
 			return false;
 		}
@@ -299,7 +299,7 @@ class Node extends Controller
 				folder_id = '$folder_id',
 				pos = '$pos',
 				database_id = '$database_id',
-				container_id = '$container_id',
+				block_id = '$block_id',
 				is_active = '$is_active',
 				is_cached = '$is_cached',
 				permissions = $permissions,

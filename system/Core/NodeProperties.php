@@ -26,7 +26,7 @@ class NodeProperties
 	public $database_id;
 	public $folder_id;
 	public $module_id;
-	public $container_id;
+	public $block_id;
 	public $cache_params;
 	public $params;
 	public $permissions;
@@ -65,7 +65,7 @@ class NodeProperties
 		$this->database_id	= $properties['database_id'];
 		$this->folder_id	= $properties['folder_id'];
 		$this->module_id	= $properties['module_id'];
-		$this->container_id	= $properties['container_id'];
+		$this->block_id		= $properties['block_id'];
 		$this->params		= unserialize($properties['params']);
 		$this->plugins		= $properties['plugins'];
 		$this->route_params	= $properties['route_params'];

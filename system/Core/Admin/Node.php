@@ -6,7 +6,7 @@
  * @package	Kernel
  * 
  * @uses	Breadcrumbs
- * @uses	Container
+ * @uses	Block
  * @uses	DB
  * @uses	Folder
  * @uses	Kernel
@@ -46,9 +46,9 @@ class Admin_Node extends Node
 		$result = $this->DB->query($sql);
 		$row = $result->fetchObject();
 		
-		$Container	= new Container();
-		$Folder		= new Folder();
-		$target		= isset($_GET['popup']) ? '_parent' : '_self';
+		$Block	= new Block();
+		$Folder	= new Folder();
+		$target	= isset($_GET['popup']) ? '_parent' : '_self';
 		
 		$user_data = $this->User->getData($row->owner_id);
 		$form_data = array(
@@ -89,11 +89,11 @@ class Admin_Node extends Node
 					'type' => 'string',
 					'value' => $row->pos,
 					),
-				'pd[container_id]' => array(
-					'label' => 'Контейнер',
+				'pd[block_id]' => array(
+					'label' => 'Блок',
 					'type' => 'select',
-					'value' => $row->container_id,
-					'options' => $Container->getHtmlSelectOptionsArray(),
+					'value' => $row->block_id,
+					'options' => $Block->getHtmlSelectOptionsArray(),
 					),
 				'pd[folder_id]' => array(
 					'label' => 'Папка',
@@ -161,7 +161,7 @@ class Admin_Node extends Node
 					'_create_datetime',
 					'pd[descr]',
 					'pd[pos]',
-					'pd[container_id]',
+					'pd[block_id]',
 					'pd[folder_id]',
 					'pd[database_id]',
 					'pd[permissions]',
@@ -206,7 +206,7 @@ class Admin_Node extends Node
 		$row = $result->fetchObject();
 		$pos = $row->max_pos + 1;
 		
-		$Container = new Container();
+		$Block = new Block();
 		$Folder = new Folder();
 
 		$data = array();
@@ -251,11 +251,11 @@ class Admin_Node extends Node
 					'type' => 'string',
 					'value' => $pos,
 					),
-				'pd[container_id]' => array(
-					'label' => 'Контейнер',
+				'pd[block_id]' => array(
+					'label' => 'Блок',
 					'type' => 'select',
 					'value' => 1,
-					'options' => $Container->getHtmlSelectOptionsArray(),
+					'options' => $Block->getHtmlSelectOptionsArray(),
 					),
 				'pd[folder_id]' => array(
 					'label' => 'Папка',

@@ -1,6 +1,6 @@
 
 <form action="" method="post" class="default-form">
-<input type="hidden" name="action" value="update_containers"/>
+<input type="hidden" name="action" value="update_blocks"/>
 	<table class="admin-table" width="100%">
 	<tr>
 		<th>id</th>
@@ -12,7 +12,7 @@
 		<th>Действие</th>
 	</tr>
 	<?php
-	foreach ($this->containers as $key => $value) {
+	foreach ($this->blocks as $key => $value) {
 		
 		$disabled = $value['nodes_count'] > 0 ? ' disabled="disabled"' : '';
 		
@@ -28,14 +28,14 @@
 	}
 	echo "<tr>\n";
 	echo "\t<td></td>\n";
-	echo "\t<td><input name=\"pd[_new_container_][pos]\" value=\"\" type=\"text\"/></td>\n";
-	echo "\t<td><input name=\"pd[_new_container_][name]\" value=\"\" type=\"text\"/></td>\n";
-	echo "\t<td><input name=\"pd[_new_container_][descr]\" value=\"\" type=\"text\"/></td>\n";
-	echo "\t<td colspan=\"3\"> <- Добавить контейнер</td>\n";
+	echo "\t<td><input name=\"pd[_new_block_][pos]\" value=\"\" type=\"text\"/></td>\n";
+	echo "\t<td><input name=\"pd[_new_block_][name]\" value=\"\" type=\"text\"/></td>\n";
+	echo "\t<td><input name=\"pd[_new_block_][descr]\" value=\"\" type=\"text\"/></td>\n";
+	echo "\t<td colspan=\"3\"> <- Добавить блок</td>\n";
 	echo "</tr>\n";
 	?>
 </table>
 
-<input name="submit[update_containers]" value="Сохранить контейнеры" type="submit"/>
+<input name="submit[update_blocks]" value="Сохранить блоки" type="submit"/>
 
 </form>

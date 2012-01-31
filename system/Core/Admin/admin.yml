@@ -17,10 +17,10 @@ structure:
             descr: Управление древовидной структурой разделов.
             class: Admin_Folder
             params: list
-        containers:
-            title: Контейнеры
+        blocks:
+            title: Блоки
             descr: Управление блоками для объединения нод.
-            class: Admin_Container
+            class: Admin_Block
         node:
             title: Ноды
             class: Admin_Node

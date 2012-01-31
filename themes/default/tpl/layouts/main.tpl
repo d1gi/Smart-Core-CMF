@@ -26,19 +26,19 @@
 	<div class="main-frame">
 		
 <div id="auth-light">
-<?php $this->container('auth-light')?>
+<?php $this->block('auth-light')?>
 </div>
 
 <div id="logo"><h1>Smart Core CMF</h1>платформа управления сайтами</div><!-- <div id="lang-switch">Рус | Eng</div> -->
 		
 <div id="v-menu">
-<?php //$this->container('v_menu')?>
-<?php //echo $this->View->Container->v_menu?>
-<?php $this->Containers->v_menu->render()?>
+<?php //$this->block('v_menu')?>
+<?php //echo $this->View->Block->v_menu?>
+<?php $this->Blocks->v_menu->render()?>
 </div>
 
 <div id="breadcrumbs">
-<?php $this->container('breadcrumbs')?>
+<?php $this->block('breadcrumbs')?>
 </div>
 
 <div id="content">
@@ -46,7 +46,7 @@
 	$this->view('content');
 	/*
 	if ($this->view('content') === false) {
-		$this->container('content');
+		$this->block('content');
 	};
 	*/
 ?>		
@@ -60,5 +60,5 @@
 
 <div id="footer">
 <!-- контент футера -->
-<?php $this->container('footer')?>
+<?php $this->block('footer')?>
 </div>

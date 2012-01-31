@@ -1,6 +1,6 @@
 <?php
 /**
- * Контейнеры.
+ * Блоки.
  * 
  * @author	Artem Ryzhkov
  * @package	Kernel
@@ -10,9 +10,9 @@
  * 
  * @version 2011-07-13.0
  */
-class Container extends Controller
+class Block extends Controller
 {
-	private $container_list = array();
+	private $block_list = array();
 	
 	/**
 	 * Конструктор.
@@ -23,7 +23,7 @@ class Container extends Controller
 	}
 	
 	/**
-	 * Получить список контейнеров.
+	 * Получить список блоков.
 	 * 
 	 * @param int $site_id
 	 * @return array
@@ -32,12 +32,12 @@ class Container extends Controller
 	{
 		$data = array();
 		$sql = "SELECT * 
-			FROM {$this->DB->prefix()}engine_containers
+			FROM {$this->DB->prefix()}engine_blocks
 			WHERE site_id = '{$this->Env->site_id}'
 			ORDER BY pos ASC";
 		$result = $this->DB->query($sql);
 		while($row = $result->fetchObject()) {
-			$data[$row->container_id] = array(
+			$data[$row->block_id] = array(
 				'name'		=> $row->name,
 				'descr'		=> $row->descr,
 				'pos'		=> $row->pos,
@@ -56,12 +56,12 @@ class Container extends Controller
 	 */
 	public function getHtmlSelectOptionsArray()
 	{
-		if (count($this->container_list) == 0) {
-			$this->container_list = $this->getList();
+		if (count($this->block_list) == 0) {
+			$this->block_list = $this->getList();
 		}
 		
 		$multi_options = array();
-		foreach ($this->container_list as $key => $value) {
+		foreach ($this->block_list as $key => $value) {
 			$multi_options[$key] = $value['descr'] . ' (' . $value['name'] . ')';
 		}		
 		

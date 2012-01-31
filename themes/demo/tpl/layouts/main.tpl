@@ -20,10 +20,10 @@
 		<div id="rightside">
 	
 <div id="breadcrumbs">
-<?php $this->container('breadcrumbs')?>
+<?php $this->block('breadcrumbs')?>
 </div>
 		
-<?php $this->container('content')?>
+<?php $this->block('content')?>
 
 		</div>
 		<div id="footer">

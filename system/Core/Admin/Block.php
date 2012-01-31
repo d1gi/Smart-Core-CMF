@@ -1,6 +1,6 @@
 <?php
 /**
- * Управление контейнерами.
+ * Управление блоками.
  * 
  * @author	Artem Ryzhkov
  * @package	Kernel
@@ -10,7 +10,7 @@
  * 
  * @version 2011-09-18.0
  */
-class Admin_Container extends Container
+class Admin_Block extends Block
 {
 	/**
 	 * Constructor.
@@ -18,7 +18,7 @@ class Admin_Container extends Container
 	public function __construct()
 	{
 		parent::__construct();
-		$this->View->setTpl('container');
+		$this->View->setTpl('block');
 	}
 
 	/**
@@ -31,11 +31,11 @@ class Admin_Container extends Container
 	{
 		if (isset($_POST['action'])) {
 			switch ($_POST['action']) {
-				case 'update_containers':
-					foreach ($_POST['pd'] as $container_id => $value) {
+				case 'update_blocks':
+					foreach ($_POST['pd'] as $block_id => $value) {
 						// Удаление.
 						if (isset($value['delete']) and $value['delete'] == 1) {
-							$this->delete($container_id);
+							$this->delete($block_id);
 							continue;
 						}
 						
@@ -46,10 +46,10 @@ class Admin_Container extends Container
 						if (strlen($name) > 2) {
 							// Имя задано, проверяем на уникальность в БД.
 							$sql = "SELECT * 
-								FROM {$this->DB->prefix()}engine_containers
+								FROM {$this->DB->prefix()}engine_blocks
 								WHERE site_id = '{$this->Env->site_id}'
 								AND name = $name
-								AND container_id != '$container_id' ";
+								AND block_id != '$block_id' ";
 							$result = $this->DB->query($sql);
 							if ($result->rowCount() == 1) {
 								continue;
@@ -67,13 +67,13 @@ class Admin_Container extends Container
 						}
 
 						// Создание.
-						if ($container_id == '_new_container_' and strlen($name) > 2) {
+						if ($block_id == '_new_block_' and strlen($name) > 2) {
 							$this->create($pos, $name, $descr);
 							continue;
 						}
 						
 						// Обновление.
-						$this->update($pos, $name, $descr, $container_id, $value['inherit']);
+						$this->update($pos, $name, $descr, $block_id, $value['inherit']);
 					}
 					break;
 				default;
@@ -83,26 +83,26 @@ class Admin_Container extends Container
 		$uri_path_parts = explode('/', $uri_path);
 		switch ($uri_path_parts[0]) {
 			case '':
-				$this->View->containers = array();
+				$this->View->blocks = array();
 				$sql = "SELECT * 
-					FROM {$this->DB->prefix()}engine_containers
+					FROM {$this->DB->prefix()}engine_blocks
 					WHERE site_id = '{$this->Env->site_id}'
 					ORDER BY pos ";
 				$result = $this->DB->query($sql);
 				while ($row = $result->fetchObject()) {
-					// Вычисление кол-ва нод включенных в контейнер.
+					// Вычисление кол-ва нод включенных в блок.
 					$sql2 = "SELECT node_id
 						FROM {$this->DB->prefix()}engine_nodes
 						WHERE site_id = '{$this->Env->site_id}'
-						AND container_id = '$row->container_id' ";
+						AND block_id = '$row->block_id' ";
 					$result2 = $this->DB->query($sql2);
 					$nodes_count = $result2->rowCount();
 					
 					$inherit = '';
 					$sql2 = "SELECT folder_id
-						FROM {$this->DB->prefix()}engine_containers_inherit
+						FROM {$this->DB->prefix()}engine_blocks_inherit
 						WHERE site_id = '{$this->Env->site_id}'
-						AND container_id = '$row->container_id' ";
+						AND block_id = '$row->block_id' ";
 					$result2 = $this->DB->query($sql2);
 					$cnt = $result2->rowCount();
 					while ($row2 = $result2->fetchObject()) {
@@ -111,12 +111,12 @@ class Admin_Container extends Container
 							$inherit .= ',';
 						}
 					}
-					$this->View->containers[$row->container_id] = array(
-						'pos' => $row->pos,
-						'name' => $row->name,
-						'descr' => $row->descr,
+					$this->View->blocks[$row->block_id] = array(
+						'pos'		  => $row->pos,
+						'name'		  => $row->name,
+						'descr'		  => $row->descr,
 						'nodes_count' => $nodes_count,
-						'inherit' => $inherit,
+						'inherit'	  => $inherit,
 						);
 				}
 				break;
@@ -134,7 +134,7 @@ class Admin_Container extends Container
 	public function create($pos, $name, $descr)
 	{
 		$sql = "
-			INSERT INTO {$this->DB->prefix()}engine_containers
+			INSERT INTO {$this->DB->prefix()}engine_blocks
 				(site_id, pos, name, descr, create_datetime, owner_id )
 			VALUES
 				('{$this->Env->site_id}', $pos, $name, $descr, NOW(), {$this->Env->user_id} ) ";
@@ -145,19 +145,18 @@ class Admin_Container extends Container
 	/**
 	 * Удаление
 	 *
-	 * @param int $container_id
+	 * @param int $block_id
 	 */
-	public function delete($container_id)
+	public function delete($block_id)
 	{
-		$sql = "DELETE FROM {$this->DB->prefix()}engine_containers
+		$sql = "DELETE FROM {$this->DB->prefix()}engine_blocks
 			WHERE site_id = '{$this->Env->site_id}'
-			AND container_id = '$container_id'
-			";
+			AND block_id = '$block_id' ";
 		$this->DB->exec($sql);
 
-		$sql = "DELETE FROM {$this->DB->prefix()}engine_containers_inherit
+		$sql = "DELETE FROM {$this->DB->prefix()}engine_blocks_inherit
 			WHERE site_id = '{$this->Env->site_id}'
-			AND container_id = '$container_id' ";
+			AND block_id = '$block_id' ";
 		$this->DB->exec($sql);
 	}
 	
@@ -167,34 +166,34 @@ class Admin_Container extends Container
 	 * @param int $pos
 	 * @param string $name
 	 * @param string $descr
-	 * @param int $container_id
+	 * @param int $block_id
 	 * @param string $inherit
 	 */
-	public function update($pos, $name, $descr, $container_id, $inherit = null)
+	public function update($pos, $name, $descr, $block_id, $inherit = null)
 	{
 		$sql = "
-			UPDATE {$this->DB->prefix()}engine_containers SET
+			UPDATE {$this->DB->prefix()}engine_blocks SET
 				name = $name,
 				descr = $descr,
 				pos = $pos
 			WHERE site_id = '{$this->Env->site_id}'
-			AND container_id = '$container_id' ";
+			AND block_id = '$block_id' ";
 		$this->DB->query($sql);
 		
 		// Сначала удаляются все записи по наследованию.
-		$sql = "DELETE FROM {$this->DB->prefix()}engine_containers_inherit
+		$sql = "DELETE FROM {$this->DB->prefix()}engine_blocks_inherit
 			WHERE site_id = '{$this->Env->site_id}'
-			AND container_id = '$container_id' ";
+			AND block_id = '$block_id' ";
 		$this->DB->exec($sql);
 		// Затем создаются новые записи.
 		if (strlen(trim($inherit)) > 0) {
 			$inherit = explode(',', trim($inherit));
 			foreach ($inherit as $folder_id) {
 				$sql = "
-					INSERT INTO {$this->DB->prefix()}engine_containers_inherit
-						(folder_id, site_id, container_id )
+					INSERT INTO {$this->DB->prefix()}engine_blocks_inherit
+						(folder_id, site_id, block_id )
 					VALUES
-						('$folder_id', '{$this->Env->site_id}', '$container_id' ) ";
+						('$folder_id', '{$this->Env->site_id}', '$block_id' ) ";
 				$this->DB->query($sql);
 			}
 		}

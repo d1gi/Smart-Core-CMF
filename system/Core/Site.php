@@ -24,14 +24,6 @@ class Site extends Base
 	protected static $_site_id			 = false;
 
 	/**
-	 * Constructor.
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/**
 	 * Получить список доменов.
 	 *
 	 * @param int $site_id - ид сайта, по умолчанию системый.

@@ -3,7 +3,6 @@
  * @version 2011-07-18.1
  */
 
-
 // Редактирование текстера
 if (isset($this->edit_form_data)) {
 	$Form = new Helper_Form($this->edit_form_data);
@@ -21,7 +20,7 @@ if (isset($this->all_items)) {
 			<th>Нода</th>
 			<th>Описание</th>
 			<th>Путь</th>
-			<th>Контейнер id</th>
+			<th>Блок id</th>
 			<th>db id</th>
 			<th>Действие</th>
 		</tr>        
@@ -55,7 +54,7 @@ if (isset($this->all_items)) {
 				}
 				
 				echo "\t<td>$path</td>\n";
-				echo "\t<td>$prop[container_id]</td>\n";
+				echo "\t<td>$prop[block_id]</td>\n";
 				echo "\t<td>$prop[database_id]</td>\n";
 
 				if ($rowspan > 1 or $cnt > 0) {

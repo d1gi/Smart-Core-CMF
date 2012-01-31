@@ -61,29 +61,29 @@ class Action extends Controller
 			$uri_path = substr($uri_path, strlen($node_id));
 			// Проверка на наличие ноды в текущей папке.
 			$sql = "SELECT n.node_id, n.folder_id, n.module_id, n.node_action_mode,
-					n.database_id, n.params, n.permissions, c.name AS container_name
+					n.database_id, n.params, n.permissions, b.name AS block_name
 				FROM {$this->DB->prefix()}engine_nodes AS n
-				LEFT JOIN {$this->DB->prefix()}engine_containers AS c USING (container_id)
+				LEFT JOIN {$this->DB->prefix()}engine_blocks AS b USING (block_id)
 				WHERE n.node_id = '$node_id'
 				AND n.folder_id = '{$this->Env->current_folder_id}'
 				AND n.is_active = 1
 				AND n.site_id = '{$this->Env->site_id}'
-				AND c.site_id = '{$this->Env->site_id}' ";
+				AND b.site_id = '{$this->Env->site_id}' ";
 			$result = $this->DB->query($sql);
 			
-			// Ноды НЕТ прямо в текущей папке, по этому выполняется поиск в унаследованных контейнерах. 
+			// Ноды НЕТ прямо в текущей папке, по этому выполняется поиск в унаследованных блоках.
 			if ($result->rowCount() === 0) { 
 				$node_pass = false;
 				$sql = "SELECT n.node_id, n.folder_id, n.module_id, n.node_action_mode, 
-						n.database_id, n.params, n.permissions, c.name AS container_name
+						n.database_id, n.params, n.permissions, b.name AS block_name
 					FROM {$this->DB->prefix()}engine_nodes AS n
-					LEFT JOIN {$this->DB->prefix()}engine_containers_inherit AS ci USING (container_id)
-					LEFT JOIN {$this->DB->prefix()}engine_containers AS c USING (container_id)
+					LEFT JOIN {$this->DB->prefix()}engine_blocks_inherit AS bi USING (block_id)
+					LEFT JOIN {$this->DB->prefix()}engine_blocks AS b USING (block_id)
 					WHERE n.node_id = '$node_id'
 					AND n.is_active = 1
 					AND n.site_id = '{$this->Env->site_id}'
-					AND c.site_id = '{$this->Env->site_id}'
-					AND ci.site_id = '{$this->Env->site_id}'
+					AND b.site_id = '{$this->Env->site_id}'
+					AND bi.site_id = '{$this->Env->site_id}'
 					GROUP BY node_id ";
 				$result = $this->DB->query($sql);
 				
@@ -129,7 +129,7 @@ class Action extends Controller
 				// Удаляется первый слеш и запускается действие.
 				$Module->nodeAction(substr($uri_path, 1));
 				
-				// @todo сейчас используется контейнер content для popup режима. возможно надо другой заюзать, например некий 'default'.
+				// @todo сейчас используется блок content для popup режима. возможно надо другой заюзать, например некий 'default'.
 				if ($row->node_action_mode === 'popup') {
 					$this->EE->addHeadScript('backend.js', HTTP_SYS_RESOURCES . 'admin/backend/backend.js');
 					$this->EE->addDocumentReady('fieldsetsToTabs($j);');
@@ -137,9 +137,9 @@ class Action extends Controller
 					$this->EE->addHeadStyle('system_admin.css', HTTP_SYS_RESOURCES . 'admin/backend/system_admin.css');
 					$this->EE->addHeadStyle('popup_iframe.css', HTTP_SYS_RESOURCES . 'styles/popup_iframe.css');
 					
-					$container = 'content';
+					$block = 'content';
 				} else {
-					$container = $row->container_name;
+					$block = $row->block_name;
 				}
 				
 				$this->View->Content = $Module->View;
@@ -157,12 +157,6 @@ class Action extends Controller
 		return true;
 	}
 	
-	/**
-	 * NewFunction
-	 *
-	 * @param
-	 * @return
-	 */
 	public function getFrontEndActionMode()
 	{
 		return $this->front_end_action_mode;

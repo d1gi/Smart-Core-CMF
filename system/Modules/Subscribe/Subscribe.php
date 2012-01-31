@@ -381,38 +381,59 @@ class Module_Subscribe extends Module
 		$uri_parts = Uri::parse($path);
 		
 		// @todo проверку на наличие хешей в запросе.
+		$data['action'] = 'run';
 		switch ($uri_parts[0]['name']) {
 			case 'activate':
 				if (isset($uri_parts[1]['name'])) {
-					$data['data']['action'] = 'activate';
-					$data['data']['code'] = $uri_parts[1]['name'];
+					$data = array(
+						'params' => array(
+							'action' => 'activate',
+							'code' => $uri_parts[1]['name'],
+						),
+					);
 				} else {
 					return null;
 				}
 				break;
 			case 'delete':
 				if (isset($uri_parts[1]['name'])) {
-					$data['data']['action'] = 'delete';
-					$data['data']['code'] = $uri_parts[1]['name'];
+					$data = array(
+						'params' => array(
+							'action' => 'delete',
+							'code' => $uri_parts[1]['name'],
+						),
+					);
 				} else {
 					return null;
 				}
 				break;
 			case 'update':
-				$data['data']['action'] = 'update';
-				$data['data']['code'] = $uri_parts[1]['name'];
+					$data = array(
+						'params' => array(
+							'action' => 'update',
+							'code' => $uri_parts[1]['name'],
+						),
+					);
 				break;
 			case 'releases':
 				if ($this->Permissions->isRoot() or $this->Permissions->isAdmin()) {
-					$data['data']['action'] = 'releases';
-					$data['data']['uri'] = str_replace('releases/', '', $path);
+					$data = array(
+						'params' => array(
+							'action' => 'releases',
+							'uri' => str_replace('releases/', '', $path),
+						),
+					);
 				} else {
 					return null;
 				}
 				break;
 			default;
-				$data['data']['action'] = 'email';
-				$data['data']['email'] = $uri_parts[0]['name'];
+					$data = array(
+						'params' => array(
+							'action' => 'email',
+							'email' => $uri_parts[0]['name'],
+						),
+					);
 		}
 
 		return $data;

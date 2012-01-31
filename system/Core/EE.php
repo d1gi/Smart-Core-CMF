@@ -92,10 +92,10 @@ final class EE extends Singleton
 	{
 		// @todo ВАЖНО! продумать как, удалять ноды!
 		if (isset($this->data)) {
-			foreach ($this->data as $container => $nodes) {
+			foreach ($this->data as $block => $nodes) {
 				foreach ($this->_disabled_nodes as $node_id => $is_delete) {
 					if (($is_delete === true or $is_delete === 1) and array_key_exists($node_id, $nodes)) {
-						unset($this->data[$container][$node_id]);
+						unset($this->data[$block][$node_id]);
 					}
 				}
 			}

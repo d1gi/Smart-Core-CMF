@@ -24,7 +24,7 @@
 				<li><a href="<?php echo $users['link']?>" class="lightview" rel="iframe" title="<?php echo $users['title']?> ::  :: width: 900, height: 680, keyboard: false, overlayClose: false" ><?php echo $users['title']?></a></li>
 				<li><a href="<?php echo $settings['link']?>" class="lightview" rel="iframe" title="<?php echo $settings['title']?> ::  :: width: 900, height: 680, keyboard: false, overlayClose: false" ><?php echo $settings['title']?></a></li>
 				<li><a href="<?php echo $sysinfo['link']?>" class="lightview" rel="iframe" title="<?php echo $sysinfo['title']?> ::  :: width: 900, height: 680, keyboard: false, overlayClose: false" ><?php echo $sysinfo['title']?></a></li>
-				<li><a href="<?php echo $containers['link']?>" class="lightview" rel="iframe" title="<?php echo $containers['title']?> ::  :: width: 900, height: 680, keyboard: false, overlayClose: false" ><?php echo $containers['title']?></a></li>
+				<li><a href="<?php echo $blocks['link']?>" class="lightview" rel="iframe" title="<?php echo $blocks['title']?> ::  :: width: 900, height: 680, keyboard: false, overlayClose: false" ><?php echo $blocks['title']?></a></li>
 				<!--<li><a href="#aba"><i>Модули</i></a></li>-->
 				<li><a href="<?php echo HTTP_ROOT?>admin/module/" class="lightview" rel="iframe" title="Модули ::  :: width: 900, height: 680, keyboard: false, overlayClose: false" >Модули</a></li>
 				<!--<li><a href="#<?php echo HTTP_ROOT?>admin/components/" class="lightview" rel="iframe" title="Компоненты ::  :: width: 900, height: 680, keyboard: false, overlayClose: false" >Компоненты</a></li>-->

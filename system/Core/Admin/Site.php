@@ -18,7 +18,6 @@ class Admin_Site extends Site
 	 */
 	public function __construct()
 	{
-		parent::__construct();
 		$this->View->setTpl('site');
 	}
 

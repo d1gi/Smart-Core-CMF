@@ -38,7 +38,7 @@ function OpenFile(fileUrl)
 
 */
 ?>
-<div id="filemanager_container">
+<div id="filemanager_block">
 	<?php
 	$Form = new Helper_Form($this->upload_form);
 	echo $Form;

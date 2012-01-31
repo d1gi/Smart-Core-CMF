@@ -5,7 +5,7 @@
 			<div id="sc-lang"><a href="#">ru</a> | <a href="#">en</a></div>
 			
 			<!--<a id="sc-logo" href="#">Smart Core CMF</a>-->
-			<?php $this->container('primary-menu')?>
+			<?php $this->block('primary-menu')?>
 			
 			<ul id="nav-primary">
 				<li><a href="#">О системе</a></li>
@@ -150,19 +150,19 @@
 <!--	
 	
 	<div id="head2">
-	<?php $this->container('head')?>
+	<?php $this->block('head')?>
 	</div>
 	 
 	<div id="menu">
-	<?php $this->container('vertical-menu')?>
+	<?php $this->block('vertical-menu')?>
 	</div>
 	 
 	<div id="content">
-	<?php $this->container('content')?>
+	<?php $this->block('content')?>
 	</div>
 	 
 	<div id="footer">
-	<?php $this->container('footer')?>
+	<?php $this->block('footer')?>
 	</div>
 
 </div> 
