@@ -12,9 +12,9 @@
  * @uses		Env
  * @uses		Registry
  * 
- * @version 	2011-12-31.0
+ * @version 	2012-01-01.0
  */
-class Site extends Base
+class Site extends Container
 {
 	protected static $_cookie_prefix	 = '';
 	protected static $_dir_application	 = 'application/';
@@ -116,7 +116,7 @@ class Site extends Base
 	 * Используется, как статический метод для того, чтобы можно было использовать в Cron для обращения к нодам.
 	 *  
 	 * @uses DB
-	 * @uses EE
+	 * @uses Env
 	 * 
 	 * @param int $site_id - инициализировать заданный site_id
 	 * @param string $domain - инициализировать заданный domain @todo 
@@ -182,23 +182,6 @@ class Site extends Base
 		
 		$Env->setVal('dir_application', self::$_dir_application);
 		$Env->setVal('dir_theme', $theme_dir);
-		
-		// @todo убрать отсюда! :) т.к. далеко не всегда вывод данных будет через шаблонизатор.
-		$EE = EE::getInstance();
-		$EE->template = array(
-			'engine'			=> 'default native php template engine', // @todo поддержку разных шаблонных движков.
-			'dir_theme'			=> $theme_dir,			// Папка с темой оформления.
-			'theme_name'		=> $row->theme_path,	// Имя темы, фактически является относительной папкой в папке тем. (может быть пустой).
-			//'layout'			=> 'main',				// Имя макета, который будет запущен. (Обязателен для шаблонизатора).
-			'views'				=> '', 					// Представления.
-			'doctype' 			=> $row->doctype,		// @todo убрать отсюда в инишник темы
-			'content_language'	=> $row->content_language, // @todo убрать отсюда - язык долже задаваться не в теме а после логики работы ПАРСЕРА!
-			'body_attributes'	=> array(), 			// Аттрибуты тега <body>, по умолчанию их нет.
-			);
-		$EE->head = array(
-			'site_short_name'	=> $properties['short_name'],	// Сокрашенное название сайта. // @todo убрать отсюда 
-			'site_full_name'	=> $properties['full_name'],	// Полное название сайта. // @todo убрать отсюда 
-			);
 		return true;
 	}
 	

@@ -93,7 +93,7 @@ class Module_Catalog extends Module
 		// Мета-тэги
 		if (!empty($this->View->item['meta'])) {
 			foreach ($this->View->item['meta'] as $key => $value) {
-				$this->EE->addHeadMeta($key, $value);
+				$this->Html->addHeadMeta($key, $value);
 			}
 		}
 		$this->View->categories = "@todo принадлежность к разделам";
@@ -158,7 +158,7 @@ class Module_Catalog extends Module
 			// Мета-тэги
 			if (!empty($this->View->item['meta'])) {
 				foreach ($this->View->item['meta'] as $key => $value) {
-					$this->EE->addHeadMeta($key, $value);
+					$this->Html->addHeadMeta($key, $value);
 				}
 			}
 			$this->View->categories = "@todo принадлежность к разделам";
@@ -176,7 +176,7 @@ class Module_Catalog extends Module
 			// Мета-тэги
 			if (!empty($params['meta'])) {
 				foreach ($params['meta'] as $key => $value) {
-					$this->EE->addHeadMeta($key, $value);
+					$this->Html->addHeadMeta($key, $value);
 				}
 			}
 			
@@ -224,8 +224,8 @@ class Module_Catalog extends Module
 				if (empty($args)) {
 					return null;
 				} else {
-					$parser_node_data = Kernel::getParserNodeData();
-//cmf_dump($parser_node_data);					
+					$parser_node_data = Kernel::getParserNodeData();					
+//cmf_dump($parser_node_data);										
 					return (empty($parser_node_data) or $args['use_parcer_node_data'] == 0)
 						? $this->Unicat->getCategoriesTree($args['structure_id'], $args['category_id'], $args['max_depth'])
 						: $this->Unicat->getCategoriesTree($args['structure_id'], $parser_node_data['data']['structures'][$args['structure_id']], $args['max_depth']);
@@ -236,6 +236,7 @@ class Module_Catalog extends Module
 					return null;
 				} else {
 					$parser_node_data = Kernel::getParserNodeData();
+//cmf_dump($parser_node_data);					
 					return (empty($parser_node_data) or $args['use_parcer_node_data'] == 0)
 						? $this->Unicat->getCategoriesList($args['structure_id'], $args['category_id'])
 						: $this->Unicat->getCategoriesList($args['structure_id'], $parser_node_data['data']['structures'][$args['structure_id']]);
@@ -252,6 +253,8 @@ class Module_Catalog extends Module
 				break;
 			case 'getUniqueId':
 				$item_id = Kernel::getParserNodeData();
+//cmf_dump($item_id);
+//cmf_dump($this->Node);
 				return isset($item_id['data']['item_id']) ? $item_id['data']['item_id'] : null;
 				break;
 			case 'getUriByCategoryId':

@@ -37,7 +37,8 @@ class View
 			'tpl_path'	=> null,
 			'controller'=> false, // $this
 			'action'	=> 'includeTpl', // echoProperties
-			'decorators' => null,
+			'decorators'		=> null,
+			'properties_count'	=> 0,
 			);
 		$this->__options = $options + $this->__options;
 	}
@@ -163,6 +164,7 @@ class View
 	 */
 	public function set($name, $value)
 	{
+		$this->__options['properties_count']++;
 		$this->$name = $value;
 	}
 	
@@ -171,7 +173,9 @@ class View
 	 */
 	public function __set($name, $value)
 	{
+		//$this->set($name, $value);
 		$this->$name = $value;
+		$this->__options['properties_count']++;
 	}
 	
 	/**

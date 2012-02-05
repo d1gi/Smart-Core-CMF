@@ -153,10 +153,10 @@ class Module_Taxonomy extends Module
 		
 		if (!empty($data['data'])) {
 			$tag = $Node->hook('getTagData', array('tag_id' => $data['data']));
-			$this->EE->addBreadCrumb(Folder::getUri($this->Node->folder_id) . $tag['name'] . '/', $tag['title']);
+			$this->Breadcrumbs->add(Folder::getUri($this->Node->folder_id) . $tag['name'] . '/', $tag['title']);
 
 			if (isset($_GET['page']) and is_numeric($_GET['page'])) {
-				$this->EE->addBreadCrumb(Folder::getUri($this->Node->folder_id) . $tag['name'] . '/', 'Страница № ' . $_GET['page']);
+				$this->Breadcrumbs->add(Folder::getUri($this->Node->folder_id) . $tag['name'] . '/', 'Страница № ' . $_GET['page']);
 			}
 		}
 		

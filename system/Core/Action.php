@@ -7,11 +7,12 @@
  * @link	http://smart-core.org/
  * @license	http://opensource.org/licenses/gpl-2.0
  * 
- * @uses 	EE
  * @uses 	Node
- * @uses 	Output
+ * @uses 	Permissions
+ * @uses 	ScriptsLib
+ * @uses 	View
  * 
- * @version 2012-01-26.0
+ * @version 2012-02-01
  */
 class Action extends Controller
 {
@@ -131,11 +132,12 @@ class Action extends Controller
 				
 				// @todo сейчас используется блок content для popup режима. возможно надо другой заюзать, например некий 'default'.
 				if ($row->node_action_mode === 'popup') {
-					$this->EE->addHeadScript('backend.js', HTTP_SYS_RESOURCES . 'admin/backend/backend.js');
-					$this->EE->addDocumentReady('fieldsetsToTabs($j);');
+					$this->ScriptsLib->request('jquery');
+					$this->Html->addHeadScript('backend.js', HTTP_SYS_RESOURCES . 'admin/backend/backend.js');
+					$this->Html->addDocumentReady('fieldsetsToTabs($j);');
 					// @todo !!! сделать нормально ;) popup_iframe.css не нужен для built-in режима.
-					$this->EE->addHeadStyle('system_admin.css', HTTP_SYS_RESOURCES . 'admin/backend/system_admin.css');
-					$this->EE->addHeadStyle('popup_iframe.css', HTTP_SYS_RESOURCES . 'styles/popup_iframe.css');
+					$this->Html->addHeadStyle('system_admin.css', HTTP_SYS_RESOURCES . 'admin/backend/system_admin.css');
+					$this->Html->addHeadStyle('popup_iframe.css', HTTP_SYS_RESOURCES . 'styles/popup_iframe.css');
 					
 					$block = 'content';
 				} else {

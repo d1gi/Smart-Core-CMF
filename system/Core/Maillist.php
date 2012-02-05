@@ -11,7 +11,7 @@
  * 
  * @version 2011-12-27.0
  */
-class Maillist extends Base
+class Maillist extends Container
 {
 	/**
 	 * Кол-во писем которое будет отправлено при каждой итерации.

@@ -25,7 +25,7 @@ if ($this->notice_message) {
 }
 
 if (isset($this->items)) {
-	echo "\n<div class=\"$data[css_prefix]list\">\n";
+	echo "\n<div class=\"{$this->css_prefix}list\">\n";
 	
 	?>
 	<table width="100%" border="1" cellspacing="0">
@@ -38,7 +38,7 @@ if (isset($this->items)) {
 	
 	foreach ($this->items as $key => $value) {
 		echo "<tr>\n";
-		echo "\t<td><div class=\"$data[css_prefix]item\" id=\"$data[css_prefix]item_id_$key\">{$value['properties']['content']['subject']['value']}</div></td>\n";
+		echo "\t<td><div class=\"{$this->css_prefix}item\" id=\"{$this->css_prefix}item_id_$key\">{$value['properties']['content']['subject']['value']}</div></td>\n";
 		echo "\t<td>" . @$value['properties']['content']['auto_start_datetime']['value'] . "</td>\n";
 		echo "\t<td>" . @$value['properties']['content']['status']['value'] . "</td>\n";
 		echo "</tr>\n";

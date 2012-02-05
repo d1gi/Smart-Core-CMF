@@ -11,21 +11,11 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version 	2012-01-31.0
+ * @version 	2012-02-01.0
  */
 // Проверка версии index.php
 if (!defined('INDEX_PHP_VERSION') or INDEX_PHP_VERSION !== 4) {
 	echo '<h1>Bad index version, please update your index.php file!</h1>';
-}
-
-// Проверка на допустимую версию PHP.
-if (version_compare(PHP_VERSION, '5.2.4') <= 0) {
-	die ('Require PHP version 5.2.4 or later.');
-}
-
-// Загрузка патчей для совместимости с РНР 5.2.х
-if (version_compare(PHP_VERSION, '5.3.0') <= 0) {
-	require_once 'php-5.2-patches.php';
 }
 
 // Конфиг по умолчанию.
@@ -130,8 +120,8 @@ if (!empty($config['debug_error_log'])) {
 	ini_set('error_log',	DIR_LOG . $config['debug_error_log']);
 }
 
-// @todo На этапе разработки, некоторые вещи будут описаны во временном файле...
-require_once '_temporary.php';
+// @todo На этапе разработки, некоторые вещи будут описаны во временных файлах...
+require_once '_temp/common.php';
 
 // Регистрация автозагрузчика классов.
 require_once DIR_FRAMEWORK . 'Class/Loader.php';

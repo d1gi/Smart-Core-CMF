@@ -2,7 +2,7 @@
 /**
  * Хлебные крошки (Дублирующая навигация).
  * 
- * @version 2011-12-25.0
+ * @version 2012-02-01
  */
 class Module_Breadcrumbs extends Module
 {

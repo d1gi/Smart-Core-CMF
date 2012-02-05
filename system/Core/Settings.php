@@ -6,7 +6,7 @@
  * 
  * @version	2011-12-23.0
  */
-class Settings extends Base
+class Settings extends Container
 {
 	private $_settings;
 

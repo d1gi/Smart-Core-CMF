@@ -1,7 +1,6 @@
 <?php
 /**
- * Базовый класс, предоставляющий общие системные данные.
- * Dependency Injection.
+ * Контейнер служб. (Dependency Injection)
  * 
  * @author		Artem Ryzhkov
  * @category	System
@@ -15,7 +14,7 @@
  * 
  * @version		2012-01-31.0
  */
-abstract class Base
+abstract class Container
 {
 	static protected $profiler_enable = false;
 
@@ -31,7 +30,7 @@ abstract class Base
 			if (method_exists($class_name, 'getInstance')) {
 				$this->$class_name = call_user_func($class_name .'::getInstance');
 			} else {
-				if (! Registry::exists($class_name)) {
+				if (! Registry::has($class_name)) {
 					Registry::set($class_name, new $class_name());
 				}
 				$this->$class_name = Registry::get($class_name);

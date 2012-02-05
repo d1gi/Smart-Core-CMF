@@ -28,7 +28,7 @@ class NodeProperties
 	public $module_id;
 	public $block_id;
 	public $cache_params;
-	public $params;
+	public $params = array();
 	public $permissions;
 	public $plugins;
 	public $route_params;

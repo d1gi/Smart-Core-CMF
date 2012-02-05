@@ -29,7 +29,7 @@ class Registry
 	 * @param string $name
 	 * @return bool
 	 */
-	public static function exists($key) 
+	public static function has($key) 
 	{
 		return isset(self::$registry[$key]) ? true : false;
 	}
@@ -43,7 +43,7 @@ class Registry
 	 */
 	static public function set($key, $object)
 	{
-		if (self::exists($key)) {
+		if (self::has($key)) {
 			return false;
 		} else {
 			self::$registry[$key] = $object;

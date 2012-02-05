@@ -3,6 +3,8 @@
  * Класс по работе с мета данными.
  * 
  * @version 2011-07-18.0
+ * 
+ * @todo переделать на extends View
  */
 class Component_Meta // extends View
 {

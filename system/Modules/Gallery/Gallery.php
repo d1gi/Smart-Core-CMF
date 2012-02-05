@@ -57,7 +57,7 @@ class Module_Gallery extends Module
 	 */
 	public function run($params)
 	{
-		$this->EE->useScriptLib('lightview');
+		$this->ScriptsLib->request('lightview');
 		
 		// Просмотр альбома.
 		if (isset($_GET['album']) and is_numeric($_GET['album'])) {

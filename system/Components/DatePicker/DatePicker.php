@@ -4,12 +4,11 @@
  * 
  * @todo сделать возможность использования разных библиотек, например xin_calendar_2, jQuery DatePicher и т.д.
  */
-class Component_DatePicker
+class Component_DatePicker extends Container
 {
 	public function __construct()
 	{
-		$EE = EE::getInstance();
-		$EE->addHeadData('<style type="text/css"> @import "' . HTTP_SCRIPTS . 'xin_calendar_2/css/xc2_default.css"; </style>
+		$this->Html->addHeadData('<style type="text/css"> @import "' . HTTP_SCRIPTS . 'xin_calendar_2/css/xc2_default.css"; </style>
 		<script type="text/javascript" src="' . HTTP_SCRIPTS . 'xin_calendar_2/config/xc2_default.js"></script>
 		<script type="text/javascript" src="' . HTTP_SCRIPTS . 'xin_calendar_2/script/xc2_inpage.js"></script>	
 		<script type="text/javascript" src="' . HTTP_SCRIPTS . 'xin_calendar_2/script/mod_time.js"></script>

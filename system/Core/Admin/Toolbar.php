@@ -16,13 +16,13 @@ class Admin_Toolbar extends Controller
 	{
 		$Popup = new Component_Popup();
 		
-		$this->EE->useScriptLib('jquery');
+		$this->ScriptsLib->request('jquery');
 		
-		$this->EE->addHeadScript('superfish',	HTTP_SYS_RESOURCES . 'admin/toolbar/superfish.js');
-		$this->EE->addHeadStyle('superfish',	HTTP_SYS_RESOURCES . 'admin/toolbar/superfish.css');
+		$this->Html->addHeadScript('superfish',	HTTP_SYS_RESOURCES . 'admin/toolbar/superfish.js');
+		$this->Html->addHeadStyle('superfish',	HTTP_SYS_RESOURCES . 'admin/toolbar/superfish.css');
 		
-		$this->EE->addHeadStyle('cmf_toolbar',	HTTP_SYS_RESOURCES . 'admin/toolbar/toolbar.css');
-		$this->EE->addHeadScript('cmf_toolbar',	HTTP_SYS_RESOURCES . 'admin/toolbar/toolbar.js');
+		$this->Html->addHeadStyle('cmf_toolbar',	HTTP_SYS_RESOURCES . 'admin/toolbar/toolbar.css');
+		$this->Html->addHeadScript('cmf_toolbar',	HTTP_SYS_RESOURCES . 'admin/toolbar/toolbar.js');
 	}
 	
 	/**

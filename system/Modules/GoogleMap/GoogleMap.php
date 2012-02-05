@@ -6,8 +6,6 @@
  * 
  * @package Module
  * @version 2011-10-01.0
- * 
- * @uses EE
  */
 class Module_GoogleMap extends Module
 {
@@ -69,10 +67,10 @@ class Module_GoogleMap extends Module
 		if ($result->rowCount() == 1) {
 			$row = $result->fetchObject();
 			
-			$this->EE->template['body_attributes']['onload'] = 'initialize()';
-			$this->EE->template['body_attributes']['onunload'] = 'GUnload()';
-			$this->EE->useScriptLib('jquery');
-			$this->EE->addHeadData('<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=' . $row->key . '" type="text/javascript"></script>' . "\n\t" .
+			$this->ScriptsLib->request('jquery');
+			$this->Html->setBodyAttribute['onload'] = 'initialize()';
+			$this->Html->setBodyAttribute['onunload'] = 'GUnload()';
+			$this->Html->addHeadData('<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=' . $row->key . '" type="text/javascript"></script>' . "\n\t" .
 				'<script type="text/javascript">// <![CDATA[' . "\n\t" .
 				'function initialize() {' . "\n\t" .
 				'if (GBrowserIsCompatible()) {' . "\n\t" .

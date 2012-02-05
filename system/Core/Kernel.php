@@ -20,17 +20,17 @@
  * @uses 		Site
  * @uses 		User
  * 
- * @version 	2012-01-31.0
+ * @version 	2012-02-01.0
  */
-class Kernel extends Base
+class Kernel extends Container
 {
 	/**
 	 * Информация о версии.
 	 * @var string
 	 */
-	const VERSION		= '0.40beta';
-	const VERSION_BUILD	= '175';
-	const VERSION_DATE	= '2012-01-31';
+	const VERSION		= '0.41beta';
+	const VERSION_BUILD	= '176';
+	const VERSION_DATE	= '2012-02-01';
 	
 	/**
 	 * Подключения ядра к БД.
@@ -138,25 +138,27 @@ class Kernel extends Base
 	 * Запус приложения. 
 	 * 
 	 * @access 	public
+	 * @uses 	Env
 	 * @uses 	Response
 	 */
 	public function run()
 	{
 		$this->profilerStart('kernel', 'siteinit');
+
 		$this->siteInit();
+		View::setPaths(array(
+			Site::getDirApplication(),
+			DIR_SYSTEM,
+			));
+
 		$this->profilerStop('kernel', 'siteinit');
 
 		$this->profilerStart('kernel', 'router');
 		
 		// Роутинг.
 		$route = $this->router($_SERVER['REQUEST_URI']);
-		header('Content-Type: text/plain; charset=UTF-8'); // @todo убрать ;)
+//		header('Content-Type: text/plain; charset=UTF-8'); // @todo убрать ;)
 //		cmf_dump($route, '$route');
-		
-		View::setPaths(array(
-			Site::getDirApplication(),
-			DIR_SYSTEM,
-			));
 		
 		// Заполнение информации о текущей "папке" в системном окружении.
 		$current_folder = end($route['params']['folders']);
@@ -182,11 +184,16 @@ class Kernel extends Base
 		}
 		
 		$this->profilerStart('kernel', 'output');
-		
+				
 //		$this->Response->sendHeaders();
 		$this->Response->send($Controller->View);
 
+//		cmf_dump(View::getPaths());
+//		cmf_dump($Controller->View->getHeadData());
+//		unset($Controller->View->admin);
+//		unset($Controller->View->Toolbar);
 //		cmf_dump($Controller->View);
+//		cmf_dump($Controller->View->Toolbar);
 		
 		$this->profilerStop('kernel', 'output');
 	}
@@ -482,10 +489,6 @@ class Kernel extends Base
 //		cmf_dump(View::getPaths());
 //		cmf_dump($this->Breadcrumbs->get());
 
-//		unset($this->EE->admin);
-//		cmf_dump($this->EE);		
-//		cmf_dump($this->EE->template, 'Массив template');
-//		cmf_dump($this->EE->admin['toolbar']);
 //		cmf_dump($this->Env);
 //		cmf_dump($this->Session);
 //		cmf_dump($this->Cookie);

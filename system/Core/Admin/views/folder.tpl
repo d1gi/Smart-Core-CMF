@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 2012-01-24.0
+ * @version 2012-02-01
  */
 
 $level = 0;
@@ -73,13 +73,11 @@ if (!empty($this->nodes)) {
 
 }
 
-if ($this->meta) {
-	echo "Мета-данные: <a href=\"meta/\">Редактировать</a><br />";
-	if (is_array($this->meta)) {
-		echo "<table class=\"admin-table\">";
-		foreach ($this->meta as $key => $value) {
-			echo "<tr><td>$key</td><td>$value</td></tr>";
-		}
-		echo "</table>";
+echo "Мета-данные: <a href=\"meta/\">Редактировать</a><br />";
+if (is_array($this->meta)) {
+	echo "<table class=\"admin-table\">";
+	foreach ($this->meta as $key => $value) {
+		echo "<tr><td>$key</td><td>$value</td></tr>";
 	}
+	echo "</table>";
 }

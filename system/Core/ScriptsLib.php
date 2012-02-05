@@ -10,9 +10,9 @@
  * @uses		DB
  * @uses		Settings
  * 
- * @version		2011-12-23
+ * @version		2012-02-01
  */
-class ScriptsLib extends Base
+class ScriptsLib extends Container
 {
 	/**
 	 * Список всех прописаных скриптов.
@@ -31,6 +31,11 @@ class ScriptsLib extends Base
 	 * @var string
 	 */
 	protected $profiles;
+	
+	/**
+	 * Список запрошенных библиотек.
+	 */
+	protected $requested_libs = array();
 	
 	/**
 	 * Constructor.
@@ -60,12 +65,22 @@ class ScriptsLib extends Base
 	}
 	
 	/**
+	 * Подключение библиотеки скриптов.
+	 *
+	 * @param string $name
+	 * @param string $version
+	 */
+	public function request($name, $version = false)
+	{
+		$this->requested_libs[$name] = $version;
+	}
+
+	/**
 	 * Получить список запрошенных либ.
 	 *
-	 * @param array $requested_scripts
 	 * @return array
 	 */
-	public function get(array $requested_scripts = null)
+	public function get()
 	{
 		$output = array();
 		
@@ -78,16 +93,17 @@ class ScriptsLib extends Base
 		$flag = 1;
 		while ($flag == 1) {
 			$flag = 0;
-			foreach ($requested_scripts as $name => $value) {
+			foreach ($this->requested_libs as $name => $value) {
 				// @todo пока можно обработать зависимость только от одной либы, далее надо сделать списки, например "prototype, scriptaculous".
-				if (!empty($this->scripts[$name]['related_by']) and !isset($requested_scripts[$this->scripts[$name]['related_by']])) {
-					$requested_scripts[$this->scripts[$name]['related_by']] = false;
+				if (!empty($this->scripts[$name]['related_by']) and !isset($this->requested_libs[$this->scripts[$name]['related_by']])) {
+					$this->requested_libs[$this->scripts[$name]['related_by']] = false;
 					$flag = 1;
 				}
 			}
 		}
 		 
-		foreach ($requested_scripts as $name => $version) {
+		// @todo сделать возможность конфигурирования из файлов.
+		foreach ($this->requested_libs as $name => $version) {
 			$sql_version = empty($version) ? " AND version = '{$this->scripts[$name]['current_version']}' " : " AND version = '$version' ";
 			
 			$sql = "SELECT path

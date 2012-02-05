@@ -10,12 +10,11 @@
  * 
  * @uses		Cookie
  * @uses		DB
- * @uses		EE
  * @uses		Env
  * @uses		Session_Force
- * @uses		View
+ * @uses		Html
  * 
- * @version 	2012-01-31.0
+ * @version 	2012-02-01.0
  */
 class NodeMapper extends Controller
 {
@@ -41,8 +40,6 @@ class NodeMapper extends Controller
 	 */
 	public function run($params)
 	{
-		View::prependPath(DIR_ROOT . 'themes/default/tpl/'); // @todo
-		
 		$this->profilerStart('node_mapper', 'build_nodes_list');
 		$nodes_list = $this->buildNodesList($params['folders']);
 		$this->profilerStop('node_mapper', 'build_nodes_list');
@@ -59,12 +56,22 @@ class NodeMapper extends Controller
 					}
 				}	
 				
-				$this->EE->template['views'] = $params['views']; // @todo убрать
-				
+				View::prependPath(DIR_ROOT . 'themes/default/views/'); // @todo настройку смены тем!!!!!
+				View::prependPath(DIR_ROOT . 'themes/default/tpl/'); // @todo настройку смены тем!!!!!
 				$this->View = new Html();
+				$this->View->setTemplateViews(unserialize($params['views'])); // @todo убрать!
+				
+				// @todo cmf_is_absolute_path() ?
+				$this->View->setTemplateHttpThemeRoot(HTTP_ROOT . 'themes/default/');
+				
 				$this->View->setTpl($params['layout']);
-				$this->View->setTplPath('layouts');
+//				$this->View->setTplPath('layouts');
 				$this->View->Blocks = new View();
+				
+				// Заполнение мета-тэгов.
+				foreach ($params['meta'] as $key => $value) {
+					$this->View->addHeadMetaName($key, $value);
+				}
 				
 				if ($this->Cookie->cmf_session_force_start == true) {
 					$this->Session->start();
@@ -77,7 +84,7 @@ class NodeMapper extends Controller
 				if ($this->Cookie->cmf_session_force_start == true) {
 					$this->Session_Force->clean();
 					$this->Cookie->delete('cmf_session_force_start');
-				}					
+				}
 				break;
 			case 'POST':
 				$this->postProcessor();
@@ -227,7 +234,7 @@ class NodeMapper extends Controller
 	}	
 	
 	/**
-	 * Собирается массив $ЕЕ, исходя из блоков и подготовленного списка нод,
+	 * Собираютя блоки из подготовленного списка нод,
 	 * по мере прохождения, подключаются и запускаются нужные модули с нужными параметрами.
 	 * 
 	 * @uses Module_*
@@ -342,7 +349,7 @@ class NodeMapper extends Controller
 
 					if(is_array($front_controls)) {
 						// @todo сделать выбор типа фронт админки popup/built-in/ajax.
-						$this->EE->admin['frontend'][$node_id] = array(
+						$this->View->admin['frontend'][$node_id] = array(
 							// 'type' => 'popup',
 							'node_action_mode'	=> $node_properties['node_action_mode'],
 							'doubleclick'		=> '@todo двойной щелчок по блоку НОДЫ.',

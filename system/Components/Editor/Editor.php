@@ -2,7 +2,8 @@
 /**
  * Компонент, предоставляющий модулям интерфейс работы с визуальным редакторами текста.
  * 
- * @uses EE
+ * @uses Html
+ * @uses ScriptsLib
  */
 class Component_Editor extends Controller
 {
@@ -26,21 +27,21 @@ class Component_Editor extends Controller
 		$this->type			= $options['type'];
 		$this->editor_css	= $options['editor_css'];
 		$this->height		= 380;
-		$this->width		= "100%";
+		$this->width		= '100%';
 		
 		switch ($this->type) {
 			case 'tinymce':
-				$this->EE->useScriptLib('tinymce');
+				$this->ScriptsLib->request('tinymce');
 				ob_start();
 				include DIR_COMPONENTS . 'Editor/' . $this->type . '.inc';
-				$this->EE->addHeadData(ob_get_clean());
+				$this->Html->addHeadData(ob_get_clean());
 				break;
 			case 'ckeditor':
-				$this->EE->useScriptLib('jquery');
-				$this->EE->useScriptLib('ckeditor');
+				$this->ScriptsLib->request('jquery');
+				$this->ScriptsLib->request('ckeditor');
 				ob_start();
 				include DIR_COMPONENTS . 'Editor/' . $this->type . '.inc';
-				$this->EE->addHeadData(ob_get_clean());
+				$this->Html->addHeadData(ob_get_clean());
 				break;
 			case 'fckeditor':
 				include DIR_COMPONENTS . 'Editor/' . $this->type . '.inc';

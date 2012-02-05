@@ -2,7 +2,6 @@
 /**
  * Модуль работы с типовым HTML текстом.
  * 
- * @uses EE
  * @uses Log
  * @uses Response
  * @uses User
@@ -52,7 +51,7 @@ class Module_Texter extends Module
 
 		if (is_array($text_item['meta']) and !empty($text_item['meta'])) {
 			foreach ($text_item['meta'] as $key => $value) {
-				$this->EE->addHeadMeta($key, $value);
+				$this->Html->addHeadMeta($key, $value);
 			}
 		}
 		

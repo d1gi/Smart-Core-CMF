@@ -5,7 +5,6 @@
  * @author	Artem Ryzhkov
  * @package	Kernel
  * 
- * @uses	EE
  * @uses	Kernel
  * @uses	Zend_Locale
  * 
@@ -189,22 +188,22 @@ class Admin_Site extends Site
 					'value' => $properties['dir_themes'],
 					),
 				'pd[layouts]' => array(
-					'label' => 'Макеты',
+					'label' => 'Макеты <br /><b>@todo Убрать!</b>',
 					'type' => 'textarea',
 					'value' => $properties['layouts'],
 					),
 				'pd[views]' => array(
-					'label' => 'Представления в макетах',
+					'label' => 'Представления в макетах<br /><b>@todo Убрать!</b>',
 					'type' => 'textarea',
 					'value' => $properties['views'],
 					),
 				'pd[root_layout]' => array(
-					'label' => 'Макет для корневой папки',
+					'label' => 'Вид для корневой папки',
 					'type' => 'string',
 					'value' => $properties['root_layout'],
 					),
 				'pd[root_view]' => array(
-					'label' => 'Представление для корневой папки',
+					'label' => 'Представление для корневой папки <br /><b>@todo Убрать!</b>',
 					'type' => 'text',
 					'value' => $properties['root_view'],
 					),

@@ -1,2 +1,2 @@
 <?php
-cmf_dump($data);
+cmf_dump($this);

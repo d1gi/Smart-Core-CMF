@@ -8,19 +8,11 @@
  * 
  * @uses	DB
  * 
- * @version 2011-07-13.0
+ * @version 2012-02-01.0
  */
-class Block extends Controller
+class Block extends Container
 {
 	private $block_list = array();
-	
-	/**
-	 * Конструктор.
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
 	
 	/**
 	 * Получить список блоков.

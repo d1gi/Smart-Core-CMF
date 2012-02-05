@@ -7,9 +7,9 @@
  * @link	http://smart-core.org/
  * @license	http://opensource.org/licenses/gpl-2.0
  * 
- * @uses 	EE
  * @uses 	Permissions
  * @uses 	User
+ * @uses 	View
  * @uses 	Zend_Config_Yaml
  * 
  * @version 2012-01-24.0
@@ -160,11 +160,12 @@ class Admin extends Controller
 	 */
 	public function loginPage()
 	{
+		$this->View->setTpl('login');
+
+		$tmp = $this->Site->getProperties();
+		$this->View->welcome_message = "<h1>{$tmp['full_name']}</h1>Вход в административную панель.<br />Здесь может авторизоваться только администратор.";
 		$this->View->homepage		 = $this->Breadcrumbs->get(0);
 		$this->View->login_form		 = $this->getLoginFormData();
-		// @todo Пересмотреть $this->EE->head['site_full_name']
-		$this->View->welcome_message = "<h1>{$this->EE->head['site_full_name']}</h1>Вход в административную панель.<br />Здесь может авторизоваться только администратор.";
-		$this->View->setTpl('login');
 	}
 	
 	/**
@@ -186,8 +187,9 @@ class Admin extends Controller
 					$this->Breadcrumbs->add($bc['uri'], $bc['title'], $bc['descr']);
 				}	
 
-				$this->EE->addHeadScript('backend.js', HTTP_SYS_RESOURCES . 'admin/backend/backend.js'); // @todo переделать!
-				$this->EE->addDocumentReady('fieldsetsToTabs($j);'); // @todo переделать!
+				$this->ScriptsLib->request('jquery');
+				$this->Html->addHeadScript('backend.js', HTTP_SYS_RESOURCES . 'admin/backend/backend.js'); // @todo переделать!
+				$this->Html->addDocumentReady('fieldsetsToTabs($j);'); // @todo переделать!
 				
 				// У пользователя есть права доступа.
 				if ($this->Permissions->isRoot()) {
@@ -221,7 +223,7 @@ class Admin extends Controller
 					$this->loginPage();
 				}
 				
-				$this->EE->addHeadStyle('system_admin.css', HTTP_SYS_RESOURCES . 'admin/backend/system_admin.css'); // @todo переделать!
+				$this->Html->addHeadStyle('system_admin.css', HTTP_SYS_RESOURCES . 'admin/backend/system_admin.css'); // @todo переделать!
 				
 				break;
 			case 'POST':

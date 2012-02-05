@@ -70,7 +70,7 @@ abstract class Module extends Controller
 		if ($this->Node->database_id != 0) {
 			// @todo для совместимости с эмуляцией функции get_called_class для РНР 5.2, дальше для PHP 5.3 only можно будет записывать в одну строку, без $con_data.
 			$db_key = 'DB.' . $this->Node->database_id;
-			if (!Registry::exists($db_key)) {
+			if (!Registry::has($db_key)) {
 				$con_data = $this->DB_Resources->getConnectionData($this->Node->database_id);
 				Registry::set($db_key, DB::connect($con_data));
 			}

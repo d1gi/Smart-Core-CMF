@@ -3,10 +3,9 @@
  * Module Filemanager.
  * 
  * @uses Component_Media
- * @uses EE
  * 
  * @package Module
- * @version 2011-10-01.0
+ * @version 2012-02-01
  */
 class Module_Filemanager extends Module
 {
@@ -42,7 +41,7 @@ class Module_Filemanager extends Module
 	 */
 	public function run($params)
 	{
-		$this->EE->addHeadStyle('filemanager.css', HTTP_SYS_RESOURCES . 'styles/filemanager.css');
+		$this->Html->addHeadStyle('filemanager.css', HTTP_SYS_RESOURCES . 'styles/filemanager.css');
 		
 		$form_data = array(
 			'enctype' => 'file',

@@ -12,7 +12,7 @@
  * 
  * @version 	2011-11-05.0
  */
-class User_Groups extends Base
+class User_Groups extends Container
 {
 	private $groups;
 	private $_tmp_group_inherit;

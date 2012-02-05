@@ -9,7 +9,7 @@
  * @link		http://smart-core.org/
  * @license		http://opensource.org/licenses/gpl-2.0
  * 
- * @version		2012-01-25.0
+ * @version		2012-02-01.0
  */
 class Html extends View
 {
@@ -22,28 +22,45 @@ class Html extends View
 	 * Данные для секции <head>
 	 * @var array
 	 */
-	static protected $_head = array();
-
-	/**
-	 * Список всех запрошенных библиотек.
-	 * @var array
-	 */
-	static protected $_requested_libs = array();
+	static protected $_head = array(
+		'title'		=> false,
+		'meta'		=> array(),
+		'styles'	=> array(),
+		'scripts'	=> array(),
+		'_data'		=> array(),
+		'document-ready'	=> array(),
+		);
 	
 	// @todo пересмотреть.
 	protected $frontend_mode;
+	public $admin = array(
+		'frontend' => array(),
+		);
 	
 	/**
-	 * Подключение библиотечных скриптов.
-	 *
-	 * @param string $name
-	 * @param string $version
+	 * Атрибуты тэга <body>
 	 */
-	public function useScriptLib($name, $version = false)
+	protected $body_attributes = array();
+	
+	/**
+	 * Данные для шаблонизатора.
+	 * @var array
+	 * 
+	 * @todo пересмотреть! может быть лучше сделать через class Template extends Html.
+	 */
+	protected $template = array(
+		'views'	=> false, // @todo Убрать!
+		'http_theme_root' => false,
+		);
+	
+	/**
+	 * Получить данные секции <head>.
+	 */
+	public function getHeadData()
 	{
-		self::$_requested_libs[$name] = $version;
+		return self::$_head;
 	}
-
+	
 	/**
 	 * Добавить произвольные данные в <head>.
 	 *
@@ -52,6 +69,14 @@ class Html extends View
 	public function addHeadData($data)
 	{
 		self::$_head['_data'][] = $data;
+	}
+	
+	/**
+	 * Установить атрибут тэга <body>.
+	 */
+	public function setBodyAttribute($key, $value)
+	{
+		$this->body_attributes[$key] = $value; 
 	}
 	
 	/**
@@ -64,6 +89,99 @@ class Html extends View
 	public function addHeadMeta($name, $content, $type = 'name')
 	{
 		self::$_head['meta'][$type][$name] = $content;
+	}
+	
+	/**
+	 * Добавить мета тэг name.
+	 *
+	 * @param string $name
+	 * @param string $content
+	 */
+	public function addHeadMetaName($name, $content)
+	{
+		$this->addHeadMeta($name, $content, 'name');
+	}
+	
+	/**
+	 * Добавить мета тэг http-equiv.
+	 *
+	 * @param string $name
+	 * @param string $content
+	 */
+	public function addHeadMetaHttpEquiv($name, $content)
+	{
+		$this->addHeadMeta($name, $content, 'http-equiv');
+	}
+	
+	/**
+	 * Добавить мета тэг property.
+	 *
+	 * @param string $name
+	 * @param string $content
+	 */
+	public function addHeadMetaProperty($name, $content)
+	{
+		$this->addHeadMeta($name, $content, 'property');
+	}
+	
+	/**
+	 * Добавить данные для тега <script>.
+	 *
+	 * Формат массива с параметрами: (каждый из них не является обязательным)
+	 *  - src  - добавить аттрибут src="".
+	 *  - data - вставить код между тегами <script> и </script>.
+	 *  - type - указать тип. по умолчанию  'text/javascript'.
+	 * 
+	 * @param string $name - техническое уникальное имя (id)
+	 * @param array $params - массив с параметрами
+	 * @param int $pos - позиция (чем больше, чем раньше подключится)
+	 */
+	public function addHeadScript($name, $params, $pos = 0)
+	{
+		if (is_array($params)) {
+			
+			if (isset($params['src']) and !empty($params['src'])) {
+				self::$_head['scripts'][$name]['src'] = $params['src'];
+			}
+			
+			if (isset($params['data']) and !empty($params['data'])) {
+				self::$_head['scripts'][$name]['data'] = $params['data'];
+			}
+
+//			self::$_head['scripts'][$name]['src'] = $params['src'];
+		} else {
+			self::$_head['scripts'][$name]['src'] = $params;
+		}
+	}
+
+	/**
+	 * Добавить данные для тега <style>.
+	 *
+	 * Формат массива с параметрами: (каждый из них не является обязательным)
+	 *  - href  - добавляет аттрибут href="".
+	 *  - data - вставляет код между тегами <style> и </style>.
+	 *  - media - медиа :)
+	 *  - type - указать тип. по умолчанию  'text/css'.
+	 * 
+	 * @param string $name - техническое уникальное имя (id)
+	 * @param array $params - массив с параметрами
+	 * @param int $pos - позиция (чем больше, чем раньше подключится)
+	 */
+	public function addHeadStyle($name, $params, $pos = 0) // @todo pos
+	{
+		if (is_array($params)) {
+			if (isset($params['href']) and !empty($params['href'])) {
+				self::$_head['styles'][$name]['href'] = $params['href'];
+			}
+			if (isset($params['data']) and !empty($params['data'])) {
+				self::$_head['styles'][$name]['data'] = $params['data'];
+			}
+			if (isset($params['ie']) and !empty($params['ie'])) {
+				self::$_head['styles'][$name]['ie'] = $params['ie'];
+			}
+		} else {
+			self::$_head['styles'][$name]['href'] = $params;
+		}
 	}
 	
 	/**
@@ -86,7 +204,7 @@ class Html extends View
 	{
 		$tmp = 'function frontControls() {';
 		
-		foreach ($this->EE->admin['frontend'] as $key => $value) {
+		foreach ($this->admin['frontend'] as $key => $value) {
 //			$tmp .= "\naddFrontControl2('#_node$key', '$key');\n";
 //			$tmp .= '$j("#cmf-draggable_node' . $key . '").draggable({cancel: "div.cmf-draggable-split-menu-body", revert: false});' . "\n";
 			
@@ -134,9 +252,17 @@ class Html extends View
 	}
 	
 	/**
-	 * Отрисовка документа.
+	 * Установить значение тэга <title>
 	 * 
-	 * @todo избавиться от ЕЕ.
+	 * @param $title
+	 */
+	public function setTitle($title)
+	{
+		self::$_head['title'] = $title;
+	}
+
+	/**
+	 * Отрисовка документа.
 	 */
 	public function render()
 	{		
@@ -144,10 +270,6 @@ class Html extends View
 		if (Registry::get('Cookie')->cmf_frontend_mode === 'view') { // @todo ненравится мне этот момент...
 			$this->frontend_mode = false;
 		}
-		
-		$this->EE = Registry::get('EE'); // @todo убрать.
-		
-		$theme_tmp = $this->EE->template['dir_theme'] . $this->EE->template['theme_name'];
 		
 		// Чтение конфига темы.
 		if (file_exists(parent::$__paths[0] . 'theme.ini')) {
@@ -160,36 +282,31 @@ class Html extends View
 			// Отображать ли фронт-админку.
 			$this->frontend_mode = (isset($layout_ini['front_controls']) and $layout_ini['front_controls'] == true and $this->frontend_mode) ? true : false;
 		}
-
-		if (cmf_is_absolute_path($this->EE->template['dir_theme'])) {
-			$this->dir_theme	= $theme_tmp;
-			$theme_path			= $theme_tmp;
-		} else {        
-			$this->dir_theme	= DIR_ROOT  . $theme_tmp;
-			$theme_path			= HTTP_ROOT . $theme_tmp;
-		}
 		
-		self::$doctype	 = isset($theme_ini['doctype']) ? $theme_ini['doctype'] : 'XHTML1_STRICT';
-		$css_path	 = isset($theme_ini['css_path']) ? $theme_ini['css_path'] : 'css/';
-		$images_path = isset($theme_ini['images_path']) ? $theme_ini['images_path'] : 'images/';
-		$js_path	 = isset($theme_ini['js_path']) ? $theme_ini['js_path'] : 'js/';
+		self::$doctype	 = isset($theme_ini['doctype'])	? $theme_ini['doctype']		: 'XHTML1_STRICT';
+		$css_path	 = isset($theme_ini['css_path'])	? $theme_ini['css_path']	: 'css/';
+		$images_path = isset($theme_ini['images_path'])	? $theme_ini['images_path']	: 'images/';
+		$js_path	 = isset($theme_ini['js_path'])		? $theme_ini['js_path']		: 'js/';
 		
-		define('HTTP_THEME',		$theme_path); 
-		define('HTTP_THEME_CSS',	$theme_path . $css_path);
-		define('HTTP_THEME_IMAGES',	$theme_path . $images_path);
-		define('HTTP_THEME_JS',		$theme_path . $js_path);
+		define('HTTP_THEME',		$this->template['http_theme_root']); 
+		define('HTTP_THEME_CSS',	$this->template['http_theme_root'] . $css_path);
+		define('HTTP_THEME_IMAGES',	$this->template['http_theme_root'] . $images_path);
+		define('HTTP_THEME_JS',		$this->template['http_theme_root'] . $js_path);
 	
-		$this->EE->addHeadMeta('Content-Type',  'text/html; charset=utf-8', 'http-equiv');
-		$this->EE->addHeadMeta('Content-Language', 'ru', 'http-equiv');
+		$this->addHeadMetaHttpEquiv('Content-Type',  'text/html; charset=utf-8');
+		$this->addHeadMetaHttpEquiv('Content-Language', 'ru');
+		
+		$ScriptsLib	= Registry::get('ScriptsLib');		
 		// В случае, если есть фронт-енд элементы управления, добавляем ресурсы и генерируем JS скрипт.
-		if (isset($this->EE->admin['frontend']) and count($this->EE->admin['frontend']) > 0  and $this->frontend_mode) {
-			$this->EE->useScriptLib('jquery');
+//		if (isset(Registry::get('EE')->admin['frontend']) and count(Registry::get('EE')->admin['frontend']) > 0  and $this->frontend_mode) {
+		if (count($this->admin['frontend']) > 0 and $this->frontend_mode) {
+			$ScriptsLib->request('jquery');
 
-			$this->EE->addHeadStyle('frontend-ie', array('href' => HTTP_SYS_RESOURCES . 'admin/frontend/node_control-ie.css', 'ie' => 'lt IE 8')); // @todo продумать как подключать стили для ИЕ.
-			$this->EE->addHeadStyle('frontend',  HTTP_SYS_RESOURCES . 'admin/frontend/node_control.css');
-			$this->EE->addHeadScript('frontend', HTTP_SYS_RESOURCES . 'admin/frontend/front_controls2.js');
-			$this->EE->addHeadScript('_generateFrontControls', array('data' => $this->_generateFrontControls()));
-			$this->EE->addDocumentReady('frontControls();');
+			$this->addHeadStyle('frontend-ie', array('href' => HTTP_SYS_RESOURCES . 'admin/frontend/node_control-ie.css', 'ie' => 'lt IE 8')); // @todo продумать как подключать стили для ИЕ.
+			$this->addHeadStyle('frontend',  HTTP_SYS_RESOURCES . 'admin/frontend/node_control.css');
+			$this->addHeadScript('frontend', HTTP_SYS_RESOURCES . 'admin/frontend/front_controls2.js');
+			$this->addHeadScript('_generateFrontControls', array('data' => $this->_generateFrontControls()));
+			$this->addDocumentReady('frontControls();');
 			
 			// Подключается скрипт всплывающих окон.
 			// @todo как-то некрасиво ;)) 
@@ -203,7 +320,7 @@ class Html extends View
 			if (isset($layout_ini['css'])) {
 				$scripts = explode(',', $layout_ini['css']);
 				foreach ($scripts as $script_name) {
-					$this->EE->addHeadStyle(trim($script_name), HTTP_THEME_CSS . trim($script_name));
+					$this->addHeadStyle(trim($script_name), HTTP_THEME_CSS . trim($script_name));
 				}
 			}
 			
@@ -211,7 +328,7 @@ class Html extends View
 			if (isset($layout_ini['js_lib'])) {
 				$scripts = explode(',', $layout_ini['js_lib']);
 				foreach ($scripts as $script_name) {
-					$this->EE->useScriptLib(trim($script_name));
+					$ScriptsLib->request(trim($script_name));
 				}
 			}
 		
@@ -219,7 +336,7 @@ class Html extends View
 			if (isset($layout_ini['js'])) {
 				$scripts = explode(',', $layout_ini['js']);
 				foreach ($scripts as $script_name) {
-					$this->EE->addHeadScript("layout script $script_name", HTTP_THEME_JS . trim($script_name));
+					$this->addHeadScript("layout script $script_name", HTTP_THEME_JS . trim($script_name));
 				}
 			}
 			
@@ -227,14 +344,12 @@ class Html extends View
 			$this->show_toobar = (isset($layout_ini['toolbar']) and $layout_ini['toolbar'] == true) ? true : false;
 		}
 
-		$this->Permissions = Registry::get('Permissions');
-		// @todo ВАЖНО! сделать адекватное подключение тулбара. сейчас отображается только для групп рута и админа.
-		if (($this->Permissions->isAdmin() or $this->Permissions->isRoot()) and $this->show_toobar and $this->layout !== 'blank') {
-			$this->Toolbar = new Admin_Toolbar();
-		}
-		
-		// Подготовка массива EE.
-		$this->EE->preparation();
+										$Permissions = Registry::get('Permissions');
+										// @todo ВАЖНО! сделать адекватное подключение тулбара. сейчас отображается только для групп рута и админа.
+										if (($Permissions->isAdmin() or $Permissions->isRoot()) and $this->show_toobar and $this->layout !== 'blank') {
+											$this->Toolbar = new Admin_Toolbar();
+										}
+										unset($Permissions);
 
 		$this->doctype();	// в нём же генерация открытия тега <html> с аргументами для доктайпа.
 		$this->head();		// декораторы <head> и </head> прямо в нём.
@@ -256,7 +371,7 @@ class Html extends View
 	 * @param array $options
 	 * @return bool
 	 */
-	protected function block($block, $options = false)
+	protected function block($block, $options = false) // @todo $options
 	{
 		if (is_object($this->Blocks->$block) and method_exists($this->Blocks->$block, 'render')) {
 			$this->Blocks->$block->render();
@@ -266,18 +381,35 @@ class Html extends View
 	}
 	
 	/**
+	 * NewFunction
+	 */
+	public function setTemplateViews($views)
+	{
+		$this->template['views'] = $views; // @todo Убрать!
+	}
+	
+	/**
+	 * NewFunction
+	 */
+	public function setTemplateHttpThemeRoot($path)
+	{
+		$this->template['http_theme_root'] = $path; // @todo Убрать!
+		$this->__options['http_theme_root'] = $path;
+	}
+	
+	/**
 	 * Представление (view) блоков внутри макетов (layout).
 	 * 
 	 * @param string $name
 	 * @param bool $force
 	 * @return bool
 	 * 
-	 * @todo пересмотреть поведение с $force, а также наличие $this->views вообще.
+	 * @todo Убрать!
 	 */
 	protected function view($name, $force = false)
 	{
 		$paths = parent::getPaths();
-		$views	= unserialize(Registry::get('EE')->template['views']);
+		$views = $this->template['views'];
 		
 		$tmp = null;
 		if ($force) {
@@ -359,29 +491,12 @@ class Html extends View
 	{
 		$head = "\n<head>\n";
 		
-		// Сборка строки <title> из "хлебных крошек".
-		$title = '';
-		$bc = Registry::get('Breadcrumbs')->get();
-		krsort($bc);
-		foreach ($bc as $key => $value) {
-			if ($key == 0) {
-				break;
-			}
-			$title .= $value['title'] . ' / '; // @todo сделать настройку разделителя.
-		}
-
-		// Если "хлебных крошек" нет, то отображаем полное имя сайта, иначе сокращенное.
-		if (count($bc) > 1) {
-			$title .= $this->EE->head['site_short_name'];
-		} else {
-			$title .= $this->EE->head['site_full_name'];
-		}
+		// @todo вынести код для title, а оставить только это: $head .= "\t<title>" . self::$_head['title'] . "</title>\n";
+		include DIR_SYSTEM . '_temp/html_head_title.php';
 		
-		$head .= "\t<title>$title</title>\n";
-
 		// Тэги <link>.
-		if (isset($this->EE->head['link']) and !empty($this->EE->head['link'])) {
-			foreach ($this->EE->head['link'] as $key => $val) {
+		if (isset(self::$_head['link']) and !empty(self::$_head['link'])) {
+			foreach (self::$_head['link'] as $key => $val) {
 				$head .= "\t<link";
 				if (isset($val['rel'])) {
 					$head .= ' rel="' . $val['rel'] . '"';
@@ -399,17 +514,22 @@ class Html extends View
 		}
 		
 		// Мета тэги.
-		if (isset($this->EE->head['meta']) and !empty($this->EE->head['meta'])) {
-			foreach ($this->EE->head['meta'] as $type => $meta) {
+		if (isset(self::$_head['meta']) and !empty(self::$_head['meta'])) {
+			foreach (self::$_head['meta'] as $type => $meta) {
 				foreach ($meta as $name => $content) {
-					$head .= "\t<meta $type=\"$name\" content=\"$content\" />\n";
+					if (!empty($content)) {
+						$head .= "\t<meta $type=\"$name\" content=\"$content\" />\n";
+					}
 				}
 			}
 		}
 		
-		// Стили. style
-		if (isset($this->EE->head['style']) and !empty($this->EE->head['style'])) {
-			foreach ($this->EE->head['style'] as $key => $val) {
+		// @todo вынести ScriptsLib из класса, пока можно в Кернел.
+		include DIR_SYSTEM . '_temp/html_head_script_lib.php';
+
+		// Стили.
+		if (isset(self::$_head['styles']) and !empty(self::$_head['styles'])) {
+			foreach (self::$_head['styles'] as $key => $val) {
 				$head .= "\t<style";
 				if (isset($val['type'])) {
 					$head .= ' type="' . $val['type'] . '">';
@@ -430,8 +550,8 @@ class Html extends View
 		}
 		
 		// Скрипты. 		
-		if (isset($this->EE->head['script']) and !empty($this->EE->head['script'])) {
-			foreach ($this->EE->head['script'] as $key => $val) {
+		if (isset(self::$_head['scripts']) and !empty(self::$_head['scripts'])) {
+			foreach (self::$_head['scripts'] as $key => $val) {
 				$head .= "\t<script";
 				if (isset($val['type'])) {
 					$head .= ' type="' . $val['type'] . '"';
@@ -453,11 +573,11 @@ class Html extends View
 		}
 
 		// Обработчик 'document-ready'.
-		if (isset($this->EE->head['document-ready']) and !empty($this->EE->head['document-ready'])) {
+		if (isset(self::$_head['document-ready']) and !empty(self::$_head['document-ready'])) {
 			$head .= "\t<script type=\"text/javascript\">";
 			$head .= '	$j = jQuery.noConflict(); $j(function(){' . "\n";
 //			$head .= '	$(function(){' . "\n";
-			foreach ($this->EE->head['document-ready'] as $js_code) {
+			foreach (self::$_head['document-ready'] as $js_code) {
 				$head .= $js_code;
 				$head .= "\n";
 			}
@@ -465,8 +585,8 @@ class Html extends View
 		}
 		
 		// Произвольные данные.
-		if (isset($this->EE->head['_data']) and !empty($this->EE->head['_data'])) {
-			foreach ($this->EE->head['_data'] as $data) {
+		if (isset(self::$_head['_data']) and !empty(self::$_head['_data'])) {
+			foreach (self::$_head['_data'] as $data) {
 				$head .= $data;
 				$head .= "\n";
 			}
@@ -483,13 +603,13 @@ class Html extends View
 	{
 		// Установка атрибутов <body>.
 		$body_attr = '';
-		foreach ($this->EE->template['body_attributes'] as $key => $value) {
+		foreach ($this->body_attributes as $key => $value) {
 			$body_attr .= " $key=\"$value\"";
 		}
 
 		echo "<body$body_attr>\n";
-		
-		echo @$this->Toolbar; // @todo переделать
+				
+		echo @$this->Toolbar; // @todo переделать!!!!!!!!!!!!!
 		
 		// @todo включение базового вида
 		

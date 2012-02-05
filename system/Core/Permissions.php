@@ -111,6 +111,8 @@ class Permissions extends Controller
 	 * 
 	 * @param $user_id = null, по умолчанию рассматривается активный юзер @todo сделать для разных юзеров.
 	 * 
+	 * @todo может переименовать в isGranted()?
+	 * 
 	 */
 	public function isAllowed($object, $action, $permissions, $user_id = null) 
 	{

@@ -2,7 +2,7 @@
 /**
  * Компонент позволяющий создавать разнообразные вспплывающие окна.
  * 
- * @uses EE
+ * @uses ScriptsLib
  */
 class Component_Popup extends Controller
 {
@@ -32,7 +32,7 @@ class Component_Popup extends Controller
 		$this->type = $type;
 		switch ($this->type) {
 			case 'lightview':
-				$this->EE->useScriptLib('lightview');
+				$this->ScriptsLib->request('lightview');
 				break;
 			/*
 			case "lightwindow":

@@ -4,10 +4,10 @@
  * 
  * @uses Component_Editor
  * @uses Component_DatePicker
- * @uses EE
  * @uses DB
  * @uses Helper_Paginator
- * @uses spyc-0.5
+ * @uses spyc-0.5 @todo убрать в класс Yaml!!!
+ * @uses View
  * 
  * @version 2012-01-24.0
  */
@@ -636,7 +636,7 @@ class Component_Unicat_Admin extends Component_Unicat
 			$form_data['fieldsets']['structures']['elements'][] = "pd[structures][$struct_value[id]]";
 		}
 
-		if (count($categories_list) === 0) {
+		if (isset($categories_list) and count($categories_list) === 0) {
 			unset($form_data['elements']['pd[structures][0]']);
 			unset($form_data['fieldsets']['structures']);
 		}
@@ -1257,7 +1257,7 @@ class Component_Unicat_Admin extends Component_Unicat
 			$form_data['hiddens']['return_to'] = $this->action_path . '?items';
 		}
 			
-		if (count($categories_list) === 0) {
+		if (isset($categories_list) and count($categories_list) === 0) {
 			unset($form_data['elements']['pd[structures][0]']);
 			unset($form_data['fieldsets']['structures']);
 		}

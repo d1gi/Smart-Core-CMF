@@ -2,7 +2,6 @@
 /**
  * Module UserAccount.
  * 
- * @uses EE
  * @uses Node
  * @uses Session
  * @uses User

@@ -199,7 +199,6 @@ class Response
 			}
 			
 			if ($is_need_cache_page) {
-				// @todo запаковать ключ parser_node_id внутрь последней ноды. задача #46.
 				$folders = $this->Kernel->getParserData(); // @todo как-то некрасиво...
 				unset($folders['parser_node_id']);
 				$this->Cache_Page->save(

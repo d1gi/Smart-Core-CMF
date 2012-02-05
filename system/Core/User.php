@@ -19,7 +19,7 @@
  * 
  * @version 	2011-12-27.0
  */
-class User extends Base
+class User extends Container
 {
 	/**
 	 * Учетная запись.

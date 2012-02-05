@@ -13,7 +13,7 @@
  * 
  * @version		2012-01-31.0
  */
-abstract class Controller extends Base
+abstract class Controller extends Container
 {
 	/**
 	 * View object

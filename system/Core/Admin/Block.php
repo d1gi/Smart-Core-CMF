@@ -8,9 +8,9 @@
  * @uses	DB
  * @uses	Env
  * 
- * @version 2011-09-18.0
+ * @version 2012-02-01.0
  */
-class Admin_Block extends Block
+class Admin_Block extends Controller
 {
 	/**
 	 * Constructor.

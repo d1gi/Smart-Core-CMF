@@ -15,7 +15,7 @@
  * @todo ОЧЕНЬ важно оптимизировать, чтобы медоты getUserData/setUserData и getToken/setToken
  *		 выполнялись без запросов! т.е. надо эти данные считывать при первом запуске метода read().
  */
-class Session_Handler extends Base
+class Session_Handler extends Container
 {
 	/**
 	 * Таблица с сессиями.
